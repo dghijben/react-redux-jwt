@@ -1,4 +1,6 @@
 .idea/
+static/css/admin
+static/img
 node_modules/
 dist/
 *.iml
