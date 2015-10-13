@@ -13,7 +13,8 @@ import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
-
+import cookie from 'react-cookie';
+import listener from 'redux/listener';
 import {ReduxRouter} from 'redux-router';
 import createHistory from 'history/lib/createMemoryHistory';
 import {reduxReactRouter, match} from 'redux-router/server';
@@ -21,14 +22,14 @@ import {Provider} from 'react-redux';
 import qs from 'query-string';
 import getRoutes from './routes';
 import getStatusFromRoutes from './helpers/getStatusFromRoutes';
-import { load as loadAuth } from './redux/modules/auth';
+// import { load as loadAuth } from './redux/modules/auth';
 
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
-  target: 'http://localhost:' + config.apiPort,
-  ws: true
+  target: 'http://localhost:' + config.apiPort + '/api',
+
 });
 
 app.use(compression());
@@ -59,10 +60,12 @@ app.use((req, res) => {
     // hot module replacement is enabled in the development env
     webpackIsomorphicTools.refresh();
   }
+
+  cookie.plugToRequest(req, res);
   const client = new ApiClient(req);
 
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);
-
+  listener(store);
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +
       ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store}/>));
@@ -114,8 +117,8 @@ app.use((req, res) => {
       }
     }));
   };
-
-  store.dispatch(loadAuth()).then(afterAuth, afterAuth);
+  afterAuth();
+  //store.dispatch(loadAuth()).then(afterAuth, afterAuth);
 });
 
 if (config.port) {

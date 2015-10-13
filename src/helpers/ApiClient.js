@@ -1,5 +1,6 @@
 import superagent from 'superagent';
 import config from '../config';
+import cookie from 'react-cookie';
 
 /*
  * This silly underscore is here to avoid a mysterious "ReferenceError: ApiClient is not defined" error.
@@ -8,7 +9,7 @@ import config from '../config';
  * Remove it at your own risk.
  */
 class ApiClient_ {
-  constructor(req) {
+  constructor() {
     ['get', 'post', 'put', 'patch', 'del'].
       forEach((method) => {
         this[method] = (path, options) => {
@@ -17,9 +18,21 @@ class ApiClient_ {
             if (options && options.params) {
               request.query(options.params);
             }
-            if (__SERVER__) {
+/*            if (__SERVER__) {
               if (req.get('cookie')) {
                 request.set('cookie', req.get('cookie'));
+              }
+            }*/
+            const token = cookie.load('token');
+            // console.log('SERVERCOOKIE', token);
+            if (token) {
+              request.set('Authorization', 'Bearer ' + token);
+            }
+            if (options && options.set) {
+              for (const key in options.set) {
+                if (options.set.hasOwnProperty(key)) {
+                  request.set(key, options.set[key]);
+                }
               }
             }
             if (options && options.data) {
@@ -42,7 +55,7 @@ class ApiClient_ {
     const adjustedPath = path[0] !== '/' ? '/' + path : path;
     if (__SERVER__) {
       // Prepend host and port of the API server to the path.
-      return 'http://localhost:' + config.apiPort + adjustedPath;
+      return 'http://localhost:' + config.apiPort + '/api' + adjustedPath;
     }
     // Prepend `/api` to relative URL, to proxy to API server.
     return '/api' + adjustedPath;

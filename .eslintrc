@@ -4,13 +4,12 @@
     "browser": true,
     "node": true,
     "mocha": true,
+    "es6": true
   },
   "rules": {
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
-    "react/jsx-quotes": 0,
-    "jsx-quotes": 2,
     // Temporarirly disabled due to a possible bug in babel-eslint (todomvc example)
     "block-scoped-var": 0,
     // Temporarily disabled for test/* until babel/babel-eslint#33 is resolved
@@ -18,7 +17,8 @@
     "comma-dangle": 0,  // not sure why airbnb turned this on. gross!
     "indent": [2, 2, {"SwitchCase": 1}],
     "no-console": 0,
-    "no-alert": 0
+    "no-alert": 0,
+    "id-length": [2, {"min": 1, "properties": "never"}]
   },
   "plugins": [
     "react"
@@ -29,7 +29,12 @@
     "__SERVER__": true,
     "__DISABLE_SSR__": true,
     "__DEVTOOLS__": true,
-    "socket": true,
     "webpackIsomorphicTools": true
+  },
+  "ecmaFeatures": {
+    "modules": true,
+    "jsx": true,
+    "spread": true,
+    "experimentalObjectRestSpread": true
   }
 }

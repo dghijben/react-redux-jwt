@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import DocumentMeta from 'react-document-meta';
 const cdn = '//cdnjs.cloudflare.com/ajax/libs/';
+import Helmet from "react-helmet";
 
 /**
  * Wrapper component containing HTML metadata and boilerplate tags.
@@ -23,16 +24,16 @@ export default class Html extends Component {
   render() {
     const {assets, component, store} = this.props;
     const content = component ? ReactDOM.renderToString(component) : '';
-
+    const head = Helmet.rewind();
     return (
       <html lang="en-us">
         <head>
           <meta charSet="utf-8"/>
-          {DocumentMeta.renderAsReact()}
+          {head.title}
+          {head.meta}
+          {head.link}
 
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link href={cdn + 'twitter-bootstrap/3.3.5/css/bootstrap.css'}
-                media="screen, projection" rel="stylesheet" type="text/css" />
           <link href={cdn + 'font-awesome/4.3.0/css/font-awesome.min.css'}
                 media="screen, projection" rel="stylesheet" type="text/css" />
 

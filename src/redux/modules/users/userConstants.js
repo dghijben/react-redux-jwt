@@ -1,0 +1,19 @@
+export const USERS = 'USERS';
+export const USERS_SUCCESS = 'USERS_SUCCESS';
+export const USERS_FAIL = 'USERS_FAIL';
+
+export const USER_LOAD = 'USER_LOAD';
+export const USER_LOAD_SUCCESS = 'USER_LOAD_SUCCESS';
+export const USER_LOAD_FAIL = 'USER_LOAD_FAIL';
+
+export const USER_CREATE = 'USER_CREATE';
+export const USER_CREATE_SUCCESS = 'USER_CREATE_SUCCESS';
+export const USER_CREATE_FAIL = 'USER_CREATE_FAIL';
+
+export const USER_EDIT = 'USER_EDIT';
+export const USER_EDIT_SUCCESS = 'USER_EDIT_SUCCESS';
+export const USER_EDIT_FAIL = 'USER_EDIT_FAIL';
+
+export const USER_DELETE = 'USER_DELETE';
+export const USER_DELETE_SUCCESS = 'USER_DELETE_SUCCESS';
+export const USER_DELETE_FAIL = 'USER_DELETE_FAIL';
