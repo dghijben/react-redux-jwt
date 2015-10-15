@@ -1,7 +1,7 @@
 import * as actions from './aclConstants';
 
 const initialState = {
-  data: null
+
 };
 
 export default function reducer(state = initialState, action = {}) {

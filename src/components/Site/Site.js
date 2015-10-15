@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   userDropDown() {
-    const username = _.get(this.props, 'authorization.user.username', 'unknown');
+    const username = _.get(this.props, 'authorization.user.name', 'unknown');
     const title = <span><i className="fa fa-user"></i> {' '} {username}</span>;
     return (
       <NavDropdown eventKey={4} title={title} id="dropdown-usermenu">
@@ -72,7 +72,7 @@ class App extends Component {
         <Helmet
           title="Site"
           titleTemplate="MySite.com - %s"
-          link={[{'rel': 'stylesheet', 'href': '//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'}]}
+          link={[{'rel': 'stylesheet', 'href': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'}]}
           />
         <Navbar>
           <NavBrand>React-Bootstrap</NavBrand>

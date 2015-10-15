@@ -31,11 +31,10 @@ export default (store) => {
       </Route>
       <Route component={RequireAdminLogin}>
         <Route path="admin" component={Admin}>
-          <IndexRoute component={AdminUsers}>
-            <Route path="create" component={AdminUserCreate}/>
-          </IndexRoute>
+          <IndexRoute component={AdminUsers} />
+
           <Route path="acl" component={AdminAcl} />
-          <Route path="users" component={AdminUserCreate} />
+          <Route path="users" component={AdminUsers} />
           <Route path="wrap" component={AdminUserCreate}>
             <Route path="child1" component={AdminUserCreate} />
             <Route path="child2" component={AdminUserCreate} />

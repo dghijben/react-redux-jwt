@@ -55,7 +55,6 @@ class Acl extends Component {
         <h2>Admin / Acl Routes</h2>
 
         <div className="table-responsive">
-
           <table className="table table-bordered">
             <thead>
             <tr>
@@ -69,10 +68,7 @@ class Acl extends Component {
             {this.routes()}
             </tbody>
           </table>
-
         </div>
-
-
       </div>
     );
   }
