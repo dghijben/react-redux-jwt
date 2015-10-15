@@ -11,13 +11,15 @@ import {Provider} from 'react-redux';
 import {reduxReactRouter, ReduxRouter} from 'redux-router';
 import listener from 'redux/listener';
 import getRoutes from './routes';
-const Intl = require('intl'); // eslint-disable-line
+import makeRouteHooksSafe from './helpers/makeRouteHooksSafe';
+import Intl from 'intl'; // eslint-disable-line
 import {IntlProvider} from 'react-intl';
+const i18n = window.__i18n;
+
 const client = new ApiClient();
 
 const dest = document.getElementById('content');
-const store = createStore(reduxReactRouter, getRoutes, createHistory, client, window.__data);
-const i18n = window.__i18n;
+const store = createStore(reduxReactRouter, makeRouteHooksSafe(getRoutes), createHistory, client, window.__data);
 
 listener(store);
 

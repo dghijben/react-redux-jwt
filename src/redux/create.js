@@ -3,11 +3,7 @@ import createMiddleware from './middleware/clientMiddleware';
 import transitionMiddleware from './middleware/transitionMiddleware';
 
 export default function createStore(reduxReactRouter, getRoutes, createHistory, client, data) {
-  const middleware = [createMiddleware(client)];
-
-  if (__CLIENT__) {
-    middleware.push(transitionMiddleware);
-  }
+  const middleware = [createMiddleware(client), transitionMiddleware];
 
   let finalCreateStore;
   if (__DEVELOPMENT__ && __CLIENT__ && __DEVTOOLS__) {
@@ -25,7 +21,6 @@ export default function createStore(reduxReactRouter, getRoutes, createHistory, 
 
   const reducer = require('./modules/reducer');
   const store = finalCreateStore(reducer, data);
-  store.client = client;
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('./modules/reducer', () => {
