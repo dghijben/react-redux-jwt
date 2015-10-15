@@ -39,7 +39,9 @@
       "command": "node ./bin/server.js",
       "env": {
         "NODE_PATH": "./src",
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "PORT": 3000,
+        "APIPORT": 9106
       }
     },
     "start-dev": {

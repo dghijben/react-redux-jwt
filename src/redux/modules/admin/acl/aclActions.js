@@ -8,6 +8,6 @@ export function load() {
 }
 
 export function isLoaded(globalState) {
-  return globalState.acl && globalState.acl.routes &&
+  return globalState.acl && globalState.acl.data &&
     (globalState.acl.success === true || globalState.acl.failed === true);
 }

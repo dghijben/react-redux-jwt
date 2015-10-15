@@ -39,7 +39,6 @@ class RequireAdminLogin extends Component {
   }
 
   render() {
-
     if (this.isAdmin() === true) {
       return (
         <div>
@@ -47,6 +46,7 @@ class RequireAdminLogin extends Component {
             title="Admin"
             titleTemplate="MySite.com - %s"
             link={[
+              {'rel': 'stylesheet', 'href': '/admin/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-skins.min.css', 'type': 'text/css', 'media': 'screen'},
