@@ -10,8 +10,8 @@ class Login extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, 'authorization.loggedIn') === true) {
-      if (_.get(nextProps, 'authorization.user.success') === true) {
-        if (_.get(nextProps, 'authorization.user.admin') === '1') {
+      if (_.get(nextProps, 'authorization.user.success', false) === true) {
+        if (_.get(nextProps, 'authorization.user.admin', false) === '1') {
           this.props.history.pushState(null, '/admin');
         } else {
           this.props.history.pushState(null, '/dashboard');

@@ -4,25 +4,29 @@
 import 'babel/polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import createHistory from 'history/lib/createBrowserHistory';
+import createHistory from './helpers/history';
 import createStore from './redux/create';
 import ApiClient from './helpers/ApiClient';
 import {Provider} from 'react-redux';
 import {reduxReactRouter, ReduxRouter} from 'redux-router';
 import listener from 'redux/listener';
 import getRoutes from './routes';
-
+const Intl = require('intl'); // eslint-disable-line
+import {IntlProvider} from 'react-intl';
 const client = new ApiClient();
 
 const dest = document.getElementById('content');
 const store = createStore(reduxReactRouter, getRoutes, createHistory, client, window.__data);
+const i18n = window.__i18n;
 
 listener(store);
 
 const component = (
-  <Provider store={store} key="provider">
-    <ReduxRouter routes={getRoutes(store)} />
-  </Provider>
+  <IntlProvider locale={i18n.locale} messages={i18n.messages}>
+    <Provider store={store} key="provider">
+      <ReduxRouter routes={getRoutes(store)} />
+    </Provider>
+  </IntlProvider>
 );
 
 ReactDOM.render(component, dest);

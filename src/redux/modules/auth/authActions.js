@@ -24,7 +24,9 @@ export function getUserSuccess(result) {
 }
 
 export function getUserFailure(Exception) {
-  cookie.remove('token');
+  if (!__SERVER__) {
+    cookie.remove('token');
+  }
   return {
     type: actions.USERINFO_FAIL,
     exception: Exception

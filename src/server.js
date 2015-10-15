@@ -16,21 +16,35 @@ import SocketIo from 'socket.io';
 import cookie from 'react-cookie';
 import listener from 'redux/listener';
 import {ReduxRouter} from 'redux-router';
-import createHistory from 'history/lib/createMemoryHistory';
+import createHistory from './helpers/history';
 import {reduxReactRouter, match} from 'redux-router/server';
 import {Provider} from 'react-redux';
 import qs from 'query-string';
 import getRoutes from './routes';
 import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 // import { load as loadAuth } from './redux/modules/auth';
+import {sync as globSync} from 'glob';
+import {readFileSync} from 'fs';
+const Intl = require('intl'); // eslint-disable-line
+import {IntlProvider} from 'react-intl';
 
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
   target: 'http://localhost:' + config.apiPort + '/api',
-
 });
+
+const translations = globSync('./src/langs/*.json')
+  .map((filename) => [
+    path.basename(filename, '.json'),
+    readFileSync(filename, 'utf8'),
+  ])
+  .map(([locale, file]) => [locale, JSON.parse(file)])
+  .reduce((collection, [locale, messages]) => {
+    collection[locale] = messages;
+    return collection;
+  }, {});
 
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
@@ -61,6 +75,15 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
 
+  const locale   = req.query.locale || 'nl';
+  const messages = translations[locale];
+
+  if (!messages) {
+    return res.status(404).send('Locale is not supported.');
+  }
+  const i18n = {locale, messages};
+
+
   cookie.plugToRequest(req, res);
   const client = new ApiClient(req);
 
@@ -68,7 +91,7 @@ app.use((req, res) => {
   listener(store);
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +
-      ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store}/>));
+      ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} i18n={i18n}/>));
   }
 
   if (__DISABLE_SSR__) {
@@ -99,16 +122,18 @@ app.use((req, res) => {
           routerState.params
         )).then(() => {
           const component = (
-            <Provider store={store} key="provider">
-              <ReduxRouter/>
-            </Provider>
+            <IntlProvider locale={i18n.locale} messages={i18n.messages}>
+              <Provider store={store} key="provider">
+                <ReduxRouter/>
+              </Provider>
+            </IntlProvider>
           );
           const status = getStatusFromRoutes(store.getState().router.routes);
           if (status) {
             res.status(status);
           }
           res.send('<!doctype html>\n' +
-            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}/>));
+            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store} i18n={i18n}/>));
         }).catch((err) => {
           console.error('DATA FETCHING ERROR:', pretty.render(err));
           res.status(500);

@@ -13,8 +13,8 @@ import {
   Admin,
   AdminUsers,
   AdminUserCreate,
+  AdminAcl,
   NotFound
-
 } from 'components';
 
 export default (store) => {
@@ -34,6 +34,13 @@ export default (store) => {
           <IndexRoute component={AdminUsers}>
             <Route path="create" component={AdminUserCreate}/>
           </IndexRoute>
+          <Route path="acl" component={AdminAcl} />
+          <Route path="users" component={AdminUserCreate} />
+          <Route path="wrap" component={AdminUserCreate}>
+            <Route path="child1" component={AdminUserCreate} />
+            <Route path="child2" component={AdminUserCreate} />
+            <Route path="child3" component={AdminUserCreate} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" component={NotFound} status={404} />

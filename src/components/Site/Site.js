@@ -5,15 +5,16 @@ import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-boo
 import { getUser, isLoaded } from '../../redux/modules/auth/authActions';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
 
 class App extends Component {
 
   constructor(context, props) {
     super(context, props);
-    this.bootstrapLink = this.bootstrapLink.bind(this);
     this.authorized = this.authorized.bind(this);
     this.loginLink = this.loginLink.bind(this);
     this.logoutLink = this.logoutLink.bind(this);
+    this.userDropDown = this.userDropDown.bind(this);
   }
 
   static fetchDatax(getState, dispatch) {
@@ -25,29 +26,31 @@ class App extends Component {
     }
   }
 
-  bootstrapLink(state, path, query = null) {
-    const history = this.props.history;
-    return {
-      'href': history.createPath(path, query),
-      'onClick': (event) => {
-        event.preventDefault();
-        history.pushState(state, path);
-      },
-      active: history.isActive(path, query)
-    };
-  }
-
   authorized() {
     if (_.get(this.props, 'authorization.loggedIn', false) === true) {
-      return this.logoutLink();
+      return this.userDropDown();
     }
 
     return this.loginLink();
   }
 
+  userDropDown() {
+    const username = _.get(this.props, 'authorization.user.username', 'unknown');
+    const title = <span><i className="fa fa-user"></i> {' '} {username}</span>;
+    return (
+      <NavDropdown eventKey={4} title={title} id="dropdown-usermenu">
+        <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.props.history, null, '/dashboard')}>Dashboard</MenuItem>
+        <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.props.history, null, '/admin')}>Admin</MenuItem>
+        <MenuItem eventKey="4.3" onSelect={()=>{ console.log('clicked'); }}>Settings</MenuItem>
+        <MenuItem divider/>
+        <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.props.history, null, '/logout')}>Uitloggen</MenuItem>
+      </NavDropdown>
+    );
+  }
+
   loginLink() {
     return (
-      <NavItem eventKey={1} {...this.bootstrapLink(null, '/login')}>
+      <NavItem eventKey={1} {...bootstrapLink(this.props.history, null, '/login')}>
         <i className="fa fa-user"></i> <i className="fa fa-unlock"></i>
       </NavItem>
     );
@@ -55,7 +58,7 @@ class App extends Component {
 
   logoutLink() {
     return (
-      <NavItem eventKey={1} {...this.bootstrapLink(null, '/logout')}>
+      <NavItem eventKey={1} {...bootstrapLink(this.props.history, null, '/logout')}>
         <i className="fa fa-user"></i> <span>{_.get(this.props, 'authorization.user.name')}</span> <i
         className="fa fa-lock"></i>
       </NavItem>
@@ -63,6 +66,7 @@ class App extends Component {
   }
 
   render() {
+    const {history} = this.props;
     return (
       <div>
         <Helmet
@@ -73,8 +77,9 @@ class App extends Component {
         <Navbar>
           <NavBrand>React-Bootstrap</NavBrand>
           <Nav bsStyle="tabs">
-            <NavItem eventKey={2} {...this.bootstrapLink(null, '/')} title="Item">Home</NavItem>
-            <NavItem eventKey={1} {...this.bootstrapLink(null, '/about')}>About</NavItem>
+            <NavItem eventKey={2} {...bootstrapLink(history, null, '/')} title="Item">Home</NavItem>
+            <NavItem eventKey={1} {...bootstrapLink(history, null, '/admin')}>Admin</NavItem>
+            <NavItem eventKey={1} {...bootstrapLink(history, null, '/about')}>About</NavItem>
             <NavDropdown eventKey={4} title="Dropdown" id="nav-dropdown">
               <MenuItem eventKey="4.1">Action</MenuItem>
               <MenuItem eventKey="4.2">Another action</MenuItem>

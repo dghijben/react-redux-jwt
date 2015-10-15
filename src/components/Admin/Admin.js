@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
-import Menu from './Menu';
+import Menu from './Menu/Menu';
 class Admin extends React.Component {
 
   static propTypes = {
@@ -17,9 +17,8 @@ class Admin extends React.Component {
   }
 
   render() {
-    // console.log(this.props);
     return (
-      <div>
+      <div className="smart-style-3" style={{fontFamily: 'arial'}}>
         <div>
           <Menu />
         </div>

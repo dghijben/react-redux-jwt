@@ -13,7 +13,10 @@ export default function(store) {
   store.subscribe(() => {
     const state = store.getState();
     if (_.get(state, 'authorization.user.failed', null) === true) {
-      cookie.remove('token');
+      if (!__SERVER__) {
+        cookie.remove('token');
+      }
+
     } else {
       if (_.get(state, 'authorization.token', null) !== null) {
         cookie.save('token', state.authorization.token);
