@@ -3,43 +3,26 @@ import React, {Component, PropTypes} from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import { Input, Row, Col, Alert } from 'react-bootstrap';
 import {connectReduxForm} from 'redux-form';
-import validateLogin from './ValidateLogin';
-import ButtonState from '../Includes/ButtonState';
-import bootstrapLink from '../../../utils/bootstrapLink';
+import validateForm from './ValidateForm';
+import ButtonState from '../../Includes/ButtonState';
+import bootstrapLink from '../../../../utils/bootstrapLink';
 
-class LoginForm extends Component {
+class Form extends Component {
   constructor() {
     super();
     this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
-    this.errorMessage = this.errorMessage.bind(this);
     this.state = {
       'displayError': true,
       'displaySuccess': true
-
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (_.get(this.props, 'active', false) !== false) {
-      this.setState({'displayError': false});
-      this.setState({'displaySuccess': false});
-    }
-
-    if (_.get(this.props, 'failed') !== _.get(nextProps, 'failed')) {
-      this.setState({'displayError': true});
-    }
-
-    if (_.get(this.props, 'success') !== _.get(nextProps, 'success')) {
-      this.setState({'displaySuccess': true});
-    }
-
-  }
 
   errorMessage() {
     if (_.get(this.props, 'failed', false) === true &&
-        _.get(this.props, 'pending', false) === false &&
-        _.get(this.props, 'active', false) === false
-        && this.state.displayError === true
+      _.get(this.props, 'pending', false) === false &&
+      _.get(this.props, 'active', false) === false
+      && this.state.displayError === true
     ) {
       return (
         <Row>
@@ -63,7 +46,7 @@ class LoginForm extends Component {
         <Row>
           <Col md={12}>
             <Alert bsStyle="success">
-              Inloggen is gelukt
+              We hebben een e-mail naar u verzonden volg hierin de instructies verder op.
             </Alert>
           </Col>
         </Row>
@@ -78,21 +61,15 @@ class LoginForm extends Component {
                wrapperClassName="col-md-9" {...this.props.fields.email}
                bsStyle={(this.props.fields.email.error && this.props.fields.email.touched) ? 'error' : null}
                help={(this.props.fields.email.error && this.props.fields.email.touched) ? this.props.fields.email.error : ''}
-               />
-
-        <Input type="password" label="Wachtwoord" labelClassName="col-md-3"
-               wrapperClassName="col-md-9" {...this.props.fields.password}
-               bsStyle={(this.props.fields.password.error && this.props.fields.password.touched) ? 'error' : null}
-               help={(this.props.fields.password.error && this.props.fields.password.touched) ? this.props.fields.password.error : ''}
-               />
+          />
         {this.errorMessage()}
         {this.successMessage()}
         <Row>
           <Col md={9} mdOffset={3}>
-            <ButtonState pending={_.get(this.props, 'authorization.pending', false)} bsStyle="primary" onClick={this.props.handleSubmit} fa="fa-hand-pointer-o">{' '}inloggen</ButtonState>
+            <ButtonState pending={_.get(this.props, 'authorization.pending', false)} bsStyle="primary" onClick={this.props.handleSubmit} fa="fa-key">wachtwoord herstellen</ButtonState>
 
             <div className="pull-right">
-              <ButtonState bsStyle="link" pullRight {...bootstrapLink(this.context.history, null, '/password-forgotten')} fa="fa-long-arrow-right">{' '}wachtwoord vergeten?</ButtonState>
+              <ButtonState bsStyle="link" pullRight {...bootstrapLink(this.context.history, null, '/login')} fa="fa-long-arrow-left">terug naar inloggen</ButtonState>
             </div>
           </Col>
         </Row>
@@ -101,20 +78,20 @@ class LoginForm extends Component {
   }
 }
 
-LoginForm.propTypes = {
+Form.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  failed: PropTypes.bool.isRequired
+  failed: PropTypes.bool.isRequired,
 };
 
-LoginForm.contextTypes = {
+Form.contextTypes = {
   history: historyPropTypes.history
 };
 
-LoginForm = connectReduxForm({
+Form = connectReduxForm({
   form: 'login',                      // the name of your form and the key to
-  fields: ['email', 'password'],
-  validate: validateLogin
-})(LoginForm);
+  fields: ['email'],
+  validate: validateForm
+})(Form);
 
-export default LoginForm;
+export default Form;

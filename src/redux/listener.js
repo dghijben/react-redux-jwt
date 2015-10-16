@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import cookie from 'react-cookie';
-import { authActions } from './modules/auth';
+import authActions from './modules/auth/authActions';
 
 export default function(store) {
 

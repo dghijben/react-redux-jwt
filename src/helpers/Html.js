@@ -35,7 +35,7 @@ export default class Html extends Component {
           {head.link}
 
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link href={cdn + 'font-awesome/4.3.0/css/font-awesome.min.css'}
+          <link href={cdn + 'font-awesome/4.4.0/css/font-awesome.min.css'}
                 media="screen, projection" rel="stylesheet" type="text/css" />
 
           {/* styles (will be present only in production with webpack extract text plugin) */}
@@ -45,7 +45,7 @@ export default class Html extends Component {
           )}
         </head>
         <body>
-          <div id="content" dangerouslySetInnerHTML={{__html: content}}/>
+          <div id="reactdata" dangerouslySetInnerHTML={{__html: content}}/>
           <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} />
           <script dangerouslySetInnerHTML={{__html: `window.__i18n=${serialize(i18n)};`}} />
           <script src={assets.javascript.main}/>

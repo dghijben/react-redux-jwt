@@ -11,9 +11,9 @@ export default function reducer(state = initialState, action = {}) {
     case actions.AUTH_SET_TOKEN:
       return Object.assign({}, state, {token: action.token, loggedIn: true, success: true});
     case actions.LOGIN:
-      return Object.assign({}, state, {token: null, loggedIn: false, pending: true});
+      return Object.assign({}, state, {token: null, loggedIn: false, pending: true, failed: false, success: false});
     case actions.LOGIN_SUCCESS:
-      return Object.assign({}, state, {token: action.result.token, loggedIn: true, pending: false, success: true});
+      return Object.assign({}, state, {token: action.result.token, loggedIn: true, pending: false, failed: false, success: true});
     case actions.LOGIN_FAIL:
       return Object.assign({}, state, {token: null, loggedIn: false, pending: false, failed: true});
     case actions.USERINFO:
@@ -26,6 +26,22 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, {loggedIn: false, user: {pending: false, failed: true}});
     case actions.AUTH_LOGOUT:
       return Object.assign({}, {token: null, loggedIn: false});
+
+    case actions.PASSWORD:
+      return Object.assign({}, state, {password: {pending: true}});
+    case actions.PASSWORD_SUCCESS:
+      return Object.assign({}, state, {password: {pending: false, success: true}});
+    case actions.PASSWORD_FAIL:
+      return Object.assign({}, state, {password: {pending: false, failed: true}});
+
+    case actions.PASSWORD_CHANGE:
+      return Object.assign({}, state, {passwordChange: {pending: true}});
+    case actions.PASSWORD_CHANGE_SUCCESS:
+      return Object.assign({}, state, {passwordChange: {pending: false, success: true}});
+    case actions.PASSWORD_CHANGE_FAIL:
+      return Object.assign({}, state, {passwordChange: {pending: false, failed: true}});
+
+
     default:
       return Object.assign({}, state);
   }

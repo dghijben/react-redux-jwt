@@ -18,10 +18,13 @@ class Admin extends React.Component {
 
   render() {
     return (
-      <div className="smart-style-3" style={{fontFamily: 'arial'}}>
-        <div>
-          <Menu />
-        </div>
+      <div >
+        <header id="header">
+          <div id="logo-group"></div>
+        </header>
+
+        <Menu />
+
         <div id="main" role="main">
           {this.props.children && React.cloneElement(this.props.children)}
         </div>

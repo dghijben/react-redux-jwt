@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { authReducer } from './auth';
+import authReducer from './auth/authReducer';
 import usersReducer from './admin/users/userReducer';
 import aclReducer from './admin/acl/aclReducer';
 import { reducer as formReducer } from 'redux-form';

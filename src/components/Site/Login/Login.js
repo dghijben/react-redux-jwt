@@ -3,8 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import { Button, Grid, Well, Row, Col } from 'react-bootstrap';
 import LoginForm from './LoginForm';
-import {initialize} from 'redux-form';
-import { authActions } from '../../../redux/modules/auth';
+import { authenticate } from '../../../redux/modules/auth/authActions';
 
 class Login extends Component {
 
@@ -25,11 +24,18 @@ class Login extends Component {
   }
 
   handleSubmit(payload) {
-    this.props.dispatch(authActions.authenticate(payload));
-    this.props.dispatch(initialize('login', {})); // clear form
+    this.props.dispatch(authenticate(payload));
   }
 
   render() {
+    if (_.has(this.props, 'children')) {
+      if (this.props.history.isActive('/password-forgotten') === true ||
+          this.props.history.isActive('/password-reset/' + _.get(this.props, 'router.params.resetId')) === true
+      ) {
+        return this.props.children;
+      }
+    }
+
     return (
       <div>
         <Grid>
@@ -41,7 +47,9 @@ class Login extends Component {
           <Row>
             <Col md={6} sm={12}>
               <h4>Al een account</h4>
-              <LoginForm onSubmit={this.handleSubmit.bind(this)}/>
+              <LoginForm onSubmit={this.handleSubmit.bind(this)}
+                         failed={_.get(this.props, 'authorization.failed', false)}
+                         success={_.get(this.props, 'authorization.success', false)}/>
             </Col>
             <Col md={6} sm={12}>
               <Well>
@@ -49,7 +57,7 @@ class Login extends Component {
                 <p>Heeft nog niet een account? Maakt dat nu eenvoudig gratis en snel een aacount aan. U kunt direct
                   inloggen en aan de slag gaan.</p>
                 <div className="clearfix">
-                  <Button className="pull-right" bsStyle="primary" href="#" pullRight>nu aanmelden</Button>
+                  <Button className="pull-right" bsStyle="primary" pullRight>nu aanmelden</Button>
                 </div>
               </Well>
             </Col>
@@ -63,9 +71,12 @@ class Login extends Component {
 Login.propTypes = {
   dispatch: PropTypes.func.isRequired,
   authorization: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
+  children: PropTypes.object,
+  router: PropTypes.object
 };
 
 export default connect(state => ({
-  authorization: state.authorization
+  authorization: state.authorization,
+  router: state.router
 }))(Login);

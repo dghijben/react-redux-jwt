@@ -1,6 +1,8 @@
 export { default as App } from './App/App';
 export { default as Home } from './Site/Home/Home';
 export { default as Login } from './Site/Login/Login';
+export { default as PasswordForgotten } from './Site/Login/PasswordForgotten/PasswordForgotten';
+export { default as PasswordReset } from './Site/Login/PasswordReset/PasswordReset';
 export { default as Logout } from './Site/Logout/Logout';
 export { default as About } from './Site/About/About';
 export { default as Dashboard } from './Site/Dashboard/Dashboard';

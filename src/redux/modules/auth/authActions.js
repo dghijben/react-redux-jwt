@@ -91,6 +91,29 @@ export function setToken(token) {
   };
 }
 
+export function passwordReset(payload) {
+  return {
+    types: [actions.PASSWORD, actions.PASSWORD_SUCCESS, actions.PASSWORD_FAIL],
+    promise: () => client.post('/password', {
+      data: {
+        email: payload.email
+      }
+    })
+  };
+}
+
+export function passwordChange(payload) {
+  return {
+    types: [actions.PASSWORD_CHANGE, actions.PASSWORD_CHANGE_SUCCESS, actions.PASSWORD_CHANGE_FAIL],
+    promise: () => client.post('/password', {
+      data: {
+        email: payload.email
+      }
+    })
+  };
+}
+
+
 export function isLoaded(globalState) {
   return globalState.authorization && globalState.authorization.user &&
     (globalState.authorization.user.success === true || globalState.authorization.user.pending === true || globalState.authorization.user.failed === true);

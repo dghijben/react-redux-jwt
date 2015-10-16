@@ -58,12 +58,14 @@ class RequireAdminLogin extends Component {
       );
     }
 
-    return (<div>
-      <Helmet
-        title="Denied"
-        titleTemplate="Access - %s"
-        />
-      Access denied</div>);
+    return (
+      <div>
+        <Helmet
+          title="Denied"
+          titleTemplate="Access - %s"
+          />
+        Access denied
+      </div>);
   }
 }
 export default RequireAdminLogin;

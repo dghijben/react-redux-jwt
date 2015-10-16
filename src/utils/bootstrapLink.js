@@ -4,6 +4,7 @@ export default function bootstrapLink(history, state, path, query = null) {
       event.preventDefault();
       history.pushState(state, path);
     },
+    href: history.createPath(path, query),
     active: history.isActive(path, query)
   };
 }
@@ -14,6 +15,7 @@ export function bootstrapSelectLink(history, state, path, query = null) {
       event.preventDefault();
       history.pushState(state, path);
     },
+    href: history.createPath(path, query),
     active: history.isActive(path, query)
   };
 }

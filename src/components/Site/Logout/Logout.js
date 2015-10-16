@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import { authActions } from '../../../redux/modules/auth';
+import authActions from '../../../redux/modules/auth/authActions';
 
 class Logout extends Component {
 

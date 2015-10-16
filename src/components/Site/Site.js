@@ -65,6 +65,7 @@ class App extends Component {
     );
   }
 
+
   render() {
     const {history} = this.props;
     return (
@@ -72,7 +73,7 @@ class App extends Component {
         <Helmet
           title="Site"
           titleTemplate="MySite.com - %s"
-          link={[{'rel': 'stylesheet', 'href': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'}]}
+          link={[{'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css', 'type': 'text/css', 'media': 'screen'}]}
           />
         <Navbar>
           <NavBrand>React-Bootstrap</NavBrand>

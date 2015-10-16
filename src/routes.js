@@ -6,6 +6,8 @@ import {
   Home,
   Login,
   Logout,
+  PasswordForgotten,
+  PasswordReset,
   RequireLogin,
   Dashboard,
   RequireAdminLogin,
@@ -22,7 +24,10 @@ export default (store) => {
     <Route component={App}>
       <Route component={Site}>
         <Route path="/" component={Home}/>
-        <Route path="/login" component={Login} />
+        <Route path="/login" component={Login}>
+          <Route path="/password-forgotten" component={PasswordForgotten} />
+          <Route path="/password-reset/:resetId" component={PasswordReset} />
+        </Route>
         <Route path="/logout" component={Logout} />
         <Route path="/about" component={About}/>
         <Route component={RequireLogin}>

@@ -16,7 +16,7 @@ import Intl from 'intl'; // eslint-disable-line
 import {IntlProvider} from 'react-intl';
 const i18n = window.__i18n;
 const client = new ApiClient();
-const dest = document.getElementById('content');
+const dest = document.getElementById('reactdata');
 const store = createStore(reduxReactRouter, makeRouteHooksSafe(getRoutes), createHistory, client, window.__data);
 listener(store);
 
