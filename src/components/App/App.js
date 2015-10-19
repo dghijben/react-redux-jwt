@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import {connect} from 'react-redux';
@@ -12,9 +13,12 @@ class App extends Component {
 
   static fetchData(getState, dispatch) {
     const promises = [];
+    const state = getState();
     if (!isLoaded(getState())) {
-      const token = getState().authorization.token;
-      promises.push(dispatch(getUser(token)));
+      const token = _.get(state, 'authorization.token', null);
+      if (token !== null) {
+        promises.push(dispatch(getUser(token)));
+      }
     }
     return Promise.all(promises);
   }

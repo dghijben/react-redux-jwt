@@ -19,6 +19,7 @@ class App extends Component {
 
   static fetchDatax(getState, dispatch) {
     const state = getState();
+    console.log('STATE', _.get(state, 'authorization.token', null));
     if (_.get(state, 'authorization.token', null) !== null) {
       if (!isLoaded(getState())) {
         return dispatch(getUser(getState().authorization.token));

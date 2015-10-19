@@ -14,6 +14,8 @@ import {
   About,
   Admin,
   AdminUsers,
+  AdminUserShow,
+  AdminUserEdit,
   AdminUserCreate,
   AdminAcl,
   NotFound
@@ -26,7 +28,7 @@ export default (store) => {
         <Route path="/" component={Home}/>
         <Route path="/login" component={Login}>
           <Route path="/password-forgotten" component={PasswordForgotten} />
-          <Route path="/password-reset/:resetId" component={PasswordReset} />
+          <Route path="/password-reset/:token" component={PasswordReset} />
         </Route>
         <Route path="/logout" component={Logout} />
         <Route path="/about" component={About}/>
@@ -40,11 +42,11 @@ export default (store) => {
 
           <Route path="acl" component={AdminAcl} />
           <Route path="users" component={AdminUsers} />
-          <Route path="wrap" component={AdminUserCreate}>
-            <Route path="child1" component={AdminUserCreate} />
-            <Route path="child2" component={AdminUserCreate} />
-            <Route path="child3" component={AdminUserCreate} />
-          </Route>
+          <Route path="users/:userId" component={AdminUserShow} />
+          <Route path="users/:userId/edit" component={AdminUserEdit} />
+          <Route path="users/new" component={AdminUserCreate} />
+
+
         </Route>
       </Route>
       <Route path="*" component={NotFound} status={404} />

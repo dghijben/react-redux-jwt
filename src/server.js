@@ -83,9 +83,12 @@ app.use((req, res) => {
     return res.status(404).send('Locale is not supported.');
   }
   const i18n = {locale, messages};
-
-
-  cookie.plugToRequest(req, res);
+  if (typeof(req.headers.cookie) !== 'undefined') {
+    cookie.setRawCookie(req.headers.cookie);
+  } else {
+    //Force empty cookie
+    cookie.setRawCookie('cookie:');
+  }
   const client = new ApiClient(req);
 
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);

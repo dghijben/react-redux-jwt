@@ -30,7 +30,7 @@ class Login extends Component {
   render() {
     if (_.has(this.props, 'children')) {
       if (this.props.history.isActive('/password-forgotten') === true ||
-          this.props.history.isActive('/password-reset/' + _.get(this.props, 'router.params.resetId')) === true
+          this.props.history.isActive('/password-reset/' + _.get(this.props, 'router.params.token')) === true
       ) {
         return this.props.children;
       }

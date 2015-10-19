@@ -39,7 +39,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.PASSWORD_CHANGE_SUCCESS:
       return Object.assign({}, state, {passwordChange: {pending: false, success: true}});
     case actions.PASSWORD_CHANGE_FAIL:
-      return Object.assign({}, state, {passwordChange: {pending: false, failed: true}});
+      return Object.assign({}, state, {passwordChange: {msg: action.result, pending: false, failed: true}});
 
 
     default:

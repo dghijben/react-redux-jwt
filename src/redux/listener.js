@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import cookie from 'react-cookie';
-import authActions from './modules/auth/authActions';
+import {setToken} from './modules/auth/authActions';
 
 export default function(store) {
-
+  console.log('HOI');
   const token = cookie.load('token');
-  if (!_.isEmpty(token)) {
-
-    store.dispatch(authActions.setToken(token));
+  if (!_.isEmpty(token) && !_.isNull(token)) {
+    console.log('WE HAVE AN TOKEN', token);
+    store.dispatch(setToken(token));
   }
 
   store.subscribe(() => {
@@ -16,7 +16,9 @@ export default function(store) {
       cookie.remove('token');
     } else {
       if (_.get(state, 'authorization.token', null) !== null) {
-        cookie.save('token', state.authorization.token);
+        if (!cookie.load('token')) {
+          cookie.save('token', state.authorization.token, {path: '/'});
+        }
       }
     }
   });

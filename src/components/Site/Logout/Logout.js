@@ -1,11 +1,11 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import authActions from '../../../redux/modules/auth/authActions';
+import {logout} from '../../../redux/modules/auth/authActions';
 
 class Logout extends Component {
 
   componentWillMount() {
-    this.props.dispatch(authActions.logout());
+    this.props.dispatch(logout());
   }
 
   render() {

@@ -4,7 +4,11 @@ import cookie from 'react-cookie';
 const client = new ApiClient();
 
 export function logout() {
-  cookie.remove('token');
+  cookie.remove('token', '/');
+  cookie.remove('token', '/');
+  cookie.remove('token', '/admin');
+
+
   return {
     type: actions.AUTH_LOGOUT
   };
@@ -24,9 +28,7 @@ export function getUserSuccess(result) {
 }
 
 export function getUserFailure(Exception) {
-  if (!__SERVER__) {
-    cookie.remove('token');
-  }
+  cookie.remove('token');
   return {
     type: actions.USERINFO_FAIL,
     exception: Exception
@@ -105,9 +107,12 @@ export function passwordReset(payload) {
 export function passwordChange(payload) {
   return {
     types: [actions.PASSWORD_CHANGE, actions.PASSWORD_CHANGE_SUCCESS, actions.PASSWORD_CHANGE_FAIL],
-    promise: () => client.post('/password', {
+    promise: () => client.post('/password-reset', {
       data: {
-        email: payload.email
+        email: payload.email,
+        password: payload.password,
+        password_confirmation: payload.passwordCheck,
+        token: payload.token
       }
     })
   };

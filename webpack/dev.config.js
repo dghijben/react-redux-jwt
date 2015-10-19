@@ -50,7 +50,8 @@ module.exports = {
     'main': [
       'webpack-hot-middleware/client?path=http://' + host + ':' + port + '/__webpack_hmr',
       './src/client.js'
-    ]
+    ],
+    'vendor': ['react', 'lodash','react-router', 'history'],
   },
   output: {
     path: assetsPath,
@@ -77,6 +78,7 @@ module.exports = {
   },
   plugins: [
     // hot reload
+    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.IgnorePlugin(/webpack-stats\.json$/),
     new webpack.DefinePlugin({

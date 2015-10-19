@@ -3,17 +3,19 @@ import React, {Component, PropTypes} from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
-import LoginForm from './Form';
+import Form from './Form';
 import { passwordChange } from '../../../../redux/modules/auth/authActions';
 
 @connect(state => ({
-  authorization: state.authorization
+  authorization: state.authorization,
+  router: state.router
 }))
 class PasswordReset extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     authorization: PropTypes.object,
+    router: PropTypes.object,
     history: historyPropTypes.history
   };
 
@@ -22,6 +24,7 @@ class PasswordReset extends Component {
   }
 
   handleSubmit(payload) {
+    payload.token = this.props.router.params.token;
     this.props.dispatch(passwordChange(payload));
   }
 
@@ -36,9 +39,11 @@ class PasswordReset extends Component {
           </Row>
           <Row>
             <Col md={6} sm={12}>
-              <LoginForm onSubmit={this.handleSubmit.bind(this)}
+              <Form onSubmit={this.handleSubmit.bind(this)}
                          failed={_.get(this.props, 'authorization.passwordChange.failed', false)}
                          success={_.get(this.props, 'authorization.passwordChange.success', false)}
+                         pending={_.get(this.props, 'authorization.passwordChange.pending', false)}
+                         error={_.get(this.props, 'authorization.passwordChange.msg', false)}
                 />
             </Col>
           </Row>
