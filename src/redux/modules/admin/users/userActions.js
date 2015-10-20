@@ -1,9 +1,15 @@
+import _ from 'lodash';
 import * as actions from './userConstants';
 
-export function load() {
+export function load(params) {
+
   return {
     types: [actions.USERS, actions.USERS_SUCCESS, actions.USERS_FAIL],
-    promise: (client) => client.get('/admin/users')
+    promise: (client) => client.get('/admin/users', {
+      params: {
+        ...params
+      }
+    })
   };
 }
 
@@ -14,9 +20,11 @@ export function loadUser(userId) {
   };
 }
 
-export function isLoaded(globalState) {
-  return globalState.users && globalState.users.data &&
-    (globalState.users.success === true || globalState.users.failed === true);
+export function isLoaded(globalState, params) {
+  return (
+    _.get(globalState, 'users.success', false) === true &&
+    parseInt(_.get(globalState, 'users.list.current_page', 1), 10) === parseInt(_.get(params, 'page', 1), 10)
+  );
 }
 
 export function isLoadedUser(globalState, userId) {

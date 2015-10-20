@@ -3,10 +3,8 @@ import cookie from 'react-cookie';
 import {setToken} from './modules/auth/authActions';
 
 export default function(store) {
-  console.log('HOI');
   const token = cookie.load('token');
   if (!_.isEmpty(token) && !_.isNull(token)) {
-    console.log('WE HAVE AN TOKEN', token);
     store.dispatch(setToken(token));
   }
 

@@ -5,9 +5,7 @@ const client = new ApiClient();
 
 export function logout() {
   cookie.remove('token', '/');
-  cookie.remove('token', '/');
   cookie.remove('token', '/admin');
-
 
   return {
     type: actions.AUTH_LOGOUT

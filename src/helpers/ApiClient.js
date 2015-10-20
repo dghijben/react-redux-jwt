@@ -18,13 +18,7 @@ class ApiClient_ {
             if (options && options.params) {
               request.query(options.params);
             }
-/*            if (__SERVER__) {
-              if (req.get('cookie')) {
-                request.set('cookie', req.get('cookie'));
-              }
-            }*/
             const token = cookie.load('token');
-            // console.log('SERVERCOOKIE', token);
             if (token) {
               request.set('Authorization', 'Bearer ' + token);
             }

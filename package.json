@@ -50,7 +50,7 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000,
-        "APIPORT": 80
+        "APIPORT": 9106
       }
     },
     "watch-client": {
@@ -75,6 +75,7 @@
     "http-proxy": "1.11.2",
     "immutable": "^3.7.5",
     "intl": "^1.0.0",
+    "jsx-loader": "^0.13.2",
     "less": "2.5.3",
     "less-loader": "2.2.1",
     "lodash": "^3.10.1",
@@ -92,10 +93,12 @@
     "react-helmet": "^2.0.0",
     "react-inline-css": "2.0.0",
     "react-intl": "^2.0.0-pr-3",
+    "react-laravel-paginator": "git://github.com/lemonCMS/react-paginator.git#master",
     "react-redux": "3.1.0",
     "react-router": "1.0.0-rc3",
     "redux": "3.0.1",
     "redux-form": "^2.2.6",
+    "redux-router": "1.0.0-beta3",
     "serialize-javascript": "1.1.2",
     "serve-favicon": "2.3.0",
     "serve-static": "1.10.0",
@@ -143,7 +146,6 @@
     "react-transform-hmr": "^1.0.1",
     "redbox-react": "^1.1.1",
     "redux-devtools": "^2.1.5",
-    "redux-router": "1.0.0-beta3",
     "sass-loader": "^3.0.0",
     "strip-loader": "^0.1.0",
     "style-loader": "^0.12.4",

@@ -36,8 +36,8 @@ class App extends Component {
   }
 
   userDropDown() {
-    const username = _.get(this.props, 'authorization.user.name', 'unknown');
-    const title = <span><i className="fa fa-user"></i> {' '} {username}</span>;
+    const firstname = _.get(this.props, 'authorization.user.firstname', 'unknown');
+    const title = <span><i className="fa fa-user"></i> {' '} {firstname}</span>;
     return (
       <NavDropdown eventKey={4} title={title} id="dropdown-usermenu">
         <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.props.history, null, '/dashboard')}>Dashboard</MenuItem>

@@ -2,13 +2,15 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
+import {logout} from '../../../redux/modules/auth/authActions';
 
 @connect(state => ({authorization: state.authorization}))
 class RequireAdminLogin extends Component {
   static propTypes = {
     authorization: PropTypes.object,
     history: PropTypes.object.isRequired,
-    children: PropTypes.object.isRequired
+    children: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
   };
 
   static contextTypes = {
@@ -23,6 +25,7 @@ class RequireAdminLogin extends Component {
   componentWillMount() {
     const {history} = this.props;
     if (!this.isAdmin()) {
+      this.props.dispatch(logout());
       history.pushState(null, '/');
     }
   }

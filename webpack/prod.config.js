@@ -17,7 +17,8 @@ module.exports = {
   devtool: 'source-map',
   context: path.resolve(__dirname, '..'),
   entry: {
-    'main': './src/client.js'
+    'main': './src/client.js',
+    'vendor': ['react', 'lodash','react-router', 'history'],
   },
   output: {
     path: assetsPath,
@@ -44,7 +45,7 @@ module.exports = {
   },
   plugins: [
     new CleanPlugin([relativeAssetsPath]),
-
+    new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js"),
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     new webpack.DefinePlugin({
