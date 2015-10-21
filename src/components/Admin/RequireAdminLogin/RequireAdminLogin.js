@@ -52,6 +52,7 @@ class RequireAdminLogin extends Component {
               {'rel': 'stylesheet', 'href': '/admin/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production.min.css', 'type': 'text/css', 'media': 'screen'},
+              {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production-plugins.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-skins.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/user.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': 'http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700', 'type': 'text/css', 'media': 'screen'}

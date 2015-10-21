@@ -21,7 +21,7 @@ import {
   NotFound
 } from 'components';
 
-export default (store) => {
+export default () => {
   return (
     <Route component={App}>
       <Route component={Site}>

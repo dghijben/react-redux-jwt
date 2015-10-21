@@ -1,9 +1,10 @@
 import React, {Component, PropTypes} from 'react';
+import createFragment from 'react-addons-create-fragment';
 import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
 import DocumentMeta from 'react-document-meta';
 const cdn = '//cdnjs.cloudflare.com/ajax/libs/';
-import Helmet from "react-helmet";
+import Helmet from 'react-helmet';
 var Intl = require('intl'); // eslint-disable-line
 /**
  * Wrapper component containing HTML metadata and boilerplate tags.
@@ -30,9 +31,9 @@ export default class Html extends Component {
       <html lang="en-us">
         <head>
           <meta charSet="utf-8"/>
-          {head.title}
-          {head.meta}
-          {head.link}
+          {head.title.toComponent()}
+          {head.meta.toComponent()}
+          {head.link.toComponent()}
 
           <link rel="shortcut icon" href="/favicon.ico" />
           <link href={cdn + 'font-awesome/4.4.0/css/font-awesome.min.css'}
