@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {FormControls} from 'react-bootstrap';
+import Ribbon from '../includes/Ribbon';
 
 @connect(state=>({
   'users': state.users,
@@ -23,13 +23,15 @@ class UserShow extends Component {
   }
 
   render() {
+    const breadcrumps = [
+      {name: 'Admin', to: '/admin'},
+      {name: 'Users', to: '/admin/users'},
+      {name: _.get(this.props, 'fields.firstname', 'unknown')},
+    ];
+
     return (
       <div>
-        <div id="ribbon">
-          <ol className="breadcrumb">
-            <li><Link to="/admin">Admin</Link></li><li><Link to="/admin/users">Gebruikers</Link></li><li>{_.get(this.props, 'users.user.firstname', '')}</li>
-          </ol>
-        </div>
+        <Ribbon breadcrumps={breadcrumps}/>
 
         <div id="content">
           <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>

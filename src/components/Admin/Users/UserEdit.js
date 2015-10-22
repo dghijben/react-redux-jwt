@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {connectReduxForm} from 'redux-form';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {Row, Col, Input} from 'react-bootstrap';
 import ButtonState from '../../Includes/ButtonState';
 import formWrap from '../../Includes/FormWrap';
+import Ribbon from '../includes/Ribbon';
 
 @connect(state=>({
   'users': state.users,
@@ -27,16 +27,16 @@ class UserEdit extends Component {
   }
 
   render() {
+    const breadcrumps = [
+      {name: 'Admin', to: '/admin'},
+      {name: 'Users', to: '/admin/users'},
+      {name: _.get(this.props, 'fields.firstname', 'unknown'), to: ('/admin/users/' + _.get(this.props, 'fields.id'))},
+      {name: 'wijzigen'}
+    ];
+
     return (
       <div>
-        <div id="ribbon">
-          <ol className="breadcrumb">
-            <li><Link to="/admin">Admin</Link></li>
-            <li><Link to="/admin/users">Gebruikers</Link></li>
-            <li><Link to={'/admin/users/' + _.get(this.props, 'users.user.id', '')}>{_.get(this.props, 'users.user.firstname', '')}</Link></li>
-            <li>Wijzigen</li>
-          </ol>
-        </div>
+        <Ribbon breadcrumps={breadcrumps}/>
 
         <div id="content">
           <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
