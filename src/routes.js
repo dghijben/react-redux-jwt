@@ -46,7 +46,6 @@ export default () => {
           <Route path="users/:userId/edit" component={AdminUserEdit} />
           <Route path="users/new" component={AdminUserCreate} />
 
-
         </Route>
       </Route>
       <Route path="*" component={NotFound} status={404} />

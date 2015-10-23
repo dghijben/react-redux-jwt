@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import mapDispatchToProps from 'utils/mapDispatchToProps';
 import DataTable from './DataTable';
 import { storeState } from 'redux/modules/reduxRouter/actions';
+import SearchForm from './SearchForm';
 const queryString = require('query-string');
-
 
 @connect(state=>({
   'router': state.router,
@@ -20,12 +20,14 @@ class DataOverview extends Component {
     'fields': PropTypes.object,
     'history': PropTypes.object,
     'pushState': PropTypes.func,
-    'dispatch': PropTypes.func
+    'dispatch': PropTypes.func,
+    'searchForm': PropTypes.object
   };
 
   constructor() {
     super();
     this.switchPage = this.switchPage.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
     this.state = {
       page: 1
     };
@@ -45,6 +47,10 @@ class DataOverview extends Component {
     this.setState({page: page}, this.pushState);
   }
 
+  handleSearch(data) {
+    this.setState({searchForm: {...data}, page: 1}, this.pushState);
+  }
+
   render() {
     const lastPage = _.get(this.props, 'data.list.last_page', 0);
     const currentPage = _.get(this.props, 'data.list.current_page', 0);
@@ -60,6 +66,13 @@ class DataOverview extends Component {
 
     return (
       <div>
+        <SearchForm
+          placeHolder="...zoeken"
+          dropDownTitle="alles"
+          dropDown={_.get(this.props, 'searchForm.dropDownFields', {})}
+          onSubmit={this.handleSearch}
+          initialValues={_.get(this.props, 'searchForm.state', {})}
+          />
         {dataTable}
       </div>
     );

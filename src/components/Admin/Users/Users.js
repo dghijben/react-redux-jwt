@@ -1,20 +1,33 @@
-import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
 import { load } from '../../../redux/modules/admin/users/userActions';
 import { connect } from 'react-redux';
 import Ribbon from '../includes/Ribbon';
+import {Well} from 'react-bootstrap';
 import mapDispatchToProps from 'utils/mapDispatchToProps';
 import DataOverview from '../includes/DataOverview';
+import DynamicForm from '../includes/DynamicForm';
 import {stateMapper} from 'utils/functions';
 const reducerIndex = 'users';
 const form = {
   name: 'searchForm',
   fields: [
     'search',
-    'searchField',
-    'page'
+    'searchField'
   ],
 };
+
+const dropDownFields = [
+  {default: 'Alle'},
+  {name: 'Voornaam', field: 'firstname'},
+  {name: 'Achternaam', field: 'lastname'},
+  {name: 'Volledige naam', field: 'fullname'},
+  {name: 'E-mail', field: 'email'}
+];
+
+const breadcrumps = [
+  {name: 'Admin', to: '/admin'},
+  {name: 'Users'}
+];
 
 @connect(state=>{
   const obj = {
@@ -39,9 +52,6 @@ class Users extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      searchForm: {}
-    };
   }
 
   componentWillMount() {
@@ -55,15 +65,10 @@ class Users extends Component {
     const state = getState();
     const pathname = state.router.location.pathname;
     const params = stateMapper(state, pathname, form.name, form.fields);
-    return dispatch(load(_.omit(params, (value)=>{ return !value; })));
+    return dispatch(load(params));
   }
 
   render() {
-
-    const breadcrumps = [
-      {name: 'Admin', to: '/admin'},
-      {name: 'Users'}
-    ];
 
     const data = this.props[reducerIndex];
     const cols = [
@@ -78,15 +83,30 @@ class Users extends Component {
       ]}
     ];
 
+
+/*
+    <DataOverview
+      cols={cols}
+      data={data}
+      searchForm={{
+                name: form.name,
+                fields: form.fields,
+                dropDownFields: dropDownFields,
+                initialValues: this.state[form.name]
+              }}
+      />
+*/
+
     return (
       <div>
         <Ribbon breadcrumps={breadcrumps}/>
         <div id="content">
-          <DataOverview
-            cols={cols}
-            form={form}
-            data={data}
-            />
+          <Well>
+            <DynamicForm
+              formKey={this.props.formKey + 'DynamicForm'}
+              formName="contact"
+              fieldsNeeded={['name','mango', 'lala']} initialValues={{name: 'kaas met mango'}}/>
+          </Well>
         </div>
       </div>
     );
