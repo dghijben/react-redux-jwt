@@ -7,7 +7,8 @@ export default class DataTable extends Component {
   static propTypes = {
     records: PropTypes.array.isRequired,
     cols: PropTypes.array.isRequired,
-    paginator: PropTypes.object
+    paginator: PropTypes.object,
+    onChange: PropTypes.func
   }
 
   constructor() {

@@ -42,7 +42,9 @@ class SearchForm extends Component {
   dropDownSelect(item) {
     this.setState({dropDownTitle: item.name});
     this.props.dispatch(updateField('searchField', item.field));
-    this.props.handleSubmit();
+    if (_.get(this.props, 'fields.search.value')) {
+      this.props.handleSubmit();
+    }
   }
 
   dropDown() {
