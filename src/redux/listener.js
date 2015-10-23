@@ -11,11 +11,11 @@ export default function(store) {
   store.subscribe(() => {
     const state = store.getState();
     if (_.get(state, 'authorization.user.failed', null) === true) {
-      cookie.remove('token');
+      // cookie.remove('token');
     } else {
       if (_.get(state, 'authorization.token', null) !== null) {
         if (!cookie.load('token')) {
-          cookie.save('token', state.authorization.token, {path: '/'});
+          cookie.save('token', state.authorization.token, ["Path='/'"]);
         }
       }
     }

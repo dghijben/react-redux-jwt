@@ -99,7 +99,6 @@ class SearchFormWrap extends Component {
       }
     }
 
-    console.log('Log', this.props);
     const SearchForm = connectReduxForm({ form: 'serachForm', fields: ['search'] })(SearchFormClass);
 
     const {name, fields, dispatch, onSubmit, placeHolder, initialValues} = this.props;

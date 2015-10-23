@@ -83,12 +83,18 @@ app.use((req, res) => {
     return res.status(404).send('Locale is not supported.');
   }
   const i18n = {locale, messages};
+
+
+  cookie.plugToRequest(req, res);
+
+/*
   if (typeof(req.headers.cookie) !== 'undefined') {
     cookie.setRawCookie(req.headers.cookie);
   } else {
     //Force empty cookie
     cookie.setRawCookie('cookie:');
   }
+*/
   const client = new ApiClient(req);
 
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);
@@ -155,7 +161,7 @@ if (config.port) {
     if (err) {
       console.error(err);
     }
-    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.name, config.apiPort);
+    console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
     console.info('==> 💻  Open http://localhost:%s in a browser to view the app.', config.port);
   });
 } else {

@@ -32,16 +32,20 @@ export default () => {
         </Route>
         <Route path="/logout" component={Logout} />
         <Route path="/about" component={About}/>
+
         <Route component={RequireLogin}>
           <Route path="/dashboard" component={Dashboard}/>
         </Route>
+      </Route>
+      <Route component={Site}>
+        <Route path="/users" component={AdminUsers} />
       </Route>
       <Route component={RequireAdminLogin}>
         <Route path="admin" component={Admin}>
           <IndexRoute component={AdminUsers} />
 
           <Route path="acl" component={AdminAcl} />
-          <Route path="users" component={AdminUsers} />
+
           <Route path="users/:userId" component={AdminUserShow} />
           <Route path="users/:userId/edit" component={AdminUserEdit} />
           <Route path="users/new" component={AdminUserCreate} />

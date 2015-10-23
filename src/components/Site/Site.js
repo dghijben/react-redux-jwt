@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
-import { getUser, isLoaded } from '../../redux/modules/auth/authActions';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
@@ -15,16 +14,6 @@ class App extends Component {
     this.loginLink = this.loginLink.bind(this);
     this.logoutLink = this.logoutLink.bind(this);
     this.userDropDown = this.userDropDown.bind(this);
-  }
-
-  static fetchDatax(getState, dispatch) {
-    const state = getState();
-    console.log('STATE', _.get(state, 'authorization.token', null));
-    if (_.get(state, 'authorization.token', null) !== null) {
-      if (!isLoaded(getState())) {
-        return dispatch(getUser(getState().authorization.token));
-      }
-    }
   }
 
   authorized() {
