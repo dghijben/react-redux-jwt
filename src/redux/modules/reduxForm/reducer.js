@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as actions from './constants';
 
 export default {
@@ -5,12 +6,12 @@ export default {
     switch (action.type) {
       case actions.UPDATE_REDUX_FORM:
         const newState = Object.assign({}, state);
-        if (newState.hasOwnProperty(action.field)) {
-          newState[action.field].value = action.value;
-        } else {
-          newState[action.field] = {value: action.value};
+
+        if (action.key !== null) {
+          return _.set(newState, action.key + '.' + action.field + '.value', action.value);
         }
-        return newState;
+
+        return _.set(newState, action.field + '.value', action.value);
       default:
         return state;
     }

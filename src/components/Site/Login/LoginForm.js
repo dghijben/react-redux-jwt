@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import { Input, Row, Col, Alert } from 'react-bootstrap';
-import {connectReduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form';
 import validateLogin from './ValidateLogin';
 import ButtonState from '../Includes/ButtonState';
 import bootstrapLink from '../../../utils/bootstrapLink';
@@ -111,7 +111,7 @@ LoginForm.contextTypes = {
   history: historyPropTypes.history
 };
 
-LoginForm = connectReduxForm({
+LoginForm = reduxForm({
   form: 'login',                      // the name of your form and the key to
   fields: ['email', 'password'],
   validate: validateLogin

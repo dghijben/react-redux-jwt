@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {connectReduxForm} from 'redux-form';
+import {reduxForm} from 'redux-form';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {Row, Col, Input} from 'react-bootstrap';
 import ButtonState from '../../Includes/ButtonState';
@@ -60,7 +60,7 @@ class UserEdit extends Component {
 
 
 const BeforeConnect = formWrap(UserEdit);
-const AfterConnect = connectReduxForm({
+const AfterConnect = reduxForm({
   form: 'form',
   fields: ['initials', 'firstname', 'middlename', 'lastname', 'email'],
 })(BeforeConnect);

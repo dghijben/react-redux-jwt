@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import mapDispatchToProps from 'utils/mapDispatchToProps';
 import DataTable from './DataTable';
 import { storeState } from 'redux/modules/reduxRouter/actions';
-import SearchForm from './SearchForm';
+import DynamicForm from './DynamicForm';
+import deepEqual from 'deep-equal';
 const queryString = require('query-string');
 
 @connect(state=>({
@@ -14,10 +15,10 @@ const queryString = require('query-string');
 class DataOverview extends Component {
   static propTypes = {
     data: PropTypes.object,
-    cols: PropTypes.array,
+    cols: PropTypes.array.isRequired,
     'router': PropTypes.object,
     'reduxRouterReducer': PropTypes.object,
-    'fields': PropTypes.object,
+    'form': PropTypes.object,
     'history': PropTypes.object,
     'pushState': PropTypes.func,
     'dispatch': PropTypes.func,
@@ -31,6 +32,15 @@ class DataOverview extends Component {
     this.state = {
       page: 1
     };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // Important when using dynamic redux forms
+    if (deepEqual(nextProps.data, this.props.data) === true ) {
+      return false;
+    }
+
+    return true;
   }
 
   pushState() {
@@ -66,12 +76,12 @@ class DataOverview extends Component {
 
     return (
       <div>
-        <SearchForm
-          placeHolder="...zoeken"
-          dropDownTitle="alles"
-          dropDown={_.get(this.props, 'searchForm.dropDownFields', {})}
-          onSubmit={this.handleSearch}
-          initialValues={_.get(this.props, 'searchForm.state', {})}
+        <DynamicForm
+          formName={this.props.form.name}
+          formKey={this.props.form.key}
+          fieldsNeeded={this.props.form.fields}
+          initialValues={this.props.form.initialValues}
+          onSubmit={this.props.form.onSubmit}
           />
         {dataTable}
       </div>
