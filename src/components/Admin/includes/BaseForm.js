@@ -26,11 +26,9 @@ class BaseForm extends Component {
   }
 
   dropDownSelect(name, item) {
-    this.setState(_.set(Object.assign({}, this.state), ['dropDownTitle', name], item.name || item.default));
-    this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null)));
-
-    // this.props.handleSubmit();
-    console.log('SAY what>?');
+    this.setState(_.set(Object.assign({}, this.state), ['dropDownTitle', name], item.desc || item.default));
+    Promise.resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))))
+    .then(this.refs.button.click());
   }
 
   dropDown(field) {
@@ -46,9 +44,9 @@ class BaseForm extends Component {
         menuItem.push( <MenuItem key={key + '_div'} divider/>);
       } else {
         if (_.get(this.props, ['fields', field.name, 'defaultValue']) === item.field) {
-          dropDownTitle = item.name;
+          dropDownTitle = item.desc;
         }
-        menuItem.push( <MenuItem key={key} onSelect={this.props.handleSubmit(select)}>{item.name}</MenuItem>);
+        menuItem.push( <MenuItem key={key} onSelect={select}>{item.desc}</MenuItem>);
       }
     });
 
@@ -83,9 +81,8 @@ class BaseForm extends Component {
 
   render() {
     const { fieldsNeeded, fields } = this.props;
-    console.log('Props', this.props);
     return (
-      <form onSubmit={this.props.handleSubmit}>
+      <form onSubmit={this.props.handleSubmit} ref="form">
         <div formKey={this.props.formKey} >
           {_.map(fieldsNeeded, (field, key) => {
             return (
@@ -95,8 +92,8 @@ class BaseForm extends Component {
               />
             );
           })}
-          <input type="button" value="verstuur"/>
         </div>
+        <input type="button" ref="button" onClick={this.props.handleSubmit} className="hidden" />
       </form>
     );
   }

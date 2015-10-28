@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
-import mapDispatchToProps from 'utils/mapDispatchToProps';
 import DataTable from './DataTable';
-import { storeState } from 'redux/modules/reduxRouter/actions';
 import DynamicForm from './DynamicForm';
+import { storeState } from '../../../redux/modules/reduxRouter/actions';
 import deepEqual from 'deep-equal';
-const queryString = require('query-string');
+import {mapDispatchToProps, stringifyState, filterFields, createParamsForFetch} from 'utils/functions';
 
 @connect(state=>({
   'router': state.router,
@@ -20,8 +19,8 @@ class DataOverview extends Component {
     'reduxRouterReducer': PropTypes.object,
     'form': PropTypes.object,
     'history': PropTypes.object,
-    'pushState': PropTypes.func,
     'dispatch': PropTypes.func,
+    'pushState': PropTypes.func,
     'searchForm': PropTypes.object
   };
 
@@ -29,9 +28,19 @@ class DataOverview extends Component {
     super();
     this.switchPage = this.switchPage.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
-    this.state = {
-      page: 1
-    };
+    this.pushState = this.pushState.bind(this);
+    this.loadState = this.loadState.bind(this);
+    this.pushStateAttempt = this.pushStateAttempt.bind(this);
+    this.state = {fieldNames: []};
+  }
+
+  componentWillMount() {
+    if (_.get(this.state, 'fieldNames').length === 0) {
+      const fieldNames = filterFields(this.props.form.fields);
+      this.setState({fieldNames: fieldNames}, this.loadState(fieldNames));
+    } else {
+      this.loadState(this.state.fieldNames);
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -39,16 +48,26 @@ class DataOverview extends Component {
     if (deepEqual(nextProps.data, this.props.data) === true ) {
       return false;
     }
-
     return true;
   }
 
+  loadState(fieldNames) {
+    const obj = Object.assign({}, this.state);
+    obj[this.props.form.name] = createParamsForFetch(this.props, this.props.form.name, fieldNames);
+    this.setState(obj);
+  }
+
   pushState() {
-    const q = queryString.stringify({
-      page: this.state.page,
-      search: _.get(this.state, 'searchForm.search'),
-      searchField: _.get(this.state, 'searchForm.searchField')
-    });
+    if (_.get(this.state, 'fieldNames', null) === null) {
+      this.setState({fieldNames: filterFields(this.props.form.fields)}, this.pushStateAttempt());
+    } else {
+      this.pushStateAttempt();
+    }
+  }
+
+  pushStateAttempt() {
+    const fieldNames = filterFields(this.props.form.fields);
+    const q = stringifyState(this.state, this.props.form.name, fieldNames);
     this.props.dispatch(storeState(this.props.router.location.pathname, this.state));
     this.props.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
   }
@@ -58,7 +77,12 @@ class DataOverview extends Component {
   }
 
   handleSearch(data) {
-    this.setState({searchForm: {...data}, page: 1}, this.pushState);
+    const obj = {};
+    obj[this.props.form.name] = {
+      ...data,
+    };
+
+    this.setState(obj, this.pushState);
   }
 
   render() {
@@ -80,8 +104,8 @@ class DataOverview extends Component {
           formName={this.props.form.name}
           formKey={this.props.form.key}
           fieldsNeeded={this.props.form.fields}
-          initialValues={this.props.form.initialValues}
-          onSubmit={this.props.form.onSubmit}
+          initialValues={this.state[this.props.form.name]}
+          onSubmit={this.handleSearch}
           />
         {dataTable}
       </div>

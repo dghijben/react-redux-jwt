@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as actions from './constants';
 
 export default {
-  searchForm: (state, action) => { // <------ 'searchForm' is name of form given to connectReduxForm()
+  form: (state, action) => { // <------ 'searchForm' is name of form given to connectReduxForm()
     switch (action.type) {
       case actions.UPDATE_REDUX_FORM:
         const newState = Object.assign({}, state);

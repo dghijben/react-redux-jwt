@@ -1,24 +1,33 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
 import { load } from '../../../redux/modules/admin/users/userActions';
-import { storeState } from '../../../redux/modules/reduxRouter/actions';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { pushState } from 'redux-router';
+// import { pushState } from 'redux-router';
 import {Well} from 'react-bootstrap';
-const queryString = require('query-string');
 import Ribbon from '../includes/Ribbon';
 import DataOverview from '../includes/DataOverview';
+import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 
 const reducerIndex = 'users';
+// const queryFields = ['page', 'search', 'searchField'];
 
+const formName = 'form';
+const fields = [
+  {name: 'search', type: 'text', placeHolder: 'zoeken...',
+    buttonBefore: {
+      name: 'searchField', type: 'dropdown',
+      items: [
+        {default: 'Alle'},
+        {desc: 'Voornaam', field: 'firstname'},
+        {desc: 'Achternaam', field: 'lastname'},
+        {desc: 'Volledige naam', field: 'fullname'},
+        {desc: 'E-mail', field: 'email'}
+      ]
+    }
+  }
+];
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-    pushState: bindActionCreators(pushState, dispatch)
-  };
-}
+const fieldNames = filterFields(fields);
 
 @connect(state=>{
   const obj = {
@@ -43,56 +52,13 @@ class Users extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.switchPage = this.switchPage.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.pushState = this.pushState.bind(this);
-    this.state = {
-      searchForm: {}
-    };
-  }
-
-  componentWillMount() {
-    const pathname = this.props.router.location.pathname;
-    this.setState({
-      searchForm: {
-        search: _.get(this.props.router, 'location.query.search') || _.get(this.props, 'reduxRouterReducer.routes[' + pathname + '].searchForm.search', ''),
-        searchField: _.get(this.props.router, 'location.query.searchField') || _.get(this.props, 'reduxRouterReducer.routes[' + pathname + '].searchForm.searchField', '')
-      }
-    });
   }
 
   static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const params = {};
-    const pathname = state.router.location.pathname;
-
-    params.page = _.get(state.router, 'location.query.page') || _.get(state, 'reduxRouterReducer.routes[' + pathname + '].page');
-    params.search = _.get(state.router, 'location.query.search') || _.get(state, 'reduxRouterReducer.routes[' + pathname + '].searchForm.search');
-    params.searchField = _.get(state.router, 'location.query.searchField') || _.get(state, 'reduxRouterReducer.routes[' + pathname + '].searchForm.searchField');
-    return dispatch(load(_.omit(params, (value)=>{ return !value; })));
-  }
-
-  pushState() {
-    const q = queryString.stringify({
-      page: this.state.page,
-      search: _.get(this.state, 'searchForm.search'),
-      searchField: _.get(this.state, 'searchForm.searchField')
-    });
-    this.props.dispatch(storeState(this.props.router.location.pathname, this.state));
-    this.props.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
-  }
-
-  switchPage(page) {
-    this.setState({page: page}, this.pushState);
-  }
-
-  handleSearch(data) {
-    console.log('HOIS!!', data);
-    this.setState({searchForm: {...data}, page: 1}, this.pushState);
+    return dispatch(load(createParamsForFetch(getState(), formName, fieldNames)));
   }
 
   render() {
-
     const click1 = (item) => {
       this.props.history.pushState({}, '/admin/users/' + item.id);
     };
@@ -107,32 +73,16 @@ class Users extends Component {
     ];
 
     const form = {
-      name: 'searchForm',
+      name: formName,
       key: 'key1',
       onSubmit: this.handleSearch,
-      fields: [
-        {name: 'search', type: 'text', placeHolder: 'zoeken...',
-          buttonBefore: {
-            name: 'searchField', type: 'dropdown',
-            items: [
-              {default: 'Alle'},
-              {name: 'Voornaam', field: 'firstname'},
-              {name: 'Achternaam', field: 'lastname'},
-              {name: 'Volledige naam', field: 'fullname'},
-              {name: 'E-mail', field: 'email'}
-            ]
-          }
-        }
-      ],
-      initialValues: this.state.searchForm
+      fields: fields
     };
-
 
     return (
       <div>
         <Ribbon breadcrumps={breadcrumps}/>
         <div id="content">
-
           <Well>
             <DataOverview
               form={form}
@@ -148,11 +98,8 @@ class Users extends Component {
                   {name: 'verwijder', onClick: click2},
                 ]}
               ]}
-
               />
           </Well>
-
-
         </div>
       </div>
     );

@@ -4,7 +4,9 @@ import cookie from 'react-cookie';
 const client = new ApiClient();
 
 export function logout() {
-  cookie.remove('token', '/');
+  if (cookie.load('token')) {
+    cookie.remove('token', '/');
+  }
   return {
     type: actions.AUTH_LOGOUT
   };

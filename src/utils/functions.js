@@ -1,7 +1,10 @@
 import _ from 'lodash';
+import { bindActionCreators } from 'redux';
+import { pushState } from 'redux-router';
+const queryString = require('query-string');
 
-const params = {};
 export function stateMapper(state, pathname, name, obj, deep = 0) {
+  const params = {};
   if (deep === 0) {
     obj.push('page');
   }
@@ -37,4 +40,48 @@ export function pickDeep(collection, predicate, thisArg) {
       }
     }
   });
+}
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    dispatch,
+    pushState: bindActionCreators(pushState, dispatch)
+  };
+}
+
+
+// deep filter, get all values of an attribute in a deep array
+export function filterFields(fields, fieldName = 'name', extra = ['page']) {
+  const fieldNames = extra;
+  const mapper = (allFields) => {
+    _.map(allFields, (field, key)=>{
+      if (key === fieldName) {
+        fieldNames.push(field);
+      } else if (_.isObject(field)) {
+        mapper(field);
+      }
+    });
+  };
+
+  mapper(fields);
+  return fieldNames;
+}
+
+export function createParamsForFetch(state, form, fields) {
+  const pathname = state.router.location.pathname;
+  const params = {};
+  _.map(fields, (field) => {
+    params[field] = _.get(state, ['router', 'location', 'query', field]) ||
+      _.get(state, ['reduxRouterReducer', 'routes', pathname, form, field]) ||
+      _.get(state, ['reduxRouterReducer', 'routes', pathname, field]);
+  });
+  return _.omit(params, (value)=>{ return !value; });
+}
+
+export function stringifyState(state, formName, fields) {
+  const obj = {};
+  _.map(fields, (fieldName) => {
+    obj[fieldName] = _.get(state, fieldName) || _.get(state, [formName, fieldName]);
+  });
+  return queryString.stringify(_.omit(obj, (value)=>{ return !value; }));
 }
