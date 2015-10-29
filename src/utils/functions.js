@@ -85,3 +85,11 @@ export function stringifyState(state, formName, fields) {
   });
   return queryString.stringify(_.omit(obj, (value)=>{ return !value; }));
 }
+
+export function filterState(state, formName, fields) {
+  const obj = {};
+  _.map(fields, (fieldName) => {
+    obj[fieldName] = _.get(state, fieldName) || _.get(state, [formName, fieldName]);
+  });
+  return _.omit(obj, (value)=>{ return !value; });
+}

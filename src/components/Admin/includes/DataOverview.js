@@ -5,7 +5,7 @@ import DataTable from './DataTable';
 import DynamicForm from './DynamicForm';
 import { storeState } from '../../../redux/modules/reduxRouter/actions';
 import deepEqual from 'deep-equal';
-import {mapDispatchToProps, stringifyState, filterFields, createParamsForFetch} from 'utils/functions';
+import {mapDispatchToProps, filterState, filterFields, stringifyState, createParamsForFetch} from 'utils/functions';
 
 @connect(state=>({
   'router': state.router,
@@ -17,11 +17,16 @@ class DataOverview extends Component {
     cols: PropTypes.array.isRequired,
     'router': PropTypes.object,
     'reduxRouterReducer': PropTypes.object,
-    'form': PropTypes.object,
+    'form': PropTypes.shape({
+      'key': PropTypes.string.isRequired,
+      'fields': PropTypes.array.isRequired
+    }),
+    'name': PropTypes.string.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func,
     'pushState': PropTypes.func,
-    'searchForm': PropTypes.object
+    'searchForm': PropTypes.object,
+    'fetchData': PropTypes.func
   };
 
   constructor() {
@@ -31,19 +36,24 @@ class DataOverview extends Component {
     this.pushState = this.pushState.bind(this);
     this.loadState = this.loadState.bind(this);
     this.pushStateAttempt = this.pushStateAttempt.bind(this);
+    this.form = this.form.bind(this);
     this.state = {fieldNames: []};
   }
 
   componentWillMount() {
-    if (_.get(this.state, 'fieldNames').length === 0) {
-      const fieldNames = filterFields(this.props.form.fields);
-      this.setState({fieldNames: fieldNames}, this.loadState(fieldNames));
+    if (_.get(this.props, 'form', null)) {
+      if (_.get(this.state, 'fieldNames').length === 0) {
+        const fieldNames = filterFields(this.props.form.fields);
+        this.setState({fieldNames: fieldNames}, this.loadState(fieldNames));
+      } else {
+        this.loadState(this.state.fieldNames);
+      }
     } else {
-      this.loadState(this.state.fieldNames);
+      this.setState({fieldNames: ['page']}, this.loadState(['page']));
     }
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps: Object) {
     // Important when using dynamic redux forms
     if (deepEqual(nextProps.data, this.props.data) === true ) {
       return false;
@@ -51,9 +61,9 @@ class DataOverview extends Component {
     return true;
   }
 
-  loadState(fieldNames) {
+  loadState(fieldNames: Array) {
     const obj = Object.assign({}, this.state);
-    obj[this.props.form.name] = createParamsForFetch(this.props, this.props.form.name, fieldNames);
+    obj[this.props.name] = createParamsForFetch(this.props, this.props.name, fieldNames);
     this.setState(obj);
   }
 
@@ -66,23 +76,46 @@ class DataOverview extends Component {
   }
 
   pushStateAttempt() {
-    const fieldNames = filterFields(this.props.form.fields);
-    const q = stringifyState(this.state, this.props.form.name, fieldNames);
-    this.props.dispatch(storeState(this.props.router.location.pathname, this.state));
-    this.props.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
-  }
-
-  switchPage(page) {
-    this.setState({page: page}, this.pushState);
-  }
-
-  handleSearch(data) {
     const obj = {};
-    obj[this.props.form.name] = {
+    obj[this.props.name] = this.state[this.props.name];
+    this.props.dispatch(storeState(this.props.router.location.pathname, obj));
+
+    if (typeof this.props.fetchData === 'function') {
+      this.props.fetchData(filterState(this.state, this.props.name, this.state.fieldNames));
+    } else {
+      const q = stringifyState(this.state, this.props.name, this.state.fieldNames);
+      this.props.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
+    }
+  }
+
+  switchPage(page: number) {
+    const obj = Object.assign({}, this.state);
+    obj[this.props.name].page = page;
+    this.setState(obj, this.pushState);
+  }
+
+  handleSearch(data: Object) {
+    const obj = {};
+    obj[this.props.name] = {
       ...data,
     };
 
     this.setState(obj, this.pushState);
+  }
+
+
+  form() {
+    if (_.get(this.props, 'form', null)) {
+      return (
+        <DynamicForm
+          formName={this.props.name}
+          formKey={this.props.form.key}
+          fieldsNeeded={this.props.form.fields}
+          initialValues={this.state[this.props.name]}
+          onSubmit={this.handleSearch}
+          />
+      );
+    }
   }
 
   render() {
@@ -90,6 +123,11 @@ class DataOverview extends Component {
     const currentPage = _.get(this.props, 'data.list.current_page', 0);
     const dataTable = (<DataTable
       cols={this.props.cols}
+      state={{
+        pending: _.get(this.props, 'data.pending'),
+        failed: _.get(this.props, 'data.failed'),
+        success: _.get(this.props, 'data.success')
+      }}
       records={_.get(this.props, 'data.list.data', [])}
       paginator={{
         currPage: currentPage,
@@ -100,13 +138,7 @@ class DataOverview extends Component {
 
     return (
       <div>
-        <DynamicForm
-          formName={this.props.form.name}
-          formKey={this.props.form.key}
-          fieldsNeeded={this.props.form.fields}
-          initialValues={this.state[this.props.form.name]}
-          onSubmit={this.handleSearch}
-          />
+        {this.form()}
         {dataTable}
       </div>
     );

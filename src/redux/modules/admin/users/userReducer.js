@@ -6,9 +6,9 @@ const initialState = {
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case actions.USERS:
-      return Object.assign({}, {list: state.list}, {pending: true});
+      return Object.assign({}, {list: state.list}, {pending: true, startTime: Date.now()});
     case actions.USERS_SUCCESS:
-      return Object.assign({}, {list: action.result, pending: false, success: true});
+      return Object.assign({}, {startTime: state.startTime}, {list: action.result, pending: false, success: true});
     case actions.USERS_FAIL:
       return Object.assign({}, {pending: false, failed: true});
 

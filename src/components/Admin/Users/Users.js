@@ -1,19 +1,16 @@
-// import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
 import { load } from '../../../redux/modules/admin/users/userActions';
 import { connect } from 'react-redux';
-// import { pushState } from 'redux-router';
 import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DataOverview from '../includes/DataOverview';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 
 const reducerIndex = 'users';
-// const queryFields = ['page', 'search', 'searchField'];
+const name = 'dataoverview';
 
-const formName = 'form';
 const fields = [
-  {name: 'search', type: 'text', placeHolder: 'zoeken...',
+  {name: 'search', type: 'text', placeHolder: 'zoeken...', bsSize: 'large',
     buttonBefore: {
       name: 'searchField', type: 'dropdown',
       items: [
@@ -23,6 +20,10 @@ const fields = [
         {desc: 'Volledige naam', field: 'fullname'},
         {desc: 'E-mail', field: 'email'}
       ]
+    },
+    buttonAfter: {
+      type: 'submit',
+      value: <i className="fa fa-search"></i>
     }
   }
 ];
@@ -42,29 +43,34 @@ class Users extends Component {
 
   static propTypes = {
     'users': PropTypes.object,
-    'router': PropTypes.object,
-    'reduxRouterReducer': PropTypes.object,
-    'fields': PropTypes.object,
     'history': PropTypes.object,
-    'pushState': PropTypes.func,
     'dispatch': PropTypes.func
   };
 
   constructor(props, context) {
     super(props, context);
+    this.fetchDataCallBack = this.fetchDataCallBack.bind(this);
   }
 
   static fetchDataDeferred(getState, dispatch) {
-    return dispatch(load(createParamsForFetch(getState(), formName, fieldNames)));
+    return dispatch(load(createParamsForFetch(getState(), name, fieldNames)));
+  }
+
+  fetchDataCallBack(state) {
+    return this.props.dispatch(load(state));
   }
 
   render() {
-    const click1 = (item) => {
+    const show = (item) => {
       this.props.history.pushState({}, '/admin/users/' + item.id);
     };
 
-    const click2 = () => {
+    const edit = () => {
       console.log('CLick 2');
+    };
+
+    const remove = () => {
+      console.log('CLick 3');
     };
 
     const breadcrumps = [
@@ -72,30 +78,29 @@ class Users extends Component {
       {name: 'Users'}
     ];
 
-    const form = {
-      name: formName,
-      key: 'key1',
-      onSubmit: this.handleSearch,
-      fields: fields
-    };
-
     return (
       <div>
         <Ribbon breadcrumps={breadcrumps}/>
         <div id="content">
           <Well>
             <DataOverview
-              form={form}
+              name={name}
+              fetchData={this.fetchDataCallBack}
               data={this.props.users}
+              form={{
+                key: 'form',
+                fields: fields
+              }}
               cols={[
                 {name: 'Naam', show: ['firstname', 'middlename', 'lastname']},
                 {name: 'Email', show: 'email'},
                 {name: 'Aangemaakt', show: 'created_at'},
                 {name: 'Gewijzigd', show: 'updated_at'},
                 {name: 'Acties', dropdownButton: [
-                  {name: 'wijzigen', onClick: click1},
+                  {name: 'bekijken', onClick: show},
+                  {name: 'wijzigen', onClick: edit},
                   {divider: true},
-                  {name: 'verwijder', onClick: click2},
+                  {name: 'verwijder', onClick: remove},
                 ]}
               ]}
               />

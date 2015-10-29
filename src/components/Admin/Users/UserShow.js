@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {FormControls} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
+import Pending from 'components/Includes/Pending';
+import Failed from 'components/Includes/Failed';
 
 @connect(state=>({
   'users': state.users,
@@ -32,7 +34,8 @@ class UserShow extends Component {
     return (
       <div>
         <Ribbon breadcrumps={breadcrumps}/>
-
+        <Pending state={_.get(this.props, 'users.user.pending', false)}/>
+        <Failed state={_.get(this.props, 'users.user.failed', false)}/>
         <div id="content">
           <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
           <form className="form-horizontal">

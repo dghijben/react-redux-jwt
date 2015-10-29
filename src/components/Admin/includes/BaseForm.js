@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import {DropdownButton, MenuItem, Input} from 'react-bootstrap';
+import {DropdownButton, MenuItem, Input, Button} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
 
 class BaseForm extends Component {
@@ -31,7 +31,7 @@ class BaseForm extends Component {
     .then(this.refs.button.click());
   }
 
-  dropDown(field) {
+  dropDown(field: Object, size: string) {
 
     const menuItem = [];
     let dropDownTitle = null;
@@ -52,43 +52,55 @@ class BaseForm extends Component {
 
     if (menuItem.length > 0) {
       return (
-        <DropdownButton bsSize="large" title={_.get(this.state, ['dropDownTitle', field.name]) || dropDownTitle} id="input-dropdown-addon">
+        <DropdownButton bsSize={_.get(field, 'bsSize', size)} bsStyle={_.get(field, 'style', 'primary')} title={_.get(this.state, ['dropDownTitle', field.name]) || dropDownTitle} id="input-dropdown-addon">
           {menuItem}
         </DropdownButton>
       );
     }
   }
 
-  input(field) {
+  input(field: Object, size: string) {
     return (
-      <Input type="text" name="search" bsSize="large" placeholder={_.get(field, 'placeholder', '')}
-      {...this.props.fields[field.name]}
-           buttonBefore={this.addOnButton(_.get(field, 'buttonBefore', {}))}
+      <Input type="text" name="search" bsSize={_.get(field, 'bsSize', size)} placeholder={_.get(field, 'placeholder', '')}
+        {...this.props.fields[field.name]}
+        buttonBefore={this.addOnButton(_.get(field, 'buttonBefore', {}))}
+        buttonAfter={this.addOnButton(_.get(field, 'buttonAfter', {}))}
       />
     );
   }
 
-  addOnButton(button) {
+  button(field: Object, size: string) {
+    return (
+      <Button bsSize={_.get(field, 'bsSize', size)} type={field.type} bsStyle={_.get(field, 'style', 'primary')}>{field.value}</Button>
+    );
+  }
+
+  addOnButton(button, size) {
     if (!_.isEmpty(button)) {
       switch (button.type) {
+        case 'submit':
+          return this.button(button, size);
         case 'dropdown':
-          return this.dropDown(button);
+          return this.dropDown(button, size);
         default:
-          return this.input(button);
+          return this.input(button, size);
       }
     }
   }
 
   render() {
     const { fieldsNeeded, fields } = this.props;
+
     return (
       <form onSubmit={this.props.handleSubmit} ref="form">
         <div formKey={this.props.formKey} >
           {_.map(fieldsNeeded, (field, key) => {
+            const size = _.get(field, 'bsSize', '');
             return (
-              <Input key={key} type="text" name="search" bsSize="large" placeholder={_.get(field, 'placeholder', '')}
+              <Input key={key} type="text" name="search" bsSize={size} placeholder={_.get(field, 'placeholder', '')}
               {...fields[field.name]}
-                buttonBefore={this.addOnButton(_.get(field, 'buttonBefore', {}))}
+                buttonBefore={this.addOnButton(_.get(field, 'buttonBefore', {}), size)}
+                buttonAfter={this.addOnButton(_.get(field, 'buttonAfter', {}), size)}
               />
             );
           })}
