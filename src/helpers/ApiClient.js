@@ -54,7 +54,6 @@ class _ApiClient {
 
         request.end((err, { body } = {}) => err ? reject(body || err) : resolve(body));
       }));
-
   }
 }
 
