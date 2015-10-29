@@ -15,7 +15,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.USER_LOAD:
       return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, {pending: true})}));
     case actions.USER_LOAD_SUCCESS:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, ...action.result.user, {pending: false, success: true})}));
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, action.result, {pending: false, success: true})}));
     case actions.USER_LOAD_FAIL:
       return Object.assign({}, state, Object.assign({}, {user: {pending: false, failed: true}}));
     default:

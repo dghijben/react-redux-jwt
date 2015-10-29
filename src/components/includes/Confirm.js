@@ -10,8 +10,6 @@ export default class Confirm extends Component {
   }
 
   render() {
-    console.log(this.props);
-
     return (
       <Modal show={this.props.showModal} onHide={()=>{this.props.close();}}>
         <Modal.Header>

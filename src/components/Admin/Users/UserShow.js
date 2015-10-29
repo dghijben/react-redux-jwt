@@ -14,7 +14,8 @@ class UserShow extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'users': PropTypes.object.isRequired
+    'users': PropTypes.object.isRequired,
+    'history': PropTypes.object,
   }
 
   constructor(props, context) {
@@ -58,6 +59,10 @@ class UserShow extends Component {
       {name: _.get(this.props, 'users.user.firstname', 'unknown')},
     ];
 
+    const editLink = () => {
+      this.props.history.pushState({}, '/admin/users/' + _.get(this.props, 'users.user.id') + '/edit');
+    };
+
     return (
       <div>
         <Ribbon breadcrumps={breadcrumps}/>
@@ -73,7 +78,7 @@ class UserShow extends Component {
                 <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
                 <Row>
                   <Col md={9} mdOffset={3}>
-                    <Button bsStyle="primary">wijzigen</Button>
+                    <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
                     {' '}
                     <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
                   </Col>

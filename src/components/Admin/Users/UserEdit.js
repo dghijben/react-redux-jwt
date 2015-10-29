@@ -2,15 +2,39 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
-import {Well, Row, Col, FormControls, Input, Button} from 'react-bootstrap';
+import {Well} from 'react-bootstrap';
+import deepEqual from 'deep-equal';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
+import {mapDispatchToProps} from 'utils/functions';
+import DynamicForm from 'components/Admin/includes/DynamicForm';
+
+const fields = [
+  {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'middelname', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'lastname', label: 'Achternaam', type: 'text', placeholder: 'Achternaam', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'email', label: 'E-mail', type: 'text', placeholder: 'E-mail', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {
+    row: {
+      col: [
+        {
+          md: 9,
+          mdOffset: 3,
+          children: [{type: 'submit', name: 'submit', value: 'versturen'}]
+        }
+      ]
+    }
+  }
+];
+
+// const fieldNames = filterFields(fields);
 
 @connect(state=>({
   'users': state.users,
   'router': state.router
-}))
-class UserShow extends Component {
+}), mapDispatchToProps)
+class UserEdit extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
@@ -26,6 +50,14 @@ class UserShow extends Component {
     this.state = {
       showModal: false
     };
+  }
+
+  shouldComponentUpdate(nextProps: Object) {
+    // Important when using dynamic redux forms
+    if (deepEqual(_.get(nextProps, 'users.user'), _.get(this.props, 'users.user')) === true ) {
+      return false;
+    }
+    return true;
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -47,6 +79,10 @@ class UserShow extends Component {
     this.setState({showModal: false});
   }
 
+  handleSubmit(data) {
+    console.log(data);
+  }
+
   renderModal() {
     return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
   }
@@ -65,20 +101,15 @@ class UserShow extends Component {
           <Well>
             <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
             <Pending state={_.get(this.props, 'users.user.pending')}>
-              <form className="form-horizontal">
-                <Input labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
-                <Input type="text" labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Tussenvoegsels" value={_.get(this.props, 'users.user.middlename', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Achternaam" value={_.get(this.props, 'users.user.lastname', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
-                <Row>
-                  <Col md={9} mdOffset={3}>
-                    <Button bsStyle="primary">wijzigen</Button>
-                    {' '}
-                    <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
-                  </Col>
-                </Row>
-              </form>
+              <DynamicForm
+                formName="userEdit"
+                formKey="userEdit"
+                formClass="form-horizontal"
+                fieldsNeeded={fields}
+                initialValues={_.get(this.props, 'users.user')}
+                onSubmit={this.handleSubmit}
+                />
+
             </Pending>
           </Well>
         </div>
@@ -86,6 +117,4 @@ class UserShow extends Component {
       </div>
     );
   }
-}
-
-export default UserShow;
+} export default UserEdit;

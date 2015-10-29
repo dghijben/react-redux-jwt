@@ -4,7 +4,7 @@ export default class Pending extends Component {
 
   static propTypes = {
     state: PropTypes.bool.isRequired,
-    children: PropTypes.array.isRequired
+    children: PropTypes.object.isRequired
   }
 
   constructor() {
@@ -29,8 +29,6 @@ export default class Pending extends Component {
   }
 
   render() {
-    console.log(this.props.state);
-
     return (
       <div className="pendingWrapper">
         {this.pending()}
