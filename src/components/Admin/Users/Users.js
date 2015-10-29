@@ -12,7 +12,7 @@ const name = 'dataoverview';
 const fields = [
   {name: 'search', type: 'text', placeHolder: 'zoeken...', bsSize: 'large',
     buttonBefore: {
-      name: 'searchField', type: 'dropdown',
+      name: 'searchField', type: 'dropdown', onlySelf: false,
       items: [
         {default: 'Alle'},
         {desc: 'Voornaam', field: 'firstname'},
@@ -29,6 +29,7 @@ const fields = [
 ];
 
 const fieldNames = filterFields(fields);
+// const fieldNamesOnly = filterFieldsOnlySelf(fields);
 
 @connect(state=>{
   const obj = {
@@ -57,7 +58,9 @@ class Users extends Component {
   }
 
   fetchDataCallBack(state) {
-    return this.props.dispatch(load(state));
+    // if (intersect(Object.keys(state), fieldNamesOnly).length > 0) {
+    this.props.dispatch(load(state));
+    // }
   }
 
   render() {

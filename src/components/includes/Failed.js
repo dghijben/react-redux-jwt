@@ -7,6 +7,9 @@ export default class Failed extends Component {
   }
 
   render() {
+
+    console.log(this.props);
+
     if (this.props.state === true) {
       return <Alert>De gegevens konden niet worden geladen...</Alert>;
     }

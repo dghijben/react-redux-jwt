@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
 import {Alert, DropdownButton, MenuItem} from 'react-bootstrap';
-import Failed from 'components/Includes/Failed';
-import Pending from 'components/Includes/Pending';
+import Failed from 'components/includes/Failed';
+import Pending from 'components/includes/Pending';
 const Paginator = require('react-laravel-paginator');
 
 export default class DataTable extends Component {
@@ -107,22 +107,23 @@ export default class DataTable extends Component {
     const records = this._renderRecords();
     return (
       <div>
-        <Pending state={_.get(this.props, 'state.pending', false)} />
-        <Failed state={_.get(this.props, 'state.failed', false)}/>
-        {paged}
-        <div className="table-responsive">
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                {cols}
-              </tr>
-            </thead>
-            <tbody>
-              {records}
-            </tbody>
-          </table>
-        </div>
-        {paged}
+        <Pending state={_.get(this.props, 'state.pending', false)}>
+          <Failed state={_.get(this.props, 'state.failed', false)}/>
+          {paged}
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  {cols}
+                </tr>
+              </thead>
+              <tbody>
+                {records}
+              </tbody>
+            </table>
+          </div>
+          {paged}
+        </Pending>
       </div>
     );
   }

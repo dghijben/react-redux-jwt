@@ -4,9 +4,9 @@ import { PropTypes as historyPropTypes } from 'react-router';
 import { Input, Row, Col } from 'react-bootstrap';
 import {reduxForm} from 'redux-form';
 import validateForm from './ValidateForm';
-import ButtonState from '../../../Includes/ButtonState';
-import bootstrapLink from '../../../../utils/bootstrapLink';
-import formWrap from '../../../Includes/FormWrap';
+import ButtonState from 'components/includes/ButtonState';
+import bootstrapLink from 'utils/bootstrapLink';
+import formWrap from 'components/includes/FormWrap';
 
 class Form extends Component {
   constructor() {

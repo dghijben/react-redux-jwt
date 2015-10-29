@@ -67,6 +67,24 @@ export function filterFields(fields, fieldName = 'name', extra = ['page']) {
   return fieldNames;
 }
 
+// deep filter, get all fields who may submit on its own
+export function filterFieldsOnlySelf(fields, fieldName = 'name', extra = ['page']) {
+  const fieldNames = extra;
+  const mapper = (allFields) => {
+    const only = typeof allFields.onlySelf === 'undefined' || allFields.onlySelf === true;
+    _.map(allFields, (field, key)=>{
+      if (key === fieldName && only === true) {
+        fieldNames.push(field);
+      } else if (_.isObject(field)) {
+        mapper(field);
+      }
+    });
+  };
+
+  mapper(fields);
+  return fieldNames;
+}
+
 export function createParamsForFetch(state, form, fields) {
   const pathname = state.router.location.pathname;
   const params = {};
@@ -92,4 +110,25 @@ export function filterState(state, formName, fields) {
     obj[fieldName] = _.get(state, fieldName) || _.get(state, [formName, fieldName]);
   });
   return _.omit(obj, (value)=>{ return !value; });
+}
+
+
+export function intersect(a, b) {
+  let ai = 0;
+  let bi = 0;
+  const result = [];
+
+  while ( ai < a.length && bi < b.length ) {
+    if (a[ai] < b[bi] ) {
+      ai++;
+    } else if (a[ai] > b[bi]) {
+      bi++;
+    } else {
+      result.push(ai);
+      ai++;
+      bi++;
+    }
+  }
+
+  return result;
 }
