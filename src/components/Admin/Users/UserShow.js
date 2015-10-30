@@ -53,7 +53,7 @@ class UserShow extends Component {
   }
 
   render() {
-    const breadcrumps = [
+    const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Users', to: '/admin/users'},
       {name: _.get(this.props, 'users.user.firstname', 'unknown')},
@@ -65,7 +65,7 @@ class UserShow extends Component {
 
     return (
       <div>
-        <Ribbon breadcrumps={breadcrumps}/>
+        <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
             <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>

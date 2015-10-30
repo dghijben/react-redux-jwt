@@ -10,7 +10,7 @@ const reducerIndex = 'users';
 const name = 'dataoverview';
 
 const fields = [
-  {name: 'search', type: 'text', placeHolder: 'zoeken...', bsSize: 'large',
+  {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
     buttonBefore: {
       name: 'searchField', type: 'dropdown', onlySelf: false,
       items: [
@@ -76,14 +76,14 @@ class Users extends Component {
       console.log('CLick 3');
     };
 
-    const breadcrumps = [
+    const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Users'}
     ];
 
     return (
       <div>
-        <Ribbon breadcrumps={breadcrumps}/>
+        <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
             <DataOverview

@@ -3,26 +3,27 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {Well} from 'react-bootstrap';
-import deepEqual from 'deep-equal';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import {mapDispatchToProps} from 'utils/functions';
 import DynamicForm from 'components/Admin/includes/DynamicForm';
+import validator from './ValidateEdit';
+import {update} from 'redux/modules/admin/users/userActions';
 
 const fields = [
   {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
   {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {name: 'middelname', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
   {name: 'lastname', label: 'Achternaam', type: 'text', placeholder: 'Achternaam', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
   {name: 'email', label: 'E-mail', type: 'text', placeholder: 'E-mail', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {
-    row: {
-      col: [
-        {
-          md: 9,
-          mdOffset: 3,
-          children: [{type: 'submit', name: 'submit', value: 'versturen'}]
-        }
+  {row:
+    {col:
+      [
+        {md: 9, mdOffset: 3, children: [
+          {type: 'success', message: 'Het formulier is opgeslagen'},
+          {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
+        ]},
+        {md: 9, mdOffset: 3, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
       ]
     }
   }
@@ -38,6 +39,7 @@ class UserEdit extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
+    'dispatch': PropTypes.func,
     'users': PropTypes.object.isRequired
   }
 
@@ -47,6 +49,8 @@ class UserEdit extends Component {
     this.close = this.close.bind(this);
     this.confirmed = this.confirmed.bind(this);
     this.renderModal = this.renderModal.bind(this);
+    this.getActionState = this.getActionState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       showModal: false
     };
@@ -54,10 +58,20 @@ class UserEdit extends Component {
 
   shouldComponentUpdate(nextProps: Object) {
     // Important when using dynamic redux forms
-    if (deepEqual(_.get(nextProps, 'users.user'), _.get(this.props, 'users.user')) === true ) {
-      return false;
+
+    let updateComponent = true;
+    if (_.get(nextProps, 'users.user.id') === _.get(this.props, 'users.user.id')) {
+      updateComponent = false;
     }
-    return true;
+    return updateComponent;
+  }
+
+  getActionState() {
+    return {
+      success: _.get(this.props, 'users.user.actionUpdate.success', false),
+      failed: _.get(this.props, 'users.user.actionUpdate.failed', false),
+      pending: _.get(this.props, 'users.user.actionUpdate.pending', false)
+    };
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -79,8 +93,17 @@ class UserEdit extends Component {
     this.setState({showModal: false});
   }
 
-  handleSubmit(data) {
-    console.log(data);
+  handleSubmit(values, dispatch) {
+    return new Promise((resolve, reject) => {
+      dispatch(update(this.props.router.params.userId, values))
+        .then((ret)=> {
+          if (_.has(ret, 'error')) {
+            reject(ret.error);
+          } else {
+            resolve();
+          }
+        });
+    });
   }
 
   renderModal() {
@@ -88,15 +111,16 @@ class UserEdit extends Component {
   }
 
   render() {
-    const breadcrumps = [
+    const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Users', to: '/admin/users'},
-      {name: _.get(this.props, 'users.user.firstname', 'unknown')},
+      {name: _.get(this.props, 'users.user.firstname', 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
+      {name: 'Wijzigen'}
     ];
 
     return (
       <div>
-        <Ribbon breadcrumps={breadcrumps}/>
+        <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
             <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
@@ -108,8 +132,9 @@ class UserEdit extends Component {
                 fieldsNeeded={fields}
                 initialValues={_.get(this.props, 'users.user')}
                 onSubmit={this.handleSubmit}
+                validate={validator}
+                getActionState={this.getActionState}
                 />
-
             </Pending>
           </Well>
         </div>

@@ -4,7 +4,10 @@ export default class Pending extends Component {
 
   static propTypes = {
     state: PropTypes.bool.isRequired,
-    children: PropTypes.object.isRequired
+    children: React.PropTypes.oneOfType([
+      PropTypes.object.isRequired,
+      PropTypes.array.isRequired
+    ])
   }
 
   constructor() {

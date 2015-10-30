@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import {Row, Col, DropdownButton, MenuItem, Input, Button} from 'react-bootstrap';
+import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
+import {Pending} from 'components/includes';
 
 class BaseForm extends Component {
 
@@ -11,7 +12,12 @@ class BaseForm extends Component {
     fieldsNeeded: PropTypes.array.isRequired,
     formKey: PropTypes.string.isRequired,
     formClass: PropTypes.string,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    invalid: PropTypes.bool.isRequired,
+    pristine: PropTypes.bool.isRequired,
+    submit: PropTypes.func.isRequired,
+    getActionState: PropTypes.func.isRequired,
+    success: PropTypes.bool
   };
 
   constructor() {
@@ -30,8 +36,13 @@ class BaseForm extends Component {
 
   dropDownSelect(name, item) {
     this.setState(_.set(Object.assign({}, this.state), ['dropDownTitle', name], item.desc || item.default));
-    Promise.resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))))
-    .then(this.refs.button.click());
+
+    return new Promise((resolve) => {
+      resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))));
+    }).then(()=>{ this.refs.button.click(); });
+
+    // Promise.resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))));
+    // .then(this.refs.button.click());
   }
 
   dropDown(field: Object, size: string) {
@@ -63,13 +74,25 @@ class BaseForm extends Component {
   }
 
   input(field: Object, size: string) {
+    const props = this.props.fields[field.name];
+    const extraProps = {};
+    if (props.touched && props.error) {
+      extraProps.bsStyle = 'error';
+    }
+    if (props.touched && props.error) {
+      extraProps.help = props.error;
+    }
     return (
-      <Input key={field.name} name="search" bsSize={size}
+      <Input
+        key={field.name}
+        name="search"
+        bsSize={size}
+        {...extraProps}
         {...field}
-        {...this.props.fields[field.name]}
-             buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), size)}
-             buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), size)}
-        />
+        {...props}
+        buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), size)}
+        buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), size)}
+      />
     );
   }
 
@@ -102,6 +125,16 @@ class BaseForm extends Component {
     );
   }
 
+  message(field: Object, size: string) {
+    const {success, failed} = this.props.getActionState();
+    if ((field.type === 'success' && success && this.props.valid === true) || (field.type === 'error' && (failed || (this.props.invalid === true && this.props.pristine === false)))) {
+      const style = field.type === 'success' ? 'success' : 'danger';
+      return (
+        <Alert bsStyle={style} bsSize={_.get(field, 'bsSize', size)}>{field.message}</Alert>
+      );
+    }
+  }
+
   addField(field, size) {
     if (!_.isEmpty(field)) {
       switch (field.type) {
@@ -110,6 +143,9 @@ class BaseForm extends Component {
           return this.button(field, size);
         case 'dropdown':
           return this.dropDown(field, size);
+        case 'success':
+        case 'error':
+          return this.message(field, size);
         default:
           return this.input(field, size);
       }
@@ -117,20 +153,26 @@ class BaseForm extends Component {
   }
 
   render() {
-    const { fieldsNeeded} = this.props;
+    const {pending} = this.props.getActionState();
+    const {fieldsNeeded} = this.props;
+
+    console.log(this.props);
+
     return (
-      <form onSubmit={this.props.handleSubmit} ref="form" className={_.get(this.props, 'formClass', 'form-horizontal')}>
-        <div formKey={this.props.formKey} >
-          {_.map(fieldsNeeded, (field, key) => {
-            const size = _.get(field, 'bsSize', 'medium');
-            if (field.hasOwnProperty('name')) {
-              return this.input(field, size);
-            } else if (field.hasOwnProperty('row')) {
-              return this.row(field, key, size);
-            }
-          })}
-        </div>
-        <input type="button" ref="button" onClick={this.props.handleSubmit} classNaxme="hidden" />
+      <form onSubmit={this.props.handleSubmit(this.props.submit)} ref="form" className={_.get(this.props, 'formClass', 'form-horizontal')}>
+        <Pending state={pending}>
+          <div formKey={this.props.formKey} >
+            {_.map(fieldsNeeded, (field, key) => {
+              const size = _.get(field, 'bsSize', 'medium');
+              if (field.hasOwnProperty('name')) {
+                return this.input(field, size);
+              } else if (field.hasOwnProperty('row')) {
+                return this.row(field, key, size);
+              }
+            })}
+          </div>
+          <input type="button" ref="button" onClick={this.props.handleSubmit(this.props.submit)} className="hidden" />
+        </Pending>
       </form>
     );
   }

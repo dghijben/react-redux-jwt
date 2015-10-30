@@ -8,14 +8,13 @@ class DynamicForm extends Component {
   static propTypes = {
     formName: PropTypes.string.isRequired,
     formKey: PropTypes.string.isRequired,
-    onSubmit: PropTypes.func.isRequired,
     fieldsNeeded: PropTypes.array.isRequired,
-    initialValues: PropTypes.object
+    initialValues: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+    getActionState: PropTypes.func,
+    validate: PropTypes.func,
+    success: PropTypes.bool
   };
-
-  onSubmit(data) {
-    this.props.onSubmit(data);
-  }
 
   render() {
     const { formName, fieldsNeeded } = this.props;
@@ -26,14 +25,35 @@ class DynamicForm extends Component {
 
     const DynamicInnerForm = reduxForm({
       form: formName,
-      fields: _.values(pickNonfalsy(fields))
+      fields: _.values(pickNonfalsy(fields)),
+      validate: (values)=>{
+        if (_.has(this.props, 'validate')) {
+          return this.props.validate(values);
+        }
+        return {};
+      }
     })(BaseForm);
 
     return (<DynamicInnerForm
       formKey={this.props.formKey}
       initialValues={this.props.initialValues}
       fieldsNeeded={this.props.fieldsNeeded}
-      onSubmit={this.onSubmit.bind(this)}/>);
+      submit={this.props.onSubmit}
+      getActionState={()=> {
+        if (this.props.hasOwnProperty('getActionState')) {
+          return this.props.getActionState();
+        }
+
+        return ()=>{
+          return {
+            success: false,
+            failed: false,
+            pending: false
+          };
+        };
+
+      }}
+      />);
   }
 }
 

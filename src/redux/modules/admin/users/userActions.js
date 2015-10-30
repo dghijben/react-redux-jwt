@@ -2,7 +2,6 @@ import _ from 'lodash';
 import * as actions from './userConstants';
 
 export function load(params) {
-
   return {
     types: [actions.USERS, actions.USERS_SUCCESS, actions.USERS_FAIL],
     promise: (client) => client.get('/admin/users', {
@@ -10,6 +9,18 @@ export function load(params) {
         ...params
       }
     })
+  };
+}
+
+export function update(userId, params) {
+  return {
+    types: [actions.USER_UPDATE, actions.USER_UPDATE_SUCCESS, actions.USER_UPDATE_FAIL],
+    promise: (client) => client.put('/admin/users/' + userId + '/edit', {
+      params: {
+        ...params
+      }
+    }),
+    payload: params
   };
 }
 

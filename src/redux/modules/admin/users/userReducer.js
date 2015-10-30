@@ -18,6 +18,14 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, action.result, {pending: false, success: true})}));
     case actions.USER_LOAD_FAIL:
       return Object.assign({}, state, Object.assign({}, {user: {pending: false, failed: true}}));
+
+    case actions.USER_UPDATE:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, ...action.payload, {actionUpdate: {pending: true}})}));
+    case actions.USER_UPDATE_SUCCESS:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionUpdate: {pending: false, success: true}})}));
+    case actions.USER_UPDATE_FAIL:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionUpdate: {pending: false, failed: true}})}));
+
     default:
       return Object.assign({}, state);
   }

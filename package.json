@@ -41,7 +41,7 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 4000,
-        "APIPORT": 80
+        "APIPORT": 9106
       }
     },
     "start-dev": {
@@ -50,7 +50,7 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "development",
         "PORT": 3000,
-        "APIPORT": 80
+        "APIPORT": 9106
       }
     },
     "watch-client": {

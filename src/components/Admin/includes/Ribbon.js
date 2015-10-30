@@ -4,26 +4,26 @@ import {Link} from 'react-router';
 
 export default class Ribbon extends Component {
   static propTypes = {
-    breadcrumps: PropTypes.array
+    breadCrumbs: PropTypes.array
   };
 
   constructor(props, context) {
     super(props, context);
-    this._renderBreadCrumps = this._renderBreadCrumps.bind(this);
-    this._renderBreadCrumpItems = this._renderBreadCrumpItems.bind(this);
+    this._renderBreadCrumbs = this._renderBreadCrumbs.bind(this);
+    this._renderBreadCrumbItems = this._renderBreadCrumbItems.bind(this);
   }
 
-  _renderBreadCrumps() {
-    if (!_.isEmpty(_.get(this.props, 'breadcrumps', []))) {
+  _renderBreadCrumbs() {
+    if (!_.isEmpty(_.get(this.props, 'breadCrumbs', []))) {
       return (
         <ol className="breadcrumb">
-          {this._renderBreadCrumpItems(_.get(this.props, 'breadcrumps', []))}
+          {this._renderBreadCrumbItems(_.get(this.props, 'breadCrumbs', []))}
         </ol>
       );
     }
   }
 
-  _renderBreadCrumpItems(items) {
+  _renderBreadCrumbItems(items) {
     return _.map(items, (item, key) => {
       const itemVisible = _.has(item, 'to') ? <Link to={item.to}>{item.name}</Link> : item.name;
       return (
@@ -36,7 +36,7 @@ export default class Ribbon extends Component {
   render() {
     return (
       <div id="ribbon">
-        {this._renderBreadCrumps()}
+        {this._renderBreadCrumbs()}
       </div>
     );
   }
