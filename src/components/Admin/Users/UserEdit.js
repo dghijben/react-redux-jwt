@@ -8,7 +8,7 @@ import {Confirm, Pending} from 'components/includes';
 import {mapDispatchToProps} from 'utils/functions';
 import DynamicForm from 'components/Admin/includes/DynamicForm';
 import validator from './ValidateEdit';
-import {update} from 'redux/modules/admin/users/userActions';
+import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
 
 const fields = [
   {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
@@ -50,6 +50,7 @@ class UserEdit extends Component {
     this.confirmed = this.confirmed.bind(this);
     this.renderModal = this.renderModal.bind(this);
     this.getActionState = this.getActionState.bind(this);
+    this.clearActionState = this.clearActionState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       showModal: false
@@ -66,12 +67,21 @@ class UserEdit extends Component {
     return updateComponent;
   }
 
+
+  componentWillUnmount() {
+    this.clearActionState();
+  }
+
   getActionState() {
     return {
       success: _.get(this.props, 'users.user.actionUpdate.success', false),
       failed: _.get(this.props, 'users.user.actionUpdate.failed', false),
       pending: _.get(this.props, 'users.user.actionUpdate.pending', false)
     };
+  }
+
+  clearActionState() {
+    this.props.dispatch(clearNetworkState());
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -123,7 +133,13 @@ class UserEdit extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
+            <h1>Gebruiker
+              <span>
+                {' '} {_.get(this.props, 'users.user.firstname', '')}
+                {' '} {_.get(this.props, 'users.user.middlename', '')}
+                {' '} {_.get(this.props, 'users.user.lastname', '')}
+              </span>
+            </h1>
             <Pending state={_.get(this.props, 'users.user.pending')}>
               <DynamicForm
                 formName="userEdit"
@@ -134,6 +150,7 @@ class UserEdit extends Component {
                 onSubmit={this.handleSubmit}
                 validate={validator}
                 getActionState={this.getActionState}
+                clearActionState={this.clearActionState}
                 />
             </Pending>
           </Well>

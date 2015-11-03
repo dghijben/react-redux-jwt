@@ -31,6 +31,24 @@ export function loadUser(userId) {
   };
 }
 
+export function clearList() {
+  return {
+    type: actions.USERS_CLEAR
+  };
+}
+
+export function clearItem() {
+  return {
+    type: actions.USER_CLEAR
+  };
+}
+
+export function clearNetworkState() {
+  return {
+    type: actions.USER_CLEAR_NETWORK_STATE
+  };
+}
+
 export function isLoaded(globalState, params) {
   return (
     _.get(globalState, 'users.success', false) === true &&

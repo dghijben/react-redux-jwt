@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import BaseForm from './BaseForm';
+import {filterFields} from 'utils/functions';
 
 class DynamicForm extends Component {
 
@@ -10,22 +11,20 @@ class DynamicForm extends Component {
     formKey: PropTypes.string.isRequired,
     fieldsNeeded: PropTypes.array.isRequired,
     initialValues: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
     getActionState: PropTypes.func,
+    clearActionState: PropTypes.func,
     validate: PropTypes.func,
     success: PropTypes.bool
   };
 
   render() {
     const { formName, fieldsNeeded } = this.props;
-    let fields = _.pluck(fieldsNeeded, 'name');
-    fields = fields.concat(_.pluck(_.pluck(fieldsNeeded, 'buttonBefore'), 'name'));
-    fields = fields.concat(_.pluck(_.pluck(fieldsNeeded, 'buttonAfter'), 'name'));
-    const pickNonfalsy = _.partial(_.pick, _, _.identity);
+
 
     const DynamicInnerForm = reduxForm({
       form: formName,
-      fields: _.values(pickNonfalsy(fields)),
+      fields: filterFields(fieldsNeeded),
       validate: (values)=>{
         if (_.has(this.props, 'validate')) {
           return this.props.validate(values);
@@ -38,7 +37,12 @@ class DynamicForm extends Component {
       formKey={this.props.formKey}
       initialValues={this.props.initialValues}
       fieldsNeeded={this.props.fieldsNeeded}
-      submit={this.props.onSubmit}
+      submit={(data, dispatch) => {
+        if (this.props.hasOwnProperty('onSubmit')) {
+          return this.props.onSubmit(data, dispatch);
+        }
+      }}
+
       getActionState={()=> {
         if (this.props.hasOwnProperty('getActionState')) {
           return this.props.getActionState();
@@ -52,6 +56,13 @@ class DynamicForm extends Component {
           };
         };
 
+      }}
+      clearActionState={()=>{
+        if (this.props.hasOwnProperty('clearActionState')) {
+          return this.props.clearActionState();
+        }
+
+        return ()=>{};
       }}
       />);
   }

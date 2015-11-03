@@ -17,6 +17,9 @@ import {
   AdminUserShow,
   AdminUserEdit,
   AdminUserCreate,
+  AdminAffiliates,
+  AdminAffiliatesShow,
+  AdminAffiliatesEdit,
   AdminAcl,
   NotFound
 } from 'components';
@@ -45,6 +48,9 @@ export default () => {
           <Route path="users/:userId" component={AdminUserShow} />
           <Route path="users/:userId/edit" component={AdminUserEdit} />
           <Route path="users/new" component={AdminUserCreate} />
+          <Route path="affiliates" component={AdminAffiliates} />
+          <Route path="affiliates/:id" component={AdminAffiliatesShow} />
+          <Route path="affiliates/:id/edit" component={AdminAffiliatesEdit} />
         </Route>
       </Route>
       <Route path="*" component={NotFound} status={404} />

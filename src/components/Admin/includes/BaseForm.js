@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button} from 'react-bootstrap';
+import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button, FormControls} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
 import {Pending} from 'components/includes';
 
 class BaseForm extends Component {
 
   static propTypes = {
+    clearActionState: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     fields: PropTypes.object.isRequired,
     fieldsNeeded: PropTypes.array.isRequired,
@@ -17,7 +18,9 @@ class BaseForm extends Component {
     pristine: PropTypes.bool.isRequired,
     submit: PropTypes.func.isRequired,
     getActionState: PropTypes.func.isRequired,
-    success: PropTypes.bool
+    success: PropTypes.bool,
+    valid: PropTypes.bool.isRequired,
+
   };
 
   constructor() {
@@ -34,19 +37,24 @@ class BaseForm extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {success} = nextProps.getActionState();
+    if (_.isEmpty(nextProps.active) && success) {
+      this.props.clearActionState();
+    }
+  }
+
   dropDownSelect(name, item) {
     this.setState(_.set(Object.assign({}, this.state), ['dropDownTitle', name], item.desc || item.default));
 
     return new Promise((resolve) => {
       resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))));
     }).then(()=>{ this.refs.button.click(); });
-
     // Promise.resolve(this.props.dispatch(updateField(name, item.field, _.get(this.props, 'formKey', null))));
     // .then(this.refs.button.click());
   }
 
   dropDown(field: Object, size: string) {
-
     const menuItem = [];
     let dropDownTitle = null;
     _.map(field.items, (item, key) => {
@@ -66,7 +74,7 @@ class BaseForm extends Component {
 
     if (menuItem.length > 0) {
       return (
-        <DropdownButton bsSize={_.get(field, 'bsSize', size)} bsStyle={_.get(field, 'style', 'primary')} title={_.get(this.state, ['dropDownTitle', field.name]) || dropDownTitle} id="input-dropdown-addon">
+        <DropdownButton key={field.name} className={_.get(field, 'className')} bsSize={_.get(field, 'bsSize', size)} bsStyle={_.get(field, 'bsStyle', 'primary')} title={_.get(this.state, ['dropDownTitle', field.name]) || dropDownTitle} id={'input-dropdown-addon' + field.name}>
           {menuItem}
         </DropdownButton>
       );
@@ -75,6 +83,7 @@ class BaseForm extends Component {
 
   input(field: Object, size: string) {
     const props = this.props.fields[field.name];
+    const thisSize = _.get(field, 'bsSize', size);
     const extraProps = {};
     if (props.touched && props.error) {
       extraProps.bsStyle = 'error';
@@ -86,21 +95,76 @@ class BaseForm extends Component {
       <Input
         key={field.name}
         name="search"
-        bsSize={size}
+        bsSize={thisSize}
         {...extraProps}
         {...field}
         {...props}
-        buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), size)}
-        buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), size)}
+        buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), thisSize)}
+        buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), thisSize)}
       />
     );
   }
 
+  file(field: Object, size: string) {
+    const props = this.props.fields[field.name];
+    const thisSize = _.get(field, 'bsSize', size);
+    const extraProps = {};
+    if (props.touched && props.error) {
+      extraProps.bsStyle = 'error';
+    }
+    if (props.touched && props.error) {
+      extraProps.help = props.error;
+    }
+
+    return (
+      <Input
+        ref={field.name}
+        key={field.name}
+        name="search"
+        bsSize={thisSize}
+        {...extraProps}
+        {...field}
+        onDrop={props.onDrop}
+        onChange={(e) => { props.onChange(e); }}
+        onFocus={props.onFocus}
+        onUpdate={props.onUpdate}
+        buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), thisSize)}
+        buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), thisSize)}
+        />
+    );
+  }
+
+  staticField(field: Object, size: string) {
+    const props = this.props.fields[field.name];
+    const thisSize = _.get(field, 'bsSize', size);
+    const extraProps = {};
+    if (props.touched && props.error) {
+      extraProps.bsStyle = 'error';
+    }
+    if (props.touched && props.error) {
+      extraProps.help = props.error;
+    }
+    return (
+      <FormControls.Static
+        key={field.name}
+        name="search"
+        bsSize={thisSize}
+        {...extraProps}
+        {...field}
+        {...props}
+        buttonBefore={this.addField(_.get(field, 'buttonBefore', {}), thisSize)}
+        buttonAfter={this.addField(_.get(field, 'buttonAfter', {}), thisSize)}
+        />
+    );
+  }
+
   row(field, key, size) {
+
     return (
       <Row key={key}>
         {_.map(field, (row)=>{
-          return this.col(row.col, size);
+          const thisSize = _.get(row, 'bsSize', size);
+          return this.col(row.col, thisSize);
         })}
       </Row>
     );
@@ -109,19 +173,37 @@ class BaseForm extends Component {
   col(cols, size) {
 
     return _.map(cols, (col, key)=>{
+      const thisSize = _.get(col, 'bsSize', size);
       return (
         <Col key={key} {..._.omit(col, 'children')}>
           {_.map(col.children, (child)=>{
-            return this.addField(child, size);
+            return this.addField(child, thisSize);
           })}
         </Col>
       );
     });
   }
 
+  submit(field: Object, size: string) {
+    return (
+      <Button
+        key={field.name}
+        bsSize={_.get(field, 'bsSize', size)}
+        type={field.type}
+        bsStyle={_.get(field, 'style', 'primary')}
+        >{field.value}</Button>
+    );
+  }
+
   button(field: Object, size: string) {
     return (
-      <Button key={field.name} bsSize={_.get(field, 'bsSize', size)} type={field.type} bsStyle={_.get(field, 'style', 'primary')}>{field.value}</Button>
+      <Button
+      key={field.name}
+      bsSize={_.get(field, 'bsSize', size)}
+      type={field.type}
+      bsStyle={_.get(field, 'style', 'primary')}
+      onClick={_.get(field, 'onClick', ()=>{})}
+      >{field.value}</Button>
     );
   }
 
@@ -130,7 +212,7 @@ class BaseForm extends Component {
     if ((field.type === 'success' && success && this.props.valid === true) || (field.type === 'error' && (failed || (this.props.invalid === true && this.props.pristine === false)))) {
       const style = field.type === 'success' ? 'success' : 'danger';
       return (
-        <Alert bsStyle={style} bsSize={_.get(field, 'bsSize', size)}>{field.message}</Alert>
+        <Alert key={field.type} bsStyle={style} bsSize={_.get(field, 'bsSize', size)}>{field.message}</Alert>
       );
     }
   }
@@ -139,6 +221,7 @@ class BaseForm extends Component {
     if (!_.isEmpty(field)) {
       switch (field.type) {
         case 'submit':
+          return this.submit(field, size);
         case 'button':
           return this.button(field, size);
         case 'dropdown':
@@ -146,6 +229,12 @@ class BaseForm extends Component {
         case 'success':
         case 'error':
           return this.message(field, size);
+        case 'static':
+          return this.staticField(field, size);
+        case 'link':
+          return this.link(field, size);
+        case 'file':
+          return this.file(field, size);
         default:
           return this.input(field, size);
       }
@@ -155,17 +244,14 @@ class BaseForm extends Component {
   render() {
     const {pending} = this.props.getActionState();
     const {fieldsNeeded} = this.props;
-
-    console.log(this.props);
-
     return (
       <form onSubmit={this.props.handleSubmit(this.props.submit)} ref="form" className={_.get(this.props, 'formClass', 'form-horizontal')}>
-        <Pending state={pending}>
+        <Pending state={pending || false}>
           <div formKey={this.props.formKey} >
             {_.map(fieldsNeeded, (field, key) => {
               const size = _.get(field, 'bsSize', 'medium');
               if (field.hasOwnProperty('name')) {
-                return this.input(field, size);
+                return this.addField(field, size);
               } else if (field.hasOwnProperty('row')) {
                 return this.row(field, key, size);
               }

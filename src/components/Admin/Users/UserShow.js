@@ -68,7 +68,13 @@ class UserShow extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Gebruiker <span>{_.get(this.props, 'users.user.firstname', '')}</span></h1>
+            <h1>Gebruiker
+              <span>
+                {' '} {_.get(this.props, 'users.user.firstname', '')}
+                {' '} {_.get(this.props, 'users.user.middlename', '')}
+                {' '} {_.get(this.props, 'users.user.lastname', '')}
+              </span>
+            </h1>
             <Pending state={_.get(this.props, 'users.user.pending')}>
               <form className="form-horizontal">
                 <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />

@@ -17,3 +17,7 @@ export { default as AdminUserCreate } from './Admin/Users/UserCreate';
 export { default as AdminUserEdit } from './Admin/Users/UserEdit';
 export { default as AdminUserShow } from './Admin/Users/UserShow';
 export { default as AdminAcl } from './Admin/Acl/Acl';
+
+export { default as AdminAffiliates } from './Admin/Affiliates/Index';
+export { default as AdminAffiliatesShow } from './Admin/Affiliates/Show';
+export { default as AdminAffiliatesEdit } from './Admin/Affiliates/Edit';

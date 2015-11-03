@@ -1,52 +1,45 @@
 import React, {Component, PropTypes } from 'react';
-import { load } from '../../../redux/modules/admin/users/userActions';
+import { load } from '../../../redux/modules/admin/affiliates/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DataOverview from '../includes/DataOverview';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 
-const reducerIndex = 'users';
+const reducerIndex = 'affiliates';
 const name = 'dataoverview';
 
 const fields = [
 
   {row:
-    {bsSize: 'large', col:
-      [
-        {md: 6, children: [
-          {name: 'search', type: 'text', placeholder: 'zoeken...',
-            buttonBefore: {
-              name: 'searchField', type: 'dropdown',
-              items: [
-                {default: 'Alle'},
-                {desc: 'Voornaam', field: 'firstname'},
-                {desc: 'Achternaam', field: 'lastname'},
-                {desc: 'Volledige naam', field: 'fullname'},
-                {desc: 'E-mail', field: 'email'}
-              ]
-            },
-            buttonAfter: {
-              type: 'submit',
-              value: <i className="fa fa-search"></i>
-            }
-          }
-        ]},
-        {md: 6, children: [
-          {name: 'order', type: 'dropdown', bsStyle: 'default',
+  {bsSize: 'large', col:
+    [
+      {md: 6, children: [
+        {name: 'search', type: 'text', placeholder: 'zoeken...',
+          buttonBefore: {
+            name: 'searchField', type: 'dropdown',
             items: [
-              {default: 'Sorteren'},
-              {desc: <span>Voornaam <i className="fa fa-arrow-circle-up"></i></span>, field: 'firstnameAsc'},
-              {desc: <span>Voornaam <i className="fa fa-arrow-circle-down"></i></span>, field: 'firstnameDesc'},
-              {desc: <span>Achternaam <i className="fa fa-arrow-circle-up"></i></span>, field: 'lastnameAsc'},
-              {desc: <span>Achternaam <i className="fa fa-arrow-circle-down"></i></span>, field: 'lastnameDesc'},
-              {desc: <span>E-mail <i className="fa fa-arrow-circle-up"></i></span>, field: 'emailAsc'},
-              {desc: <span>E-mail <i className="fa fa-arrow-circle-down"></i></span>, field: 'emailDesc'},
+              {default: 'Alle'},
+              {desc: 'Affiliate', field: 'naam'}
             ]
+          },
+          buttonAfter: {
+            type: 'submit',
+            value: <i className="fa fa-search"></i>
           }
-        ]},
-      ]
-    }
+        }
+      ]},
+      {md: 6, children: [
+        {name: 'order', type: 'dropdown', bsStyle: 'default',
+          items: [
+            {default: 'Sorteren'},
+            {desc: <span>Affiliate <i className="fa fa-arrow-circle-up"></i></span>, field: 'nameAsc'},
+            {desc: <span>Affiliate <i className="fa fa-arrow-circle-down"></i></span>, field: 'nameDesc'}
+          ]
+        }
+      ]},
+    ]
+  }
   }
 ];
 
@@ -66,7 +59,7 @@ const fieldNames = filterFields(fields);
 class Users extends Component {
 
   static propTypes = {
-    'users': PropTypes.object,
+    'affiliates': PropTypes.object,
     'history': PropTypes.object,
     'dispatch': PropTypes.func
   };
@@ -81,14 +74,12 @@ class Users extends Component {
   }
 
   fetchDataCallBack(state) {
-    // if (intersect(Object.keys(state), fieldNamesOnly).length > 0) {
     this.props.dispatch(load(state));
-    // }
   }
 
   render() {
     const show = (item) => {
-      this.props.history.pushState({}, '/admin/users/' + item.id);
+      this.props.history.pushState({}, '/admin/affiliates/' + item.id);
     };
 
     const edit = () => {
@@ -101,7 +92,7 @@ class Users extends Component {
 
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users'}
+      {name: 'Affiliates'}
     ];
 
     return (
@@ -112,14 +103,13 @@ class Users extends Component {
             <DataOverview
               name={name}
               fetchData={this.fetchDataCallBack}
-              data={this.props.users}
+              data={this.props.affiliates}
               form={{
                 key: 'form',
                 fields: fields
               }}
               cols={[
-                {name: 'Naam', show: ['firstname', 'middlename', 'lastname']},
-                {name: 'Email', show: 'email'},
+                {name: 'Naam', show: 'name'},
                 {name: 'Aangemaakt', show: 'created_at'},
                 {name: 'Gewijzigd', show: 'updated_at'},
                 {name: 'Acties', dropdownButton: [

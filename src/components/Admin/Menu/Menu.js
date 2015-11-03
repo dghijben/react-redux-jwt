@@ -4,6 +4,7 @@ import MenuWrap from './MenuWrap';
 const tree = [
   {'desc': 'Admin', 'to': '/admin', icon: 'fa-home'},
   {'desc': 'Users', 'to': '/admin/users', icon: 'fa-users'},
+  {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-plug'},
   {'desc': 'ACL', 'to': '/admin/acl', icon: 'fa-lock'},
   {'desc': 'Wrap', 'to': '/admin/wrap', icon: 'fa-plus', children: [
     {desc: 'child 1', to: '/admin/wrap/child1'},
