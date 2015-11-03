@@ -16,9 +16,7 @@ export function update(userId, params) {
   return {
     types: [actions.USER_UPDATE, actions.USER_UPDATE_SUCCESS, actions.USER_UPDATE_FAIL],
     promise: (client) => client.put('/admin/users/' + userId + '/edit', {
-      params: {
-        ...params
-      }
+      formData: params
     }),
     payload: params
   };

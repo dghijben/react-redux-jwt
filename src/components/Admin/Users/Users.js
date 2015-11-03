@@ -10,48 +10,25 @@ const reducerIndex = 'users';
 const name = 'dataoverview';
 
 const fields = [
-
-  {row:
-    {bsSize: 'large', col:
-      [
-        {md: 6, children: [
-          {name: 'search', type: 'text', placeholder: 'zoeken...',
-            buttonBefore: {
-              name: 'searchField', type: 'dropdown',
-              items: [
-                {default: 'Alle'},
-                {desc: 'Voornaam', field: 'firstname'},
-                {desc: 'Achternaam', field: 'lastname'},
-                {desc: 'Volledige naam', field: 'fullname'},
-                {desc: 'E-mail', field: 'email'}
-              ]
-            },
-            buttonAfter: {
-              type: 'submit',
-              value: <i className="fa fa-search"></i>
-            }
-          }
-        ]},
-        {md: 6, children: [
-          {name: 'order', type: 'dropdown', bsStyle: 'default',
-            items: [
-              {default: 'Sorteren'},
-              {desc: <span>Voornaam <i className="fa fa-arrow-circle-up"></i></span>, field: 'firstnameAsc'},
-              {desc: <span>Voornaam <i className="fa fa-arrow-circle-down"></i></span>, field: 'firstnameDesc'},
-              {desc: <span>Achternaam <i className="fa fa-arrow-circle-up"></i></span>, field: 'lastnameAsc'},
-              {desc: <span>Achternaam <i className="fa fa-arrow-circle-down"></i></span>, field: 'lastnameDesc'},
-              {desc: <span>E-mail <i className="fa fa-arrow-circle-up"></i></span>, field: 'emailAsc'},
-              {desc: <span>E-mail <i className="fa fa-arrow-circle-down"></i></span>, field: 'emailDesc'},
-            ]
-          }
-        ]},
+  {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
+    buttonBefore: {
+      name: 'searchField', type: 'dropdown', onlySelf: false,
+      items: [
+        {default: 'Alle'},
+        {desc: 'Voornaam', field: 'firstname'},
+        {desc: 'Achternaam', field: 'lastname'},
+        {desc: 'Volledige naam', field: 'fullname'},
+        {desc: 'E-mail', field: 'email'}
       ]
+    },
+    buttonAfter: {
+      type: 'submit',
+      value: <i className="fa fa-search"></i>
     }
   }
 ];
 
 const fieldNames = filterFields(fields);
-
 // const fieldNamesOnly = filterFieldsOnlySelf(fields);
 
 @connect(state=>{

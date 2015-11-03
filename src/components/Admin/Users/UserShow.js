@@ -5,6 +5,7 @@ import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userAc
 import {Well, Row, Col, FormControls, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
+import UserPic from 'components/Admin/includes/UserPic';
 
 @connect(state=>({
   'users': state.users,
@@ -75,22 +76,30 @@ class UserShow extends Component {
                 {' '} {_.get(this.props, 'users.user.lastname', '')}
               </span>
             </h1>
-            <Pending state={_.get(this.props, 'users.user.pending')}>
-              <form className="form-horizontal">
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Tussenvoegsels" value={_.get(this.props, 'users.user.middlename', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Achternaam" value={_.get(this.props, 'users.user.lastname', '')} />
-                <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
-                <Row>
-                  <Col md={9} mdOffset={3}>
-                    <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
-                    {' '}
-                    <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
-                  </Col>
-                </Row>
-              </form>
-            </Pending>
+
+            <Row>
+              <Col md={2}>
+                <UserPic responsive thumbnail src={_.get(this.props, 'users.user.picture', '')} />
+              </Col>
+              <Col md={10}>
+                <Pending state={_.get(this.props, 'users.user.pending')}>
+                  <form className="form-horizontal">
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Tussenvoegsels" value={_.get(this.props, 'users.user.middlename', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Achternaam" value={_.get(this.props, 'users.user.lastname', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
+                    <Row>
+                      <Col md={9} mdOffset={3}>
+                        <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
+                        {' '}
+                        <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
+                      </Col>
+                    </Row>
+                  </form>
+                </Pending>
+              </Col>
+            </Row>
           </Well>
         </div>
         {this.renderModal()}

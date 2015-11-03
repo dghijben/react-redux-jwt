@@ -34,6 +34,10 @@ const proxy = httpProxy.createProxyServer({
   target: 'http://localhost:' + config.apiPort + '/api',
 });
 
+const proxyBin = httpProxy.createProxyServer({
+  target: 'http://localhost:' + config.apiPort + '/bin',
+});
+
 const translations = globSync('./src/langs/*.json')
   .map((filename) => [
     path.basename(filename, '.json'),
@@ -53,6 +57,11 @@ app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
 // Proxy to API server
 app.use('/api', (req, res) => {
   proxy.web(req, res);
+});
+
+// Proxy to BINARY server
+app.use('/bin', (req, res) => {
+  proxyBin.web(req, res);
 });
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
@@ -76,15 +85,13 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
 
-  const locale   = req.query.locale || 'nl';
+  const locale = req.query.locale || 'nl';
   const messages = translations[locale];
 
   if (!messages) {
     return res.status(404).send('Locale is not supported.');
   }
   const i18n = {locale, messages};
-
-
   cookie.plugToRequest(req, res);
 
 /*

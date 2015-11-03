@@ -20,9 +20,7 @@ export default class Home extends React.Component {
           #10000 => <FormattedNumber value={10000} />
         </div>
 
-        <time dateTime={now} className="fancy-date">
-          <FormattedDate value={now} />
-        </time>
+
       </div>
     );
   }

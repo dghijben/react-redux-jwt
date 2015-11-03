@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { PropTypes as historyPropTypes } from 'react-router';
+import { PropTypes as historyPropTypes, Link } from 'react-router';
 import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
@@ -8,8 +8,8 @@ import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
 
 class App extends Component {
 
-  constructor(context, props) {
-    super(context, props);
+  constructor(props, context) {
+    super(props, context);
     this.authorized = this.authorized.bind(this);
     this.loginLink = this.loginLink.bind(this);
     this.logoutLink = this.logoutLink.bind(this);
@@ -29,18 +29,18 @@ class App extends Component {
     const title = <span><i className="fa fa-user"></i> {' '} {firstname}</span>;
     return (
       <NavDropdown eventKey={4} title={title} id="dropdown-usermenu">
-        <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.props.history, null, '/dashboard')}>Dashboard</MenuItem>
-        <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.props.history, null, '/admin')}>Admin</MenuItem>
+        <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.context.history, null, '/dashboard')}>Dashboard</MenuItem>
+        <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.context.history, null, '/admin')}>Admin</MenuItem>
         <MenuItem eventKey="4.3" onSelect={()=>{ console.log('clicked'); }}>Settings</MenuItem>
         <MenuItem divider/>
-        <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.props.history, null, '/logout')}>Uitloggen</MenuItem>
+        <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.context.history, null, '/logout')}>Uitloggen</MenuItem>
       </NavDropdown>
     );
   }
 
   loginLink() {
     return (
-      <NavItem eventKey={1} {...bootstrapLink(this.props.history, null, '/login')}>
+      <NavItem eventKey={1} {...bootstrapLink(this.context.history, null, '/login')}>
         <i className="fa fa-user"></i> <i className="fa fa-unlock"></i>
       </NavItem>
     );
@@ -48,9 +48,10 @@ class App extends Component {
 
   logoutLink() {
     return (
-      <NavItem eventKey={1} {...bootstrapLink(this.props.history, null, '/logout')}>
-        <i className="fa fa-user"></i> <span>{_.get(this.props, 'authorization.user.name')}</span> <i
-        className="fa fa-lock"></i>
+      <NavItem eventKey={1} {...bootstrapLink(this.context.history, null, '/logout')}>
+        <i className="fa fa-user"></i> <span>{_.get(this.props, 'authorization.user.name')}</span>
+        {' '}
+        <i className="fa fa-lock"></i>
       </NavItem>
     );
   }
@@ -85,6 +86,7 @@ class App extends Component {
         </Navbar>
 
         <div>
+          <Link to="/login">Inloggen</Link>
           {this.props.children}
         </div>
       </div>
@@ -96,6 +98,10 @@ App.propTypes = {
   children: PropTypes.object.isRequired,
   history: historyPropTypes.history,
   authorization: PropTypes.object.isRequired
+};
+
+App.contextTypes = {
+  history: historyPropTypes.history
 };
 
 export default connect(state => ({

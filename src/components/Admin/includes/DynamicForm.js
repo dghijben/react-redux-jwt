@@ -47,7 +47,6 @@ class DynamicForm extends Component {
         if (this.props.hasOwnProperty('getActionState')) {
           return this.props.getActionState();
         }
-
         return ()=>{
           return {
             success: false,

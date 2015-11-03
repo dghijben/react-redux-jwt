@@ -26,27 +26,28 @@ class _ApiClient {
     methods.forEach((method) =>
       this[method] = (path, { params, data, headers, formData } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](formatUrl(path));
-        console.log('Tikker 1', formData);
         if (formData) {
-          console.log('Tikker 2 ');
-          const fD = new FormData();
-          console.log('Tikker 3', formData);
-          _.map(formData, (value, key)=> {
-            console.log('Tikker 4', key, value);
-            if (value && value instanceof FileList) {
-              console.log('Tikker 5');
-              _.map(value, (f)=> {
-                if (f && f instanceof File) {
-                  console.log('Tikker 6', key, f);
-                  fD.append(key, f);
-                }
-              });
-            } else if (value) {
-              console.log('Tikker 7', key, value);
-              fD.append(key, value);
-            }
-          });
-          request.send(fD);
+
+          if (typeof FormData !== 'undefined') {
+            const fD = new FormData();
+            _.map(formData, (value, key)=> {
+              if (value && window.File && window.FileReader && window.FileList && window.Blob && value instanceof FileList) {
+                _.map(value, (f, index)=> {
+                  if (f && f instanceof File) {
+                    fD.append(key + '[' + index + ']', f);
+                  }
+                });
+              } else if (value) {
+                fD.append(key, value);
+              }
+            });
+            request.send(fD);
+          } else {
+            console.log('IE 9 FALLBACK', formData);
+            _.map(formData, (value, key)=> {
+              console.log(key, value);
+            });
+          }
         }
 
         if (params) {

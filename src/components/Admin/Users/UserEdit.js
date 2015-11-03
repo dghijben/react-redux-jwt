@@ -2,32 +2,42 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
-import {Well} from 'react-bootstrap';
+import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
-import {Confirm, Pending} from 'components/includes';
+import {Confirm} from 'components/includes';
 import {mapDispatchToProps} from 'utils/functions';
 import DynamicForm from 'components/Admin/includes/DynamicForm';
+import UserPic from 'components/Admin/includes/UserPic';
+/*
 import validator from './ValidateEdit';
+*/
 import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
+import deepEqual from 'deep-equal';
 
 const fields = [
-  {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {name: 'lastname', label: 'Achternaam', type: 'text', placeholder: 'Achternaam', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-  {name: 'email', label: 'E-mail', type: 'text', placeholder: 'E-mail', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
+  {name: 'picture', label: 'User', type: 'file', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'lastname', label: 'Achternaam', type: 'text', placeholder: 'Achternaam', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'email', label: 'E-mail', type: 'text', placeholder: 'E-mail', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {row:
     {col:
       [
-        {md: 9, mdOffset: 3, children: [
+        {md: 10, mdOffset: 2, children: [
           {type: 'success', message: 'Het formulier is opgeslagen'},
           {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
         ]},
-        {md: 9, mdOffset: 3, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
+        {md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
       ]
     }
   }
 ];
+
+if (__CLIENT__) {
+  console.log((window.File && window.FileReader && window.FileList && window.Blob) ? true : false);
+}
+
 
 // const fieldNames = filterFields(fields);
 
@@ -58,15 +68,15 @@ class UserEdit extends Component {
   }
 
   shouldComponentUpdate(nextProps: Object) {
-    // Important when using dynamic redux forms
+    // Important when using dynamic redux forms and serverside validation on submit
 
     let updateComponent = true;
-    if (_.get(nextProps, 'users.user.id') === _.get(this.props, 'users.user.id')) {
+    if (deepEqual(_.get(nextProps, 'users.user.id'), _.get(this.props, 'users.user.id'))) {
       updateComponent = false;
     }
+
     return updateComponent;
   }
-
 
   componentWillUnmount() {
     this.clearActionState();
@@ -140,19 +150,23 @@ class UserEdit extends Component {
                 {' '} {_.get(this.props, 'users.user.lastname', '')}
               </span>
             </h1>
-            <Pending state={_.get(this.props, 'users.user.pending')}>
-              <DynamicForm
-                formName="userEdit"
-                formKey="userEdit"
-                formClass="form-horizontal"
-                fieldsNeeded={fields}
-                initialValues={_.get(this.props, 'users.user')}
-                onSubmit={this.handleSubmit}
-                validate={validator}
-                getActionState={this.getActionState}
-                clearActionState={this.clearActionState}
-                />
-            </Pending>
+            <Row>
+              <Col md={2}>
+                <UserPic responsive thumbnail src={_.get(this.props, 'users.user.picture', '')} />
+              </Col>
+              <Col md={10}>
+                <DynamicForm
+                  formName="userEdit"
+                  formKey="userEdit"
+                  formClass="form-horizontal"
+                  fieldsNeeded={fields}
+                  initialValues={_.get(this.props, 'users.user')}
+                  onSubmit={this.handleSubmit}
+                  getActionState={this.getActionState}
+                  clearActionState={this.clearActionState}
+                  />
+              </Col>
+            </Row>
           </Well>
         </div>
         {this.renderModal()}

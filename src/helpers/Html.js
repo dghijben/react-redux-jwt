@@ -47,6 +47,7 @@ export default class Html extends Component {
         </head>
         <body>
           <div id="reactdata" dangerouslySetInnerHTML={{__html: content}}/>
+          <script src="https://cdn.polyfill.io/v1/polyfill.min.js?features=Intl.~locale.en,Intl.~locale.nl"></script>
           <script dangerouslySetInnerHTML={{__html: `window.__data=${serialize(store.getState())};`}} />
           <script dangerouslySetInnerHTML={{__html: `window.__i18n=${serialize(i18n)};`}} />
           <script src={assets.javascript.vendor}/>
