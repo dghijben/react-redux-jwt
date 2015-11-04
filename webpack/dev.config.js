@@ -42,6 +42,9 @@ babelLoaderQuery.extra['react-transform'].transforms.push({
   imports: ['react'],
   locals: ['module']
 });
+babelLoaderQuery.cacheDirectory = true;
+// babelLoaderQuery.presets = ['es2015']
+console.log(JSON.stringify(babelLoaderQuery));
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -62,7 +65,7 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.jsx$/, loaders: ['jsx-loader'] },
-      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader']},
+      { test: /\.js$/, exclude: /node_modules/, loaders: ['babel?' + JSON.stringify(babelLoaderQuery), 'eslint-loader'], },
       { test: /\.json$/, loader: 'json-loader' },
       { test: /\.less$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!less?outputStyle=expanded&sourceMap' },
       { test: /\.scss$/, loader: 'style!css?modules&importLoaders=2&sourceMap&localIdentName=[local]___[hash:base64:5]!autoprefixer?browsers=last 2 version!sass?outputStyle=expanded&sourceMap' },

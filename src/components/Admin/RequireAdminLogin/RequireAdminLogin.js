@@ -57,6 +57,9 @@ class RequireAdminLogin extends Component {
               {'rel': 'stylesheet', 'href': '/admin/user.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': 'http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700', 'type': 'text/css', 'media': 'screen'}
             ]}
+            script={[
+              {src: '/plupload-2.1.8/js/plupload.full.min.js'}
+            ]}
             />
           {this.props.children && React.cloneElement(this.props.children)}
         </div>

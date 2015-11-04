@@ -8,7 +8,7 @@ class DynamicForm extends Component {
 
   static propTypes = {
     formName: PropTypes.string.isRequired,
-    formKey: PropTypes.string.isRequired,
+    formKey: PropTypes.string,
     fieldsNeeded: PropTypes.array.isRequired,
     initialValues: PropTypes.object,
     onSubmit: PropTypes.func,
@@ -34,7 +34,8 @@ class DynamicForm extends Component {
     })(BaseForm);
 
     return (<DynamicInnerForm
-      formKey={this.props.formKey}
+      formName={this.props.formName}
+      formKey={this.props.formKey || null}
       initialValues={this.props.initialValues}
       fieldsNeeded={this.props.fieldsNeeded}
       submit={(data, dispatch) => {

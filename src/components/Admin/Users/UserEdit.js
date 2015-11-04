@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {mapDispatchToProps} from 'utils/functions';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm} from 'components/includes';
-import {mapDispatchToProps} from 'utils/functions';
 import DynamicForm from 'components/Admin/includes/DynamicForm';
 import UserPic from 'components/Admin/includes/UserPic';
 /*
@@ -15,7 +15,8 @@ import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
 import deepEqual from 'deep-equal';
 
 const fields = [
-  {name: 'picture', label: 'User', type: 'file', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'picturex', label: 'User', type: 'file', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'picture', label: 'User', type: 'plupload', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
@@ -157,7 +158,6 @@ class UserEdit extends Component {
               <Col md={10}>
                 <DynamicForm
                   formName="userEdit"
-                  formKey="userEdit"
                   formClass="form-horizontal"
                   fieldsNeeded={fields}
                   initialValues={_.get(this.props, 'users.user')}

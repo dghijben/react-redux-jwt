@@ -1,9 +1,8 @@
 import React from 'react';
-import { FormattedNumber, FormattedMessage, FormattedDate } from 'react-intl';
+import { FormattedNumber, FormattedMessage } from 'react-intl';
 
 export default class Home extends React.Component {
   render() {
-    const now = Date.now();
     return (
       <div>
         <h1>Test dd</h1>

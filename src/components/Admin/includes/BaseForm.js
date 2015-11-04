@@ -3,7 +3,10 @@ import React, { Component, PropTypes } from 'react';
 import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button, FormControls} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
 import {Pending} from 'components/includes';
+import {change} from 'redux-form';
+import Plupload from 'react-plupload';
 
+// require('../../../../static/plupload-2.1.8/js/plupload.full.min.js');
 class BaseForm extends Component {
 
   static propTypes = {
@@ -11,7 +14,8 @@ class BaseForm extends Component {
     dispatch: PropTypes.func.isRequired,
     fields: PropTypes.object.isRequired,
     fieldsNeeded: PropTypes.array.isRequired,
-    formKey: PropTypes.string.isRequired,
+    formName: PropTypes.string.isRequired,
+    formKey: PropTypes.string,
     formClass: PropTypes.string,
     handleSubmit: PropTypes.func.isRequired,
     invalid: PropTypes.bool.isRequired,
@@ -20,7 +24,6 @@ class BaseForm extends Component {
     getActionState: PropTypes.func.isRequired,
     success: PropTypes.bool,
     valid: PropTypes.bool.isRequired,
-
   };
 
   constructor() {
@@ -31,6 +34,8 @@ class BaseForm extends Component {
     this.input = this.input.bind(this);
     this.row = this.row.bind(this);
     this.col = this.col.bind(this);
+    this.change = this.change.bind(this);
+    this.plupload = this.plupload.bind(this);
     this.state = {
       dropDownTitle: {},
       hidden: []
@@ -134,6 +139,31 @@ class BaseForm extends Component {
     );
   }
 
+  plupload(field: Object) {
+    const props = this.props.fields[field.name];
+    const extraProps = {};
+    if (props.touched && props.error) {
+      extraProps.bsStyle = 'error';
+    }
+    if (props.touched && props.error) {
+      extraProps.help = props.error;
+    }
+
+    return (
+      <Plupload
+        key={field.name}
+        id="plupload"
+        runtimes="html5,flash,html4"
+        multipart
+        chunk_size="1mb"
+        url="/"
+        flash_swf_url="/plupload-2.1.8/js/Moxie.swf"
+        onFilesAdded={()=>{ console.log('nieuwe bestanden.'); }}
+      />
+    );
+  }
+
+
   staticField(field: Object, size: string) {
     const props = this.props.fields[field.name];
     const thisSize = _.get(field, 'bsSize', size);
@@ -235,13 +265,21 @@ class BaseForm extends Component {
           return this.link(field, size);
         case 'file':
           return this.file(field, size);
+        case 'plupload':
+          return this.plupload(field);
         default:
           return this.input(field, size);
       }
     }
   }
 
+  change() {
+    console.log('Change', this.props.formName);
+    this.props.dispatch(change('userEdit', 'firstname', 'mango'));
+  }
+
   render() {
+
     const {pending} = this.props.getActionState();
     const {fieldsNeeded} = this.props;
     return (
@@ -257,6 +295,7 @@ class BaseForm extends Component {
               }
             })}
           </div>
+          <button type="button" onClick={this.change}>Change</button>
           <input type="button" ref="button" onClick={this.props.handleSubmit(this.props.submit)} className="hidden" />
         </Pending>
       </form>
