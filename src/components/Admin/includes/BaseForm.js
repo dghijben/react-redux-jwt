@@ -43,7 +43,8 @@ class BaseForm extends Component {
     this.plupload = this.plupload.bind(this);
     this.state = {
       dropDownTitle: {},
-      hidden: []
+      hidden: [],
+      pending: false
     };
   }
 
@@ -154,6 +155,15 @@ class BaseForm extends Component {
       extraProps.help = props.error;
     }
 
+    const stateChange = (plupload) => {
+      if (plupload.state === 2) { // Starting with uploading
+        this.setState({pending: true});
+        return true;
+      }
+
+      this.setState({pending: false});
+    };
+
     const addedFiles = (plupload, files) => {
       const fileList = [];
 
@@ -164,6 +174,10 @@ class BaseForm extends Component {
       this.props.dispatch(change(this.props.formName, field.name, JSON.stringify(fileList)));
     };
 
+    const fileUploaded = (plupload, file, response) => {
+      console.log('Response', JSON.parse(response.response));
+    };
+
     return (
       <div>
         <Plupload
@@ -172,10 +186,13 @@ class BaseForm extends Component {
           runtimes="html5"
           multipart
           chunk_size="1mb"
-          url="/api/admin/users/2/upload"
-          multi_selection={false}
-          flash_swf_url="/plupload-2.1.8/js/Moxie.swf"
+          // url="/api/admin/users/2/upload"
+          url={field.url}
+          multi_selection={_.get(field, 'multi_selection', true)}
+          flash_swf_url={_.get(field, 'flash_swf_url', '/plupload-2.1.8/js/Moxie.swf')}
           onFilesAdded={addedFiles}
+          onStateChanged={stateChange}
+          onFileUploaded={fileUploaded}
           headers={{'Authorization': 'Bearer ' + this.props.token}}
         />
         <input type="text" {...props} />
@@ -235,14 +252,24 @@ class BaseForm extends Component {
   }
 
   submit(field: Object, size: string) {
-    return (
-      <Button
-        key={field.name}
-        bsSize={_.get(field, 'bsSize', size)}
-        type={field.type}
-        bsStyle={_.get(field, 'style', 'primary')}
-        >{field.value}</Button>
-    );
+    if (this.state.pending === true) {
+      return (
+        <Button
+          key={field.name}
+          bsSize={_.get(field, 'bsSize', size)}
+          type="button"
+          disabled
+          bsStyle={_.get(field, 'style', 'primary')}
+          >{field.value}</Button>
+      );
+    }
+
+    return (<Button
+      key={field.name}
+      bsSize={_.get(field, 'bsSize', size)}
+      type={field.type}
+      bsStyle={_.get(field, 'style', 'primary')}
+      >{field.value}</Button>);
   }
 
   button(field: Object, size: string) {
@@ -315,7 +342,6 @@ class BaseForm extends Component {
               }
             })}
           </div>
-          <button type="button" onClick={this.change}>Change</button>
           <input type="button" ref="button" onClick={this.props.handleSubmit(this.props.submit)} className="hidden" />
         </Pending>
       </form>

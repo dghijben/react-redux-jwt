@@ -14,36 +14,85 @@ import validator from './ValidateEdit';
 import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
 import deepEqual from 'deep-equal';
 
-const fields = [
-  {name: 'picturex', label: 'User', type: 'file', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'picture', label: 'User', type: 'plupload', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10',
-    headers: {
-      Authorization: 'Bearer mango'
+
+const fields = (userId) => {
+  return ([
+    {
+      name: 'picturex',
+      label: 'User',
+      type: 'file',
+      placeholder: 'Bestand',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'picture',
+      label: 'User',
+      type: 'plupload',
+      placeholder: 'Bestand',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      url: '/api/admin/users/' + userId + '/upload',
+      headers: {
+        Authorization: 'Bearer mango'
+      },
+      multi_selection: false
+    },
+    {
+      name: 'initials',
+      label: 'Voorletters',
+      type: 'text',
+      placeholder: 'Voorletters',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'firstname',
+      label: 'Voornamen',
+      type: 'text',
+      placeholder: 'Voornamen',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'middlename',
+      label: 'Tussenvoegsel',
+      type: 'text',
+      placeholder: 'Tussenvoegsel',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'lastname',
+      label: 'Achternaam',
+      type: 'text',
+      placeholder: 'Achternaam',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'email',
+      label: 'E-mail',
+      type: 'text',
+      placeholder: 'E-mail',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      row: {
+        col: [
+          {
+            md: 10, mdOffset: 2, children: [
+              {type: 'success', message: 'Het formulier is opgeslagen'},
+              {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
+            ]
+          },
+          {md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
+        ]
+      }
     }
-  },
-  {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'lastname', label: 'Achternaam', type: 'text', placeholder: 'Achternaam', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'email', label: 'E-mail', type: 'text', placeholder: 'E-mail', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {row:
-    {col:
-      [
-        {md: 10, mdOffset: 2, children: [
-          {type: 'success', message: 'Het formulier is opgeslagen'},
-          {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
-        ]},
-        {md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
-      ]
-    }
-  }
-];
-
-if (__CLIENT__) {
-  console.log((window.File && window.FileReader && window.FileList && window.Blob) ? true : false);
-}
-
-
+  ]);
+};
 // const fieldNames = filterFields(fields);
 
 @connect(state=>({
@@ -164,7 +213,7 @@ class UserEdit extends Component {
                 <DynamicForm
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields}
+                  fieldsNeeded={fields(this.props.users.user.id)}
                   initialValues={_.get(this.props, 'users.user')}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}
