@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps} from 'utils/functions';
-import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button, FormControls} from 'react-bootstrap';
+import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button, FormControls, Table} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
 import {Pending} from 'components/includes';
 import {change} from 'redux-form';
@@ -147,6 +147,7 @@ class BaseForm extends Component {
 
   plupload(field: Object) {
     const props = this.props.fields[field.name];
+    let allFiles = [];
     const extraProps = {};
     if (props.touched && props.error) {
       extraProps.bsStyle = 'error';
@@ -171,15 +172,24 @@ class BaseForm extends Component {
         fileList.push(file.name);
       });
 
-      this.props.dispatch(change(this.props.formName, field.name, JSON.stringify(fileList)));
+      // this.props.dispatch(change(this.props.formName, field.name, JSON.stringify(fileList)));
     };
 
     const fileUploaded = (plupload, file, response) => {
-      console.log('Response', JSON.parse(response.response));
-    };
+      const uploadResponse = JSON.parse(response.response);
+      if (_.get(field, 'multi_selection', true) === false) {
+        allFiles = [];
+        allFiles.push(uploadResponse.result);
+      } else {
+        allFiles.push(uploadResponse.result);
+      }
 
+      this.props.dispatch(change(this.props.formName, field.name, allFiles));
+
+    };
+    console.log('ALLFILES', props);
     return (
-      <div>
+      <div key={field.name}>
         <Plupload
           key={field.name}
           id="plupload"
@@ -195,7 +205,24 @@ class BaseForm extends Component {
           onFileUploaded={fileUploaded}
           headers={{'Authorization': 'Bearer ' + this.props.token}}
         />
-        <input type="text" {...props} />
+        <Table striped bordered condensed hover>
+          <thead>
+            <tr>
+              <th>Bestand</th>
+              <th>Datum</th>
+            </tr>
+          </thead>
+
+          {_.map(props.value, (file, key) => {
+            console.log('WAT NU????');
+            return (
+              <tr key={key}>
+                <td>{file.clientOriginalName}</td>
+                <td></td>
+              </tr>
+            );
+          })}
+        </Table>
       </div>
     );
   }

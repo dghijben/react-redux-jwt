@@ -24,7 +24,7 @@ function formatUrl(path) {
 class _ApiClient {
   constructor() {
     methods.forEach((method) =>
-      this[method] = (path, { params, data, headers, formData } = {}) => new Promise((resolve, reject) => {
+      this[method] = (path, { params, formData, data, headers } = {}) => new Promise((resolve, reject) => {
         const request = superagent[method](formatUrl(path));
         if (formData) {
 
@@ -38,7 +38,12 @@ class _ApiClient {
                   }
                 });
               } else if (value) {
-                fD.append(key, value);
+                if (typeof value === 'object') {
+                  fD.append(key, JSON.stringify(value));
+                } else {
+                  fD.append(key, value);
+                }
+
               }
             });
             request.send(fD);
