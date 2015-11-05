@@ -17,17 +17,10 @@ import deepEqual from 'deep-equal';
 
 const fields = (userId) => {
   return ([
-    {
-      name: 'picturex',
-      label: 'User',
-      type: 'file',
-      placeholder: 'Bestand',
-      labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10'
-    },
+
     {
       name: 'picture',
-      label: 'User',
+      label: 'Foto',
       type: 'plupload',
       placeholder: 'Bestand',
       labelClassName: 'col-md-2',
@@ -36,8 +29,9 @@ const fields = (userId) => {
       headers: {
         Authorization: 'Bearer mango'
       },
-      multi_selection: false
+      multi_selection: false,
     },
+
     {
       name: 'initials',
       label: 'Voorletters',
@@ -207,7 +201,7 @@ class UserEdit extends Component {
             </h1>
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail src={_.get(this.props, 'users.user.picture', '')} />
+                <UserPic responsive thumbnail pictures={_.get(this.props, 'users.user.picture', [])} />
               </Col>
               <Col md={10}>
                 <DynamicForm

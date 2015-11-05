@@ -8,7 +8,7 @@ export default class UserPic extends Component {
     super(props, context);
     this.loadImage = this.loadImage.bind(this);
     this.state = {
-      src: null
+      pictures: null
     };
   }
 
@@ -21,16 +21,13 @@ export default class UserPic extends Component {
   }
 
   loadImage(props) {
-    if ( typeof _.get(props, 'src') === 'object') {
-      _.map(_.get(props, 'src'), (file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          this.setState({src: e.target.result});
-        };
-        reader.readAsDataURL(file);
-      });
-    } else if (!_.isEmpty(props, 'src')) {
-      this.setState({src: '/bin/' + props.src});
+    const picture = _.last(props.pictures);
+
+    if (!_.isEmpty(picture)) {
+      const fileName = picture.file_name;
+      this.setState({src: '/bin/' + fileName});
+    } else {
+      this.setState({src: ''});
     }
   }
 

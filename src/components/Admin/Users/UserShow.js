@@ -79,7 +79,7 @@ class UserShow extends Component {
 
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail src={_.get(this.props, 'users.user.picture', '')} />
+                <UserPic responsive thumbnail pictures={_.get(this.props, 'users.user.picture', [])} />
               </Col>
               <Col md={10}>
                 <Pending state={_.get(this.props, 'users.user.pending')}>

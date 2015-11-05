@@ -27,7 +27,7 @@ import {
 export default () => {
   return (
     <Route component={App}>
-      <Route component={Site}>
+      <Route path="" component={Site}>
         <Route path="/" component={Home}/>
         <Route path="/login" component={Login}>
           <Route path="/password-forgotten" component={PasswordForgotten} />

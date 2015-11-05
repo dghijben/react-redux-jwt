@@ -167,12 +167,9 @@ class BaseForm extends Component {
 
     const addedFiles = (plupload, files) => {
       const fileList = [];
-
       _.map(files, (file)=> {
         fileList.push(file.name);
       });
-
-      // this.props.dispatch(change(this.props.formName, field.name, JSON.stringify(fileList)));
     };
 
     const fileUploaded = (plupload, file, response) => {
@@ -187,46 +184,47 @@ class BaseForm extends Component {
       this.props.dispatch(change(this.props.formName, field.name, allFiles));
 
     };
-    console.log('ALLFILES', props);
     return (
-      <div key={field.name}>
-        <Plupload
-          key={field.name}
-          id="plupload"
-          runtimes="html5"
-          multipart
-          chunk_size="1mb"
-          // url="/api/admin/users/2/upload"
-          url={field.url}
-          multi_selection={_.get(field, 'multi_selection', true)}
-          flash_swf_url={_.get(field, 'flash_swf_url', '/plupload-2.1.8/js/Moxie.swf')}
-          onFilesAdded={addedFiles}
-          onStateChanged={stateChange}
-          onFileUploaded={fileUploaded}
-          headers={{'Authorization': 'Bearer ' + this.props.token}}
-        />
-        <Table striped bordered condensed hover>
-          <thead>
-            <tr>
-              <th>Bestand</th>
-              <th>Datum</th>
-            </tr>
-          </thead>
+      <div key={field.name} className="formgroup">
 
-          {_.map(props.value, (file, key) => {
-            console.log('WAT NU????');
-            return (
-              <tr key={key}>
-                <td>{file.clientOriginalName}</td>
-                <td></td>
+        <label className={field.labelClassName + ' control-label'}>{field.label}</label>
+        <div className={field.wrapperClassName}>
+          <Plupload
+            key={field.name}
+            id="plupload"
+            runtimes="html5"
+            multipart
+            chunk_size="1mb"
+            url={field.url}
+            multi_selection={_.get(field, 'multi_selection', true)}
+            flash_swf_url={_.get(field, 'flash_swf_url', '/plupload-2.1.8/js/Moxie.swf')}
+            onFilesAdded={addedFiles}
+            onStateChanged={stateChange}
+            onFileUploaded={fileUploaded}
+            headers={{'Authorization': 'Bearer ' + this.props.token}}
+          />
+          <Table striped bordered condensed hover>
+            <thead>
+              <tr>
+                <th>Bestand</th>
+                <th>Datum</th>
               </tr>
-            );
-          })}
-        </Table>
+            </thead>
+            <tbody>
+              {_.map(props.value, (file, key) => {
+                return (
+                  <tr key={key}>
+                    <td>{file.file_original_name}</td>
+                    <td></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </div>
       </div>
     );
   }
-
 
   staticField(field: Object, size: string) {
     const props = this.props.fields[field.name];
