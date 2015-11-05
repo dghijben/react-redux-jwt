@@ -1,12 +1,16 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import {connect} from 'react-redux';
+import {mapDispatchToProps} from 'utils/functions';
 import {Alert, Row, Col, DropdownButton, MenuItem, Input, Button, FormControls} from 'react-bootstrap';
 import {updateField} from 'redux/modules/reduxForm/actions';
 import {Pending} from 'components/includes';
 import {change} from 'redux-form';
 import Plupload from 'react-plupload';
 
-// require('../../../../static/plupload-2.1.8/js/plupload.full.min.js');
+@connect(state=>({
+  'token': state.authorization.token
+}), mapDispatchToProps)
 class BaseForm extends Component {
 
   static propTypes = {
@@ -23,7 +27,8 @@ class BaseForm extends Component {
     submit: PropTypes.func.isRequired,
     getActionState: PropTypes.func.isRequired,
     success: PropTypes.bool,
-    valid: PropTypes.bool.isRequired,
+    token: PropTypes.string,
+    valid: PropTypes.bool.isRequired
   };
 
   constructor() {
@@ -149,17 +154,32 @@ class BaseForm extends Component {
       extraProps.help = props.error;
     }
 
+    const addedFiles = (plupload, files) => {
+      const fileList = [];
+
+      _.map(files, (file)=> {
+        fileList.push(file.name);
+      });
+
+      this.props.dispatch(change(this.props.formName, field.name, JSON.stringify(fileList)));
+    };
+
     return (
-      <Plupload
-        key={field.name}
-        id="plupload"
-        runtimes="html5,flash,html4"
-        multipart
-        chunk_size="1mb"
-        url="/"
-        flash_swf_url="/plupload-2.1.8/js/Moxie.swf"
-        onFilesAdded={()=>{ console.log('nieuwe bestanden.'); }}
-      />
+      <div>
+        <Plupload
+          key={field.name}
+          id="plupload"
+          runtimes="html5"
+          multipart
+          chunk_size="1mb"
+          url="/api/admin/users/2/upload"
+          multi_selection={false}
+          flash_swf_url="/plupload-2.1.8/js/Moxie.swf"
+          onFilesAdded={addedFiles}
+          headers={{'Authorization': 'Bearer ' + this.props.token}}
+        />
+        <input type="text" {...props} />
+      </div>
     );
   }
 

@@ -97,7 +97,7 @@
     "react-inline-css": "2.0.0",
     "react-intl": "^2.0.0-pr-3",
     "react-laravel-paginator": "git://github.com/lemonCMS/react-paginator.git#master",
-    "react-plupload": "file:/var/www/react-plupload",
+    "react-plupload": "0.0.*",
     "react-redux": "4.0.0",
     "react-router": "1.0.0-rc4",
     "redux": "3.0.4",

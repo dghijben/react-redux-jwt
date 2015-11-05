@@ -44,7 +44,7 @@ babelLoaderQuery.extra['react-transform'].transforms.push({
 });
 babelLoaderQuery.cacheDirectory = true;
 // babelLoaderQuery.presets = ['es2015']
-console.log(JSON.stringify(babelLoaderQuery));
+// console.log(JSON.stringify(babelLoaderQuery));
 
 module.exports = {
   devtool: 'inline-source-map',

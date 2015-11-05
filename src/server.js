@@ -24,7 +24,8 @@ import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 // import { load as loadAuth } from './redux/modules/auth';
 import {sync as globSync} from 'glob';
 import {readFileSync} from 'fs';
-const Intl = require('intl'); // eslint-disable-line
+//const Intl = require('intl'); // eslint-disable-line
+require('intl');
 import {IntlProvider} from 'react-intl';
 
 const pretty = new PrettyError();

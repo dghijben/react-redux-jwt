@@ -16,7 +16,11 @@ import deepEqual from 'deep-equal';
 
 const fields = [
   {name: 'picturex', label: 'User', type: 'file', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
-  {name: 'picture', label: 'User', type: 'plupload', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
+  {name: 'picture', label: 'User', type: 'plupload', placeholder: 'Bestand', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10',
+    headers: {
+      Authorization: 'Bearer mango'
+    }
+  },
   {name: 'initials', label: 'Voorletters', type: 'text', placeholder: 'Voorletters', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {name: 'firstname', label: 'Voornamen', type: 'text', placeholder: 'Voornamen', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
   {name: 'middlename', label: 'Tussenvoegsel', type: 'text', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-2', wrapperClassName: 'col-md-10'},
@@ -43,6 +47,7 @@ if (__CLIENT__) {
 // const fieldNames = filterFields(fields);
 
 @connect(state=>({
+  'token': state.authorization.token,
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)

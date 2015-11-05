@@ -12,7 +12,8 @@ import {reduxReactRouter, ReduxRouter} from 'redux-router';
 import listener from 'redux/listener';
 import getRoutes from './routes';
 import makeRouteHooksSafe from './helpers/makeRouteHooksSafe';
-import Intl from 'intl'; // eslint-disable-line
+// import Intl from 'intl'; // eslint-disable-line
+require('intl');
 import {IntlProvider} from 'react-intl';
 const i18n = window.__i18n;
 const client = new ApiClient();
