@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
+import { Component, PropTypes } from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import {connect} from 'react-redux';
 import {isLoaded, getUser} from '../../redux/modules/auth/authActions';
@@ -26,7 +26,7 @@ class App extends Component {
 
   render() {
     return (
-        this.props.children && React.cloneElement(this.props.children)
+        this.props.children
     );
   }
 }

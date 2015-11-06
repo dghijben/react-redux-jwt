@@ -26,7 +26,7 @@ class Admin extends React.Component {
         <Menu />
 
         <div id="main" role="main">
-          {this.props.children && React.cloneElement(this.props.children)}
+          {this.props.children}
         </div>
       </div>
     );

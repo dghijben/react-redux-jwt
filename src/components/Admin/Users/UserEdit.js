@@ -12,7 +12,7 @@ import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 */
 import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
-import deepEqual from 'deep-equal';
+// import deepEqual from 'deep-equal';
 
 
 const fields = (userId) => {
@@ -116,7 +116,7 @@ class UserEdit extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps: Object) {
+/*  shouldComponentUpdate(nextProps: Object) {
     // Important when using dynamic redux forms and serverside validation on submit
 
     let updateComponent = true;
@@ -125,7 +125,7 @@ class UserEdit extends Component {
     }
 
     return updateComponent;
-  }
+  }*/
 
   componentWillUnmount() {
     this.clearActionState();
@@ -205,6 +205,7 @@ class UserEdit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
+                  checkKey={'userEdit-' + _.get(this.props, 'users.user.id')}
                   formName="userEdit"
                   formClass="form-horizontal"
                   fieldsNeeded={fields(this.props.users.user.id)}

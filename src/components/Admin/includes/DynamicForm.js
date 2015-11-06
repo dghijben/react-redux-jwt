@@ -7,6 +7,7 @@ import {filterFields} from 'utils/functions';
 class DynamicForm extends Component {
 
   static propTypes = {
+    checkKey: PropTypes.string.isRequired,
     formName: PropTypes.string.isRequired,
     formKey: PropTypes.string,
     fieldsNeeded: PropTypes.array.isRequired,
@@ -18,14 +19,22 @@ class DynamicForm extends Component {
     success: PropTypes.bool
   };
 
+  shouldComponentUpdate(nextProps:Object) {
+    // Important when using @connect, without this the form goes into a infinite loop.
+    let updateComponent = true;
+    if (this.props.checkKey === nextProps.checkKey) {
+      updateComponent = false;
+    }
+    return updateComponent;
+  }
+
   render() {
     const { formName, fieldsNeeded } = this.props;
-
 
     const DynamicInnerForm = reduxForm({
       form: formName,
       fields: filterFields(fieldsNeeded),
-      validate: (values)=>{
+      validate: (values)=> {
         if (_.has(this.props, 'validate')) {
           return this.props.validate(values);
         }
@@ -55,13 +64,11 @@ class DynamicForm extends Component {
             pending: false
           };
         };
-
       }}
       clearActionState={()=>{
         if (this.props.hasOwnProperty('clearActionState')) {
           return this.props.clearActionState();
         }
-
         return ()=>{};
       }}
       />);

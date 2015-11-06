@@ -61,7 +61,7 @@ class RequireAdminLogin extends Component {
               {src: '/plupload-2.1.8/js/plupload.full.min.js'}
             ]}
             />
-          {this.props.children && React.cloneElement(this.props.children)}
+          {this.props.children}
         </div>
       );
     }
