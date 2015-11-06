@@ -24,7 +24,7 @@ import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 // import { load as loadAuth } from './redux/modules/auth';
 import {sync as globSync} from 'glob';
 import {readFileSync} from 'fs';
-//const Intl = require('intl'); // eslint-disable-line
+// const Intl = require('intl'); // eslint-disable-line
 require('intl');
 import {IntlProvider} from 'react-intl';
 
@@ -114,7 +114,7 @@ app.use((req, res) => {
 
   if (__DISABLE_SSR__) {
     hydrateOnClient();
-    return;
+    return true;
   }
 
   store.dispatch(match(req.originalUrl, (error, redirectLocation, routerState) => {
@@ -170,7 +170,7 @@ if (config.port) {
       console.error(err);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://localhost:%s in a browser to view the app.', config.port);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', (process.env.HOST || 'localhost'), config.port);
   });
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');
