@@ -82,7 +82,7 @@ class UserShow extends Component {
                 <UserPic responsive thumbnail pictures={_.get(this.props, 'users.user.picture', [])} />
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, 'users.user.pending')}>
+                <Pending state={_.get(this.props, 'users.user.pending', false)}>
                   <form className="form-horizontal">
                     <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
                     <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />

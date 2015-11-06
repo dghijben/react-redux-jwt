@@ -92,6 +92,7 @@ class Users extends Component {
               data={this.props.users}
               form={{
                 key: 'form',
+                checkKey: 'userform',
                 fields: fields
               }}
               cols={[

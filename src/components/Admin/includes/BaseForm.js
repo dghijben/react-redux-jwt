@@ -147,7 +147,7 @@ class BaseForm extends Component {
 
   plupload(field: Object) {
     const props = this.props.fields[field.name];
-    let allFiles = [];
+    let allFiles = props.value || [];
     const extraProps = {};
     if (props.touched && props.error) {
       extraProps.bsStyle = 'error';
@@ -184,6 +184,43 @@ class BaseForm extends Component {
       this.props.dispatch(change(this.props.formName, field.name, allFiles));
 
     };
+
+    const fileDelete = (index) => {
+      _.set(allFiles, [index], _.merge(_.get(allFiles, [index]), {deleted: 1}));
+      this.props.dispatch(change(this.props.formName, field.name, allFiles));
+    };
+
+    const showFiles = _.filter(props.value, (v) => { return !v.deleted; } );
+
+
+    const renderTable = () => {
+      if (showFiles.length === 0) {
+        return [];
+      }
+
+      return (
+        <Table striped bordered condensed hover>
+          <thead>
+          <tr>
+            <th>Bestand</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          {_.map(showFiles, (file, key) => {
+            return (
+              <tr key={key}>
+                <td>{file.file_original_name} {file.deleted}</td>
+                <td><Button onClick={() => { fileDelete(key); }}><i className="fa fa-trash-o"></i></Button></td>
+              </tr>
+            );
+          })}
+          </tbody>
+        </Table>
+      );
+
+    };
+
     return (
       <div key={field.name} className="formgroup">
 
@@ -201,26 +238,10 @@ class BaseForm extends Component {
             onFilesAdded={addedFiles}
             onStateChanged={stateChange}
             onFileUploaded={fileUploaded}
+            autoUpload
             headers={{'Authorization': 'Bearer ' + this.props.token}}
           />
-          <Table striped bordered condensed hover>
-            <thead>
-              <tr>
-                <th>Bestand</th>
-                <th>Datum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {_.map(props.value, (file, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{file.file_original_name}</td>
-                    <td></td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+          {renderTable()}
         </div>
       </div>
     );

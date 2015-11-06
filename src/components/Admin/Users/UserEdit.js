@@ -6,7 +6,7 @@ import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userAc
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm} from 'components/includes';
-import DynamicForm from 'components/Admin/includes/DynamicForm';
+import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 /*
 import validator from './ValidateEdit';
@@ -15,7 +15,7 @@ import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
 // import deepEqual from 'deep-equal';
 
 
-const fields = (userId) => {
+const fields = (userId, token) => {
   return ([
 
     {
@@ -27,7 +27,7 @@ const fields = (userId) => {
       wrapperClassName: 'col-md-10',
       url: '/api/admin/users/' + userId + '/upload',
       headers: {
-        Authorization: 'Bearer mango'
+        Authorization: 'Bearer ' + token
       },
       multi_selection: false,
     },
@@ -99,7 +99,8 @@ class UserEdit extends Component {
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'users': PropTypes.object.isRequired
+    'users': PropTypes.object.isRequired,
+    'token': PropTypes.string.isRequired
   }
 
   constructor(props, context) {
@@ -208,7 +209,7 @@ class UserEdit extends Component {
                   checkKey={'userEdit-' + _.get(this.props, 'users.user.id')}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(this.props.users.user.id)}
+                  fieldsNeeded={fields(this.props.users.user.id, this.props.token)}
                   initialValues={_.get(this.props, 'users.user')}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}

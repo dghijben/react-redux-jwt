@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import DataTable from './DataTable';
-import DynamicForm from './DynamicForm';
+import DynamicForm from 'redux-form-generator';
 import { storeState } from '../../../redux/modules/reduxRouter/actions';
 import deepEqual from 'deep-equal';
 import {mapDispatchToProps, filterState, filterFields, stringifyState, createParamsForFetch} from 'utils/functions';
@@ -110,6 +110,7 @@ class DataOverview extends Component {
         <DynamicForm
           formName={this.props.name}
           formKey={this.props.form.key}
+          checkKey={_.get(this.props, 'form.checkKey', this.props.name)}
           fieldsNeeded={this.props.form.fields}
           initialValues={this.state[this.props.name]}
           onSubmit={this.handleSearch}
