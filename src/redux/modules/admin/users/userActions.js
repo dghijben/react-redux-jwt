@@ -29,6 +29,13 @@ export function loadUser(userId) {
   };
 }
 
+export function destroyUser(userId) {
+  return {
+    types: [actions.USER_DELETE, actions.USER_DELETE_SUCCESS, actions.USER_DELETE_FAIL],
+    promise: (client) => client.del('/admin/users/' + userId)
+  };
+}
+
 export function clearList() {
   return {
     type: actions.USERS_CLEAR

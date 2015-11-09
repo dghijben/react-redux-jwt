@@ -1,29 +1,22 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {mapDispatchToProps} from 'utils/functions';
 import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
-import {Well, Row, Col} from 'react-bootstrap';
+import {Well, Row, Col, FormControls, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
-import {Confirm} from 'components/includes';
-import DynamicForm from 'redux-form-generator';
+import {Confirm, Pending} from 'components/includes';
 import UserPic from 'components/Admin/includes/UserPic';
-import validator from './ValidateEdit';
-import {update, clearNetworkState} from 'redux/modules/admin/users/userActions';
-import fields from './fields';
 
 @connect(state=>({
-  'token': state.authorization.token,
   'users': state.users,
   'router': state.router
-}), mapDispatchToProps)
-class UserEdit extends Component {
+}))
+class UserShow extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'dispatch': PropTypes.func,
     'users': PropTypes.object.isRequired,
-    'token': PropTypes.string.isRequired
+    'history': PropTypes.object,
   }
 
   constructor(props, context) {
@@ -32,28 +25,9 @@ class UserEdit extends Component {
     this.close = this.close.bind(this);
     this.confirmed = this.confirmed.bind(this);
     this.renderModal = this.renderModal.bind(this);
-    this.getActionState = this.getActionState.bind(this);
-    this.clearActionState = this.clearActionState.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
       showModal: false
     };
-  }
-
-  componentWillUnmount() {
-    this.clearActionState();
-  }
-
-  getActionState() {
-    return {
-      success: _.get(this.props, 'users.user.actionUpdate.success', false),
-      failed: _.get(this.props, 'users.user.actionUpdate.failed', false),
-      pending: _.get(this.props, 'users.user.actionUpdate.pending', false)
-    };
-  }
-
-  clearActionState() {
-    this.props.dispatch(clearNetworkState());
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -75,19 +49,6 @@ class UserEdit extends Component {
     this.setState({showModal: false});
   }
 
-  handleSubmit(values, dispatch) {
-    return new Promise((resolve, reject) => {
-      dispatch(update(this.props.router.params.userId, values))
-        .then((ret)=> {
-          if (_.has(ret, 'error')) {
-            reject(ret.error);
-          } else {
-            resolve();
-          }
-        });
-    });
-  }
-
   renderModal() {
     return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
   }
@@ -96,9 +57,12 @@ class UserEdit extends Component {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Users', to: '/admin/users'},
-      {name: _.get(this.props, 'users.user.firstname', 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
-      {name: 'Wijzigen'}
+      {name: _.get(this.props, 'users.user.firstname', 'unknown')},
     ];
+
+    const editLink = () => {
+      this.props.history.pushState({}, '/admin/users/' + _.get(this.props, 'users.user.id') + '/edit');
+    };
 
     return (
       <div>
@@ -112,22 +76,28 @@ class UserEdit extends Component {
                 {' '} {_.get(this.props, 'users.user.lastname', '')}
               </span>
             </h1>
+
             <Row>
               <Col md={2}>
                 <UserPic responsive thumbnail pictures={_.get(this.props, 'users.user.picture', [])} />
               </Col>
               <Col md={10}>
-                <DynamicForm
-                  checkKey={'userEdit-' + _.get(this.props, 'users.user.id')}
-                  formName="userEdit"
-                  formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, 'users.user.id'), this.props.token)}
-                  initialValues={_.get(this.props, 'users.user')}
-                  validate={validator}
-                  onSubmit={this.handleSubmit}
-                  getActionState={this.getActionState}
-                  clearActionState={this.clearActionState}
-                  />
+                <Pending state={_.get(this.props, 'users.user.pending', false)}>
+                  <form className="form-horizontal">
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Tussenvoegsels" value={_.get(this.props, 'users.user.middlename', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Achternaam" value={_.get(this.props, 'users.user.lastname', '')} />
+                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
+                    <Row>
+                      <Col md={9} mdOffset={3}>
+                        <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
+                        {' '}
+                        <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
+                      </Col>
+                    </Row>
+                  </form>
+                </Pending>
               </Col>
             </Row>
           </Well>
@@ -136,4 +106,6 @@ class UserEdit extends Component {
       </div>
     );
   }
-} export default UserEdit;
+}
+
+export default UserShow;

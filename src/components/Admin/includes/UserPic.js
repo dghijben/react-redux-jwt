@@ -21,7 +21,7 @@ export default class UserPic extends Component {
   }
 
   loadImage(props) {
-    const picture = _.last(props.pictures);
+    const picture = _.last(_.filter(props.pictures, (item) => { return !item.deleted; }));
 
     if (!_.isEmpty(picture)) {
       const fileName = picture.file_name;
@@ -32,7 +32,7 @@ export default class UserPic extends Component {
   }
 
   render() {
-    if (_.isEmpty(this.state.src)) {
+    if (_.isEmpty(this.state.src) ) {
       return <div>No image</div>;
     }
 

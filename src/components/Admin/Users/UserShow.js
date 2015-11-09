@@ -1,22 +1,24 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {loadUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
+import {loadUser, destroyUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
 import {Well, Row, Col, FormControls, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import UserPic from 'components/Admin/includes/UserPic';
+import {mapDispatchToProps} from 'utils/functions';
 
 @connect(state=>({
   'users': state.users,
   'router': state.router
-}))
+}), mapDispatchToProps)
 class UserShow extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'users': PropTypes.object.isRequired,
     'history': PropTypes.object,
+    'dispatch': PropTypes.func.isRequired
   }
 
   constructor(props, context) {
@@ -28,6 +30,12 @@ class UserShow extends Component {
     this.state = {
       showModal: false
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (_.get(nextProps, 'users.user.deleted', false) === true) {
+      this.props.history.pushState({}, '/admin/users');
+    }
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -47,6 +55,7 @@ class UserShow extends Component {
 
   confirmed() {
     this.setState({showModal: false});
+    this.props.dispatch(destroyUser(this.props.router.params.userId));
   }
 
   renderModal() {
@@ -61,7 +70,7 @@ class UserShow extends Component {
     ];
 
     const editLink = () => {
-      this.props.history.pushState({}, '/admin/users/' + _.get(this.props, 'users.user.id') + '/edit');
+      this.props.history.pushState({}, '/admin/users/' + _.get(this.props, 'router.params.userId') + '/edit');
     };
 
     return (

@@ -40,6 +40,17 @@ class UserEdit extends Component {
     };
   }
 
+/*  shouldComponentUpdate(nextProps: Object) {
+    // Important when using dynamic redux forms and serverside validation on submit
+
+    let updateComponent = true;
+    if (deepEqual(_.get(nextProps, 'users.user.id'), _.get(this.props, 'users.user.id'))) {
+      updateComponent = false;
+    }
+
+    return updateComponent;
+  }*/
+
   componentWillUnmount() {
     this.clearActionState();
   }
@@ -121,7 +132,7 @@ class UserEdit extends Component {
                   checkKey={'userEdit-' + _.get(this.props, 'users.user.id')}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, 'users.user.id'), this.props.token)}
+                  fieldsNeeded={fields(this.props.users.user.id, this.props.token)}
                   initialValues={_.get(this.props, 'users.user')}
                   validate={validator}
                   onSubmit={this.handleSubmit}

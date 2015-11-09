@@ -1,10 +1,9 @@
 import React, {Component, PropTypes } from 'react';
-import {load, destroyUser} from '../../../redux/modules/admin/users/userActions';
+import { load } from '../../../redux/modules/admin/users/userActions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DataOverview from '../includes/DataOverview';
-import {Confirm} from 'components/includes';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 
 const reducerIndex = 'users';
@@ -52,13 +51,6 @@ class Users extends Component {
   constructor(props, context) {
     super(props, context);
     this.fetchDataCallBack = this.fetchDataCallBack.bind(this);
-    this.confirmDelete = this.confirmDelete.bind(this);
-    this.close = this.close.bind(this);
-    this.confirmed = this.confirmed.bind(this);
-    this.renderModal = this.renderModal.bind(this);
-    this.state = {
-      showModal: false
-    };
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -66,28 +58,9 @@ class Users extends Component {
   }
 
   fetchDataCallBack(state) {
+    // if (intersect(Object.keys(state), fieldNamesOnly).length > 0) {
     this.props.dispatch(load(state));
-  }
-
-  confirmDelete(item) {
-
-    console.log(createParamsForFetch(this.props, name, fieldNames));
-    this.setState({showModal: true, destroyId: item.id});
-  }
-
-  close() {
-    this.setState({showModal: false});
-  }
-
-  confirmed() {
-    this.setState({showModal: false});
-    this.props.dispatch(destroyUser(this.state.destroyId)).then(() => {
-      this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
-    });
-  }
-
-  renderModal() {
-    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
+    // }
   }
 
   render() {
@@ -95,12 +68,12 @@ class Users extends Component {
       this.props.history.pushState({}, '/admin/users/' + item.id);
     };
 
-    const edit = (item) => {
-      this.props.history.pushState({}, '/admin/users/' + item.id + '/edit');
+    const edit = () => {
+      console.log('CLick 2');
     };
 
-    const destroy = (item) => {
-      this.confirmDelete(item);
+    const remove = () => {
+      console.log('CLick 3');
     };
 
     const breadCrumbs = [
@@ -131,13 +104,12 @@ class Users extends Component {
                   {name: 'bekijken', onClick: show},
                   {name: 'wijzigen', onClick: edit},
                   {divider: true},
-                  {name: 'verwijder', onClick: destroy},
+                  {name: 'verwijder', onClick: remove},
                 ]}
               ]}
               />
           </Well>
         </div>
-        {this.renderModal()}
       </div>
     );
   }
