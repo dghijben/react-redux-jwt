@@ -13,9 +13,9 @@ export { default as NotFound } from './NotFound/NotFound';
 
 export { default as Admin } from './Admin/Admin';
 export { default as AdminUsers } from './Admin/Users/Users';
-export { default as AdminUserCreate } from './Admin/Users/UserCreate';
-export { default as AdminUserEdit } from './Admin/Users/UserEdit';
-export { default as AdminUserShow } from './Admin/Users/UserShow';
+export { default as AdminUserCreate } from './Admin/Users/Create';
+export { default as AdminUserEdit } from './Admin/Users/Edit';
+export { default as AdminUserShow } from './Admin/Users/Show';
 export { default as AdminAcl } from './Admin/Acl/Acl';
 
 export { default as AdminAffiliates } from './Admin/Affiliates/Index';

@@ -1,39 +1,59 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {loadRecord, isLoadedRecord, update} from '../../../redux/modules/admin/affiliates/actions';
-import {Well} from 'react-bootstrap';
+import {mapDispatchToProps} from 'utils/functions';
+import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
-import DynamicForm from 'components/Admin/includes/DynamicForm';
-import {Pending} from 'components/includes';
+import {Confirm} from 'components/includes';
+import DynamicForm from 'redux-form-generator';
+import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-
-const REDUCER = 'affiliates';
+import {loadRecord, isLoadedRecord, update, clearNetworkState} from 'redux/modules/admin/affiliates/actions';
+import {reducerIndex, reducerItem, path} from './constants';
+import {fields} from './fields';
 
 @connect(state=>({
-  'affiliates': state.affiliates,
+  'token': state.authorization.token,
+  'users': state.users,
   'router': state.router
-})) class Edit extends Component {
+}), mapDispatchToProps)
+class Edit extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'affiliates': PropTypes.object.isRequired,
-    'history': PropTypes.object,
+    'dispatch': PropTypes.func,
+    'users': PropTypes.object.isRequired,
+    'token': PropTypes.string.isRequired
   }
 
   constructor(props, context) {
     super(props, context);
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.close = this.close.bind(this);
+    this.confirmed = this.confirmed.bind(this);
+    this.renderModal = this.renderModal.bind(this);
+    this.getActionState = this.getActionState.bind(this);
+    this.clearActionState = this.clearActionState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      showModal: false
+    };
   }
 
-  shouldComponentUpdate(nextProps:Object) {
-    // Important when using dynamic redux forms
+  componentWillUnmount() {
+    this.clearActionState();
+  }
 
-    let updateComponent = true;
-    if (_.get(nextProps, [REDUCER, 'record', 'id']) === _.get(this.props, [REDUCER, 'record', 'id'])) {
-      updateComponent = false;
-    }
-    return updateComponent;
+  getActionState() {
+    return {
+      success: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'success'], false),
+      failed: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'failed'], false),
+      pending: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'pending'], false)
+    };
+  }
+
+  clearActionState() {
+    this.props.dispatch(clearNetworkState());
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -41,6 +61,18 @@ const REDUCER = 'affiliates';
     if (!isLoadedRecord(state, state.router.params.id)) {
       return dispatch(loadRecord(state.router.params.id));
     }
+  }
+
+  confirmDelete() {
+    this.setState({showModal: true});
+  }
+
+  close() {
+    this.setState({showModal: false});
+  }
+
+  confirmed() {
+    this.setState({showModal: false});
   }
 
   handleSubmit(values, dispatch) {
@@ -56,102 +88,51 @@ const REDUCER = 'affiliates';
     });
   }
 
+  renderModal() {
+    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
+  }
+
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Affiliates', to: '/admin/affiliates'},
-      {
-        name: _.get(this.props, 'affiliates.record.name', 'unknown'),
-        to: '/admin/affiliates/' + _.get(this.props, [REDUCER, 'record', 'id'])
-      },
+      {name: 'Users', to: '/admin/' + path},
+      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown'), to: '/admin/' + path + '/' + _.get(this.props, 'router.params.id')},
       {name: 'Wijzigen'}
-    ];
-
-    const fields = [
-      {
-        name: 'logo',
-        label: 'Logo',
-        type: 'file',
-        placeholder: 'Voorletters',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-9'
-      },
-      {
-        name: 'name',
-        label: 'Naam',
-        type: 'text',
-        placeholder: 'Voorletters',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-9'
-      },
-      {
-        name: 'description',
-        label: 'Omschrijving',
-        type: 'text',
-        placeholder: 'Voornamen',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-9'
-      },
-      {
-        name: 'url_site',
-        label: 'Url Site',
-        type: 'text',
-        placeholder: 'Tussenvoegsel',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-9'
-      },
-      {
-        name: 'url_affiliate',
-        label: 'Url affiliate',
-        type: 'text',
-        placeholder: 'Achternaam',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-9'
-      },
-      {
-        name: 'active',
-        label: 'Actief',
-        type: 'checkbox',
-        placeholder: 'E-mail',
-        labelClassName: 'col-md-3',
-        wrapperClassName: 'col-md-offset-3 col-md-9'
-      },
-      {
-        row: {
-          col: [
-            {md: 9, mdOffset: 3, children: [{type: 'submit', name: 'edit', value: 'opslaan'}]}
-          ]
-        }
-      }
     ];
 
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
-
         <div id="content">
           <Well>
             <h1>Affiliate
               <span>
-                {' '} {_.get(this.props, [REDUCER, 'record', 'name'])}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
               </span>
             </h1>
-            <Pending state={_.get(this.props, [REDUCER, 'record', 'pending'])}>
-              <DynamicForm
-                formName="recordEdit"
-                formKey="form"
-                formClass="form-horizontal"
-                fieldsNeeded={fields}
-                initialValues={_.get(this.props, [REDUCER, 'record'])}
-                onSubmit={this.handleSubmit}
-                validate={validator}
-                />
-            </Pending>
+            <Row>
+              <Col md={2}>
+                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerItem, 'picture'], [])} />
+              </Col>
+              <Col md={10}>
+                <DynamicForm
+                  checkKey={'edit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
+                  formName="userEdit"
+                  formClass="form-horizontal"
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token)}
+                  initialValues={_.get(this.props, [reducerIndex, reducerItem])}
+                  validate={validator}
+                  onSubmit={this.handleSubmit}
+                  getActionState={this.getActionState}
+                  clearActionState={this.clearActionState}
+                  />
+              </Col>
+            </Row>
           </Well>
         </div>
+        {this.renderModal()}
       </div>
     );
   }
-}
+} export default Edit;
 
-export default Edit;

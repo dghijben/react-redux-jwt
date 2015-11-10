@@ -6,10 +6,12 @@ import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'components/Admin/includes/DynamicForm';
 import {Confirm, Pending} from 'components/includes';
+import {fieldsShow} from './fields';
 
 const REDUCER = 'affiliates';
 
 @connect(state=>({
+  'token': state.authorization.token,
   'affiliates': state.affiliates,
   'router': state.router
 }))
@@ -20,6 +22,7 @@ class Show extends Component {
     'router': PropTypes.object.isRequired,
     'affiliates': PropTypes.object.isRequired,
     'history': PropTypes.object,
+    'token': PropTypes.string.isRequired
   }
 
   constructor(props, context) {
@@ -31,16 +34,6 @@ class Show extends Component {
     this.state = {
       showModal: false
     };
-  }
-
-  shouldComponentUpdate(nextProps: Object) {
-    // Important when using dynamic redux forms
-
-    let updateComponent = true;
-    if (_.get(nextProps, [REDUCER, 'record', 'id']) === _.get(this.props, [REDUCER, 'record', 'id'])) {
-      updateComponent = false;
-    }
-    return updateComponent;
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -77,21 +70,7 @@ class Show extends Component {
       this.props.history.pushState({}, '/admin/affiliates/' + _.get(this.props, [REDUCER, 'record', 'id']) + '/edit');
     };
 
-    const fields = [
-      {name: 'name', label: 'Naam', type: 'static', placeholder: 'Voorletters', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-      {name: 'description', label: 'Omschrijving', type: 'static', placeholder: 'Voornamen', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-      {name: 'url_site', label: 'Url Site', type: 'static', placeholder: 'Tussenvoegsel', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-      {name: 'url_affiliate', label: 'Url affiliate', type: 'static', placeholder: 'Achternaam', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-      {name: 'active', label: 'Actief', type: 'static', placeholder: 'E-mail', labelClassName: 'col-md-3', wrapperClassName: 'col-md-9'},
-      {row:
-      {col:
-        [
-          {md: 9, mdOffset: 3, children: [{type: 'button', name: 'edit', value: 'wijzigen', onClick: editLink}]}
-        ]
-      }
-      }
-    ];
-
+    const id = _.get(this.props, [REDUCER, 'record', 'id']);
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
@@ -104,10 +83,11 @@ class Show extends Component {
             </h1>
             <Pending state={_.get(this.props, [REDUCER, 'record', 'pending'])}>
               <DynamicForm
+                checkKey={'recordEdit-' + id}
                 formName="recordEdit"
                 formKey="recordEdit"
                 formClass="form-horizontal"
-                fieldsNeeded={fields}
+                fieldsNeeded={fieldsShow(id, this.props.token, editLink, this.confirmDelete)}
                 initialValues={_.get(this.props, [REDUCER, 'record'])}
                 />
             </Pending>

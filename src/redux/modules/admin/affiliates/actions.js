@@ -16,7 +16,6 @@ export function load(params) {
 }
 
 export function update(id, params) {
-  console.log('mango', params);
   return {
     types: [actions.AFFILIATE_UPDATE, actions.AFFILIATE_UPDATE_SUCCESS, actions.AFFILIATE_UPDATE_FAIL],
     promise: (client) => client.post(URL + '/' + id + '/edit', {
@@ -30,6 +29,13 @@ export function loadRecord(id) {
   return {
     types: [actions.AFFILIATE_LOAD, actions.AFFILIATE_LOAD_SUCCESS, actions.AFFILIATE_LOAD_FAIL],
     promise: (client) => client.get(URL + '/' + id)
+  };
+}
+
+export function destroyRecord(id) {
+  return {
+    types: [actions.AFFILIATE_DELETE, actions.AFFILIATE_DELETE_SUCCESS, actions.AFFILIATE_DELETE_FAIL],
+    promise: (client) => client.del(URL + '/' + id)
   };
 }
 
@@ -61,7 +67,7 @@ export function isLoaded(globalState, params) {
 export function isLoadedRecord(globalState, id) {
   return globalState[REDUCER] && globalState[REDUCER].record &&
     ((globalState[REDUCER].record.success === true &&
-        globalState[REDUCER].record.id === id
+        parseInt(globalState[REDUCER].record.id, 10) === parseInt(id, 10)
     ) || globalState[REDUCER].record.failed === true)
     ;
 }
