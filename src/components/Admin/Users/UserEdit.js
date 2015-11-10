@@ -45,10 +45,12 @@ class UserEdit extends Component {
   }
 
   getActionState() {
+    console.log('Action State', this.props.users.user.actionStatus);
+
     return {
-      success: _.get(this.props, 'users.user.actionUpdate.success', false),
-      failed: _.get(this.props, 'users.user.actionUpdate.failed', false),
-      pending: _.get(this.props, 'users.user.actionUpdate.pending', false)
+      success: _.get(this.props, 'users.user.actionStatus.success', false),
+      failed: _.get(this.props, 'users.user.actionStatus.failed', false),
+      pending: _.get(this.props, 'users.user.actionStatus.pending', false)
     };
   }
 

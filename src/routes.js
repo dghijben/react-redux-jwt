@@ -45,9 +45,9 @@ export default () => {
           <IndexRoute component={AdminUsers} />
           <Route path="acl" component={AdminAcl} />
           <Route path="users" component={AdminUsers} />
+          <Route path="users/new" component={AdminUserCreate} />
           <Route path="users/:userId" component={AdminUserShow} />
           <Route path="users/:userId/edit" component={AdminUserEdit} />
-          <Route path="users/new" component={AdminUserCreate} />
           <Route path="affiliates" component={AdminAffiliates} />
           <Route path="affiliates/:id" component={AdminAffiliatesShow} />
           <Route path="affiliates/:id/edit" component={AdminAffiliatesEdit} />

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
 import {load, destroyUser} from '../../../redux/modules/admin/users/userActions';
 import { connect } from 'react-redux';
@@ -57,37 +58,41 @@ class Users extends Component {
     this.confirmed = this.confirmed.bind(this);
     this.renderModal = this.renderModal.bind(this);
     this.state = {
-      showModal: false
+      showModal: false,
+      modalSuccess: false
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (_.get(this.props, 'users.user.deleted', false) === false && _.get(nextProps, 'users.user.deleted', false) === true) {
+      this.setState({modalSuccess: true});
+      this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
+    }
   }
 
   static fetchDataDeferred(getState, dispatch) {
     return dispatch(load(createParamsForFetch(getState(), name, fieldNames)));
   }
 
+
   fetchDataCallBack(state) {
     this.props.dispatch(load(state));
   }
 
   confirmDelete(item) {
-
-    console.log(createParamsForFetch(this.props, name, fieldNames));
     this.setState({showModal: true, destroyId: item.id});
   }
 
   close() {
-    this.setState({showModal: false});
+    this.setState({showModal: false, modalSuccess: false});
   }
 
   confirmed() {
-    this.setState({showModal: false});
-    this.props.dispatch(destroyUser(this.state.destroyId)).then(() => {
-      this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
-    });
+    this.props.dispatch(destroyUser(this.state.destroyId));
   }
 
   renderModal() {
-    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
+    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} success={this.state.modalSuccess}/>);
   }
 
   render() {

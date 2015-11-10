@@ -22,6 +22,16 @@ export function update(userId, params) {
   };
 }
 
+export function create(params) {
+  return {
+    types: [actions.USER_CREATE, actions.USER_CREATE_SUCCESS, actions.USER_CREATE_FAIL],
+    promise: (client) => client.post('/admin/users/new', {
+      data: params
+    }),
+    payload: params
+  };
+}
+
 export function loadUser(userId) {
   return {
     types: [actions.USER_LOAD, actions.USER_LOAD_SUCCESS, actions.USER_LOAD_FAIL],
@@ -63,8 +73,7 @@ export function isLoaded(globalState, params) {
 
 export function isLoadedUser(globalState, userId) {
   return globalState.users && globalState.users.user &&
-    ((globalState.users.user.success === true &&
-        globalState.users.user.id === userId
+    ((parseInt(globalState.users.user.id, 10) === parseInt(userId, 10)
     ) || globalState.users.user.failed === true)
     ;
 }

@@ -28,7 +28,8 @@ class UserShow extends Component {
     this.confirmed = this.confirmed.bind(this);
     this.renderModal = this.renderModal.bind(this);
     this.state = {
-      showModal: false
+      showModal: false,
+      modalSuccess: false,
     };
   }
 
@@ -50,7 +51,7 @@ class UserShow extends Component {
   }
 
   close() {
-    this.setState({showModal: false});
+    this.setState({showModal: false, modalSuccess: false});
   }
 
   confirmed() {
@@ -59,7 +60,7 @@ class UserShow extends Component {
   }
 
   renderModal() {
-    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} />);
+    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed}/>);
   }
 
   render() {

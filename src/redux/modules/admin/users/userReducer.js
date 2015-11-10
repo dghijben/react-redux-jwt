@@ -27,18 +27,25 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, Object.assign({}, {user: {pending: false, failed: true}}));
 
     case actions.USER_UPDATE:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionUpdate: {pending: true}})}));
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {pending: true}})}));
     case actions.USER_UPDATE_SUCCESS:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, ...action.payload, {actionUpdate: {pending: false, success: true}})}));
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, ...action.payload, {actionStatus: {pending: false, success: true}})}));
     case actions.USER_UPDATE_FAIL:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionUpdate: {pending: false, failed: true}})}));
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {pending: false, failed: true}})}));
+
+    case actions.USER_CREATE:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, {actionStatus: {pending: true}})}));
+    case actions.USER_CREATE_SUCCESS:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, action.result, ...action.payload, {actionStatus: {pending: false, success: true}})}));
+    case actions.USER_CREATE_FAIL:
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, {actionStatus: {pending: false, failed: true}})}));
 
     case actions.USERS_CLEAR:
       return Object.assign({}, state, Object.assign({}, {list: {}}));
     case actions.USER_CLEAR:
       return Object.assign({}, state, Object.assign({}, {user: {}}));
     case actions.USER_CLEAR_NETWORK_STATE:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionUpdate: {}})}));
+      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {}})}));
     default:
       return Object.assign({}, state);
   }
