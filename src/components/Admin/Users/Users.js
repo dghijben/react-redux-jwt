@@ -59,14 +59,18 @@ class Users extends Component {
     this.renderModal = this.renderModal.bind(this);
     this.state = {
       showModal: false,
-      modalSuccess: false
+      status: {}
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (_.get(this.props, 'users.user.deleted', false) === false && _.get(nextProps, 'users.user.deleted', false) === true) {
-      this.setState({modalSuccess: true});
+      this.setState({status: {success: true}});
       this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
+    }
+
+    if (_.get(this.props, 'users.user.failed', false) === false && _.get(nextProps, 'users.user.failed', false) === true) {
+      this.setState({status: {failed: true}});
     }
   }
 
@@ -84,7 +88,7 @@ class Users extends Component {
   }
 
   close() {
-    this.setState({showModal: false, modalSuccess: false});
+    this.setState({showModal: false, status: {}});
   }
 
   confirmed() {
@@ -92,7 +96,7 @@ class Users extends Component {
   }
 
   renderModal() {
-    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} success={this.state.modalSuccess}/>);
+    return (<Confirm showModal={this.state.showModal} close={this.close} confirmed={this.confirmed} status={this.state.status}/>);
   }
 
   render() {

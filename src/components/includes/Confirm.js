@@ -9,7 +9,7 @@ export default class Confirm extends Component {
     close: PropTypes.func.isRequired,
     confirmed: PropTypes.func.isRequired,
     item: PropTypes.object,
-    success: PropTypes.bool
+    status: PropTypes.object
   }
 
   constructor() {
@@ -20,7 +20,14 @@ export default class Confirm extends Component {
   }
 
   body() {
-    if (_.get(this.props, 'success') === true ) {
+    if (_.get(this.props, 'status.failed') === true ) {
+      return (
+        <Modal.Body>
+          <Alert bsStyle="danger">Er is een fout opgetreden, de actie is is waarschijnlijk niet uitgevoerd.</Alert>
+        </Modal.Body>
+      );
+    }
+    if (_.get(this.props, 'status.success') === true ) {
       return (
         <Modal.Body>
           <Alert bsStyle="success">De actie is verwerkt, u kunt deze modal nu sluiten.</Alert>
@@ -37,7 +44,7 @@ export default class Confirm extends Component {
   }
 
   footer() {
-    if (_.get(this.props, 'success') === true ) {
+    if (_.get(this.props, 'status.success') === true || _.get(this.props, 'status.failed')) {
       return (
         <Modal.Footer>
           <Button onClick={this.props.close}>sluiten</Button>
