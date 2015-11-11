@@ -42,7 +42,7 @@ const fieldNames = filterFields(fields);
   return obj;
 }, mapDispatchToProps)
 
-class Users extends Component {
+class Index extends Component {
 
   static propTypes = {
     'users': PropTypes.object,
@@ -152,4 +152,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default Index;

@@ -12,7 +12,7 @@ import {mapDispatchToProps} from 'utils/functions';
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)
-class UserShow extends Component {
+class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
@@ -118,4 +118,4 @@ class UserShow extends Component {
   }
 }
 
-export default UserShow;
+export default Show;

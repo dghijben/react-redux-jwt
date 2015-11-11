@@ -14,7 +14,7 @@ import fields from './fields';
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)
-class UserEdit extends Component {
+class Create extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
@@ -104,4 +104,4 @@ class UserEdit extends Component {
       </div>
     );
   }
-} export default UserEdit;
+} export default Create;
