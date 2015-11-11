@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import {load, destroyUser} from '../../../redux/modules/admin/users/userActions';
+import {load, destroyUser} from '../../../redux/modules/admin/users/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
@@ -42,7 +42,7 @@ const fieldNames = filterFields(fields);
   return obj;
 }, mapDispatchToProps)
 
-class Users extends Component {
+class Index extends Component {
 
   static propTypes = {
     'users': PropTypes.object,
@@ -114,7 +114,7 @@ class Users extends Component {
 
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users'}
+      {name: 'Gebruikers'}
     ];
 
     return (
@@ -152,4 +152,4 @@ class Users extends Component {
   }
 }
 
-export default Users;
+export default Index;

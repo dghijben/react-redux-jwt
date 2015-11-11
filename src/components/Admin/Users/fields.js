@@ -13,6 +13,7 @@ export default function fields(userId, token) {
         Authorization: 'Bearer ' + token
       },
       multi_selection: false,
+      hideOnStatic: true,
     },
 
     {
@@ -56,6 +57,12 @@ export default function fields(userId, token) {
       wrapperClassName: 'col-md-10'
     },
     {
+      name: 'admin',
+      label: 'Admin',
+      type: 'checkbox',
+      wrapperClassName: 'col-md-offset-2 col-md-10'
+    },
+    {
       row: {
         col: [
           {
@@ -64,7 +71,7 @@ export default function fields(userId, token) {
             {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
             ]
           },
-          {md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
+          {hideOnStatic: true, md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
         ]
       }
     }

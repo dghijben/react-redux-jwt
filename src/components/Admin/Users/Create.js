@@ -6,7 +6,7 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import {create} from 'redux/modules/admin/users/userActions';
+import {create} from 'redux/modules/admin/users/actions';
 import fields from './fields';
 
 @connect(state=>({
@@ -14,7 +14,7 @@ import fields from './fields';
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)
-class UserEdit extends Component {
+class Create extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
@@ -72,8 +72,8 @@ class UserEdit extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users', to: '/admin/users'},
-      {name: 'nieuw'}
+      {name: 'Gebruikers', to: '/admin/users'},
+      {name: 'Nieuw'}
     ];
 
     return (
@@ -104,4 +104,4 @@ class UserEdit extends Component {
       </div>
     );
   }
-} export default UserEdit;
+} export default Create;

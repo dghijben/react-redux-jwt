@@ -1,4 +1,4 @@
-import * as actions from './userConstants';
+import * as actions from './constants';
 
 const initialState = {
 };
@@ -29,7 +29,16 @@ export default function reducer(state = initialState, action = {}) {
     case actions.USER_UPDATE:
       return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {pending: true}})}));
     case actions.USER_UPDATE_SUCCESS:
-      return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, ...action.payload, {actionStatus: {pending: false, success: true}})}));
+      { console.log(...action);
+        return Object.assign({}, state, Object.assign({}, {
+          user: Object.assign({}, ...action.result, {
+            actionStatus: {
+              pending: false,
+              success: true
+            }
+          })
+        }));
+      }
     case actions.USER_UPDATE_FAIL:
       return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {pending: false, failed: true}})}));
 

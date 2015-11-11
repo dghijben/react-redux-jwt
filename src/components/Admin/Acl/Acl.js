@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
-import {load, isLoaded } from '../../../redux/modules/admin/acl/aclActions';
+import {load, isLoaded } from '../../../redux/modules/admin/acl/actions';
 import {connect} from 'react-redux';
 
 @connect(state=>({

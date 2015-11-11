@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {loadUser, destroyUser, isLoadedUser } from '../../../redux/modules/admin/users/userActions';
+import {loadUser, destroyUser, isLoadedUser } from '../../../redux/modules/admin/users/actions';
 import {Well, Row, Col, FormControls, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
@@ -12,7 +12,7 @@ import {mapDispatchToProps} from 'utils/functions';
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)
-class UserShow extends Component {
+class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
@@ -41,9 +41,11 @@ class UserShow extends Component {
 
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
+    const promises = [];
     if (!isLoadedUser(state, state.router.params.userId)) {
-      return dispatch(loadUser(state.router.params.userId));
+      promises.push(dispatch(loadUser(state.router.params.userId)));
     }
+    return Promise.all(promises);
   }
 
   confirmDelete() {
@@ -118,4 +120,4 @@ class UserShow extends Component {
   }
 }
 
-export default UserShow;
+export default Show;

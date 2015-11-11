@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import authReducer from './auth/authReducer';
-import usersReducer from './admin/users/userReducer';
+import usersReducer from './admin/users/reducer';
 import affiliatesReducer from './admin/affiliates/reducer';
-import aclReducer from './admin/acl/aclReducer';
+import aclReducer from './admin/acl/reducer';
 import { reducer as formReducer } from 'redux-form';
 import { routerStateReducer } from 'redux-router';
 import reduxFormReducer from './reduxForm/reducer';
