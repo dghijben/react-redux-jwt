@@ -56,6 +56,12 @@ export default function fields(userId, token) {
       wrapperClassName: 'col-md-10'
     },
     {
+      name: 'admin',
+      label: 'Admin',
+      type: 'checkbox',
+      wrapperClassName: 'col-md-offset-2 col-md-10'
+    },
+    {
       row: {
         col: [
           {

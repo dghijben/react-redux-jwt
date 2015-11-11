@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import DataTable from './DataTable';
 import DynamicForm from 'redux-form-generator';
 import { storeState } from '../../../redux/modules/reduxRouter/actions';
-import deepEqual from 'deep-equal';
 import {mapDispatchToProps, filterState, filterFields, stringifyState, createParamsForFetch} from 'utils/functions';
 
 @connect(state=>({
@@ -51,14 +50,6 @@ class DataOverview extends Component {
     } else {
       this.setState({fieldNames: ['page']}, this.loadState(['page']));
     }
-  }
-
-  shouldComponentUpdate(nextProps: Object) {
-    // Important when using dynamic redux forms
-    if (deepEqual(nextProps.data, this.props.data) === true ) {
-      return false;
-    }
-    return true;
   }
 
   loadState(fieldNames: Array) {

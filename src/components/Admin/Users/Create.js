@@ -6,7 +6,7 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import {create} from 'redux/modules/admin/users/userActions';
+import {create} from 'redux/modules/admin/users/actions';
 import fields from './fields';
 
 @connect(state=>({
@@ -72,8 +72,8 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users', to: '/admin/users'},
-      {name: 'nieuw'}
+      {name: 'Gebruikers', to: '/admin/users'},
+      {name: 'Nieuw'}
     ];
 
     return (
