@@ -27,6 +27,20 @@ const fields = [
       type: 'submit',
       value: <i className="fa fa-search"></i>
     }
+  },
+  { name: 'order',
+    submit: true,
+    type: 'dropdown',
+    bsStyle: 'default',
+    items: [
+      {default: 'Sorteren'},
+      {desc: <span>Voornaam <i className="fa fa-angle-up"></i></span>, field: 'firstnameAsc'},
+      {desc: <span>Voornaam <i className="fa fa-angle-down"></i></span>, field: 'firstnameDesc'},
+      {desc: <span>Achternaam <i className="fa fa-angle-up"></i></span>, field: 'lastnameAsc'},
+      {desc: <span>Achternaam <i className="fa fa-angle-down"></i></span>, field: 'lastnameDesc'},
+      {desc: <span>Email <i className="fa fa-angle-up"></i></span>, field: 'emailAsc'},
+      {desc: <span>Email <i className="fa fa-angle-down"></i></span>, field: 'emailDesc'}
+    ]
   }
 ];
 

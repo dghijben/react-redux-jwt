@@ -1,3 +1,5 @@
+export const reducerIndex = 'users';
+export const reducerItem = 'user';
 export default function fields(userId, token) {
   return ([
 
@@ -13,6 +15,7 @@ export default function fields(userId, token) {
         Authorization: 'Bearer ' + token
       },
       multi_selection: false,
+      hideOnStatic: true
     },
 
     {
@@ -61,8 +64,21 @@ export default function fields(userId, token) {
       type: 'checkbox',
       wrapperClassName: 'col-md-offset-2 col-md-10'
     },
+
+    {
+      name: 'box',
+      label: 'Admin',
+      type: 'checkboxList',
+      wrapperClassName: 'col-md-offset-2 col-md-10',
+      options: [
+        {value: 1, desc: 'option 1'},
+        {value: 2, desc: 'option 2'},
+        {value: 3, desc: 'option 3'}
+      ]
+    },
     {
       row: {
+        hideOnStatic: true,
         col: [
           {
             md: 10, mdOffset: 2, children: [

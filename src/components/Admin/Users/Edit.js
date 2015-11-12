@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {mapDispatchToProps} from 'utils/functions';
+import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm} from 'components/includes';
@@ -10,10 +10,7 @@ import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import * as acl from 'redux/modules/admin/acl/actions';
 import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
-import fields from './fields';
-
-const reducerIndex = 'users';
-const reducerItem = 'user';
+import fields, {reducerIndex, reducerItem} from './fields';
 
 @connect(state=>{
   const obj = {
@@ -53,11 +50,7 @@ class Edit extends Component {
   }
 
   getActionState() {
-    return {
-      success: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'success'], false),
-      failed: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'failed'], false),
-      pending: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'pending'], false)
-    };
+    return getActionStatus(this.props, reducerIndex, reducerItem);
   }
 
   clearActionState() {
