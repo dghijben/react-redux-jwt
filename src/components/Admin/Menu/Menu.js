@@ -4,9 +4,12 @@ import MenuWrap from './MenuWrap';
 const tree = [
   {'desc': 'Admin', 'to': '/admin', icon: 'fa-home'},
   {'desc': 'Users', 'to': '/admin/users', icon: 'fa-users', children: [
-    {desc: 'Nieuwe gebruiker', to: '/admin/users/new'}
+    {desc: 'Nieuwe gebruiker', to: '/admin/users/new'},
+    {desc: 'Rollen', to: '/admin/roles'}
   ]},
-  {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-plug'},
+  {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-plug', children: [
+    {desc: 'Categorieën', to: '/admin/categories'}
+  ]},
   {'desc': 'ACL', 'to': '/admin/acl', icon: 'fa-lock'}
 ];
 

@@ -7,31 +7,8 @@ import Ribbon from '../includes/Ribbon';
 import DataOverview from '../includes/DataOverview';
 import {Confirm} from 'components/includes';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
-
-const reducerIndex = 'users';
-const name = 'dataoverview';
-
-const fields = [
-  {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
-    buttonBefore: {
-      name: 'searchField', type: 'dropdown', onlySelf: false,
-      items: [
-        {default: 'Alle'},
-        {desc: 'Voornaam', field: 'firstname'},
-        {desc: 'Achternaam', field: 'lastname'},
-        {desc: 'Volledige naam', field: 'fullname'},
-        {desc: 'E-mail', field: 'email'}
-      ]
-    },
-    buttonAfter: {
-      type: 'submit',
-      value: <i className="fa fa-search"></i>
-    }
-  }
-];
-
-const fieldNames = filterFields(fields);
-// const fieldNamesOnly = filterFieldsOnlySelf(fields);
+import {searchFields, reducerIndex, reducerItem, path} from './fields';
+const fieldNames = filterFields(searchFields);
 
 @connect(state=>{
   const obj = {
@@ -42,11 +19,12 @@ const fieldNames = filterFields(fields);
   return obj;
 }, mapDispatchToProps)
 
-class Index extends Component {
+class List extends Component {
 
   static propTypes = {
     'users': PropTypes.object,
     'history': PropTypes.object,
+    'children': PropTypes.object,
     'dispatch': PropTypes.func
   };
 
@@ -64,18 +42,18 @@ class Index extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(this.props, 'users.user.deleted', false) === false && _.get(nextProps, 'users.user.deleted', false) === true) {
+    if (_.get(this.props, [reducerIndex, reducerItem, 'deleted'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
       this.setState({status: {success: true}});
-      this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
+      this.props.dispatch(load(createParamsForFetch(this.props, reducerIndex, fieldNames)));
     }
 
-    if (_.get(this.props, 'users.user.failed', false) === false && _.get(nextProps, 'users.user.failed', false) === true) {
+    if (_.get(this.props, [reducerIndex, reducerItem, 'failed'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'failed'], false) === true) {
       this.setState({status: {failed: true}});
     }
   }
 
   static fetchDataDeferred(getState, dispatch) {
-    return dispatch(load(createParamsForFetch(getState(), name, fieldNames)));
+    return dispatch(load(createParamsForFetch(getState(), reducerIndex, fieldNames)));
   }
 
 
@@ -100,12 +78,17 @@ class Index extends Component {
   }
 
   render() {
+    // Render children
+    if (_.get(this.props, 'children', null) !== null) {
+      return this.props.children;
+    }
+
     const show = (item) => {
-      this.props.history.pushState({}, '/admin/users/' + item.id);
+      this.props.history.pushState({}, '/admin/' + path + '/' + item.id);
     };
 
     const edit = (item) => {
-      this.props.history.pushState({}, '/admin/users/' + item.id + '/edit');
+      this.props.history.pushState({}, '/admin/' + path + '/' + item.id + '/edit');
     };
 
     const destroy = (item) => {
@@ -123,13 +106,13 @@ class Index extends Component {
         <div id="content">
           <Well>
             <DataOverview
-              name={name}
+              name={reducerIndex}
               fetchData={this.fetchDataCallBack}
-              data={this.props.users}
+              data={_.get(this.props, reducerIndex)}
               form={{
                 key: 'form',
-                checkKey: 'userform',
-                fields: fields
+                checkKey: reducerIndex + 'form',
+                fields: searchFields
               }}
               cols={[
                 {name: 'Naam', show: ['firstname', 'middlename', 'lastname']},
@@ -152,4 +135,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default List;

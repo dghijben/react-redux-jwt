@@ -1,10 +1,21 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import { PropTypes as historyPropTypes } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 
 class MenuItem extends Component {
+
+  static propTypes = {
+    children: PropTypes.object.isRequired,
+    history: historyPropTypes.history,
+  };
+
+  static contextTypes = {
+    children: React.PropTypes.func
+  };
+
 
   constructor(context, props) {
     super(context, props);
@@ -15,6 +26,13 @@ class MenuItem extends Component {
     this.showChildren = this.showChildren.bind(this);
     this.state = { active: false };
   }
+
+  componentWillMount() {
+    if (this.context.history.isActive(this.props.item.to)) {
+      this.setState({active: true});
+    }
+  }
+
 
   content() {
     const {item} = this.props;
@@ -55,15 +73,12 @@ class MenuItem extends Component {
   }
 
   children() {
-
-    if (_.has(this.props.item, 'children') && this.state.active === true) {
+    if (_.has(this.props.item, 'children') && ( this.state.active === true)) {
       return _.map(_.get(this.props.item, 'children'), (item, key) => {
         return (<MenuItem key={key} item={item} />);
       });
     }
   }
-
-  componentWillEnter(e) { console.log(e); }
 
   render() {
     const {item} = this.props;

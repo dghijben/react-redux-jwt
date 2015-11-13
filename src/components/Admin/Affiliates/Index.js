@@ -30,7 +30,8 @@ class Index extends Component {
   static propTypes = {
     'affiliates': PropTypes.object,
     'history': PropTypes.object,
-    'dispatch': PropTypes.func
+    'dispatch': PropTypes.func,
+    'children': PropTypes.object
   };
 
   constructor(props, context) {
@@ -82,6 +83,11 @@ class Index extends Component {
   }
 
   render() {
+    // Render children
+    if (_.get(this.props, 'children', null) !== null) {
+      return this.props.children;
+    }
+
     const show = (item) => {
       this.props.history.pushState({}, '/admin/' + path + '/' + item.id);
     };

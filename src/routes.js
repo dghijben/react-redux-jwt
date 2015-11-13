@@ -1,59 +1,43 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
-import {
-  App,
-  Site,
-  Home,
-  Login,
-  Logout,
-  PasswordForgotten,
-  PasswordReset,
-  RequireLogin,
-  Dashboard,
-  RequireAdminLogin,
-  About,
-  Admin,
-  AdminUsers,
-  AdminUserShow,
-  AdminUserEdit,
-  AdminUserCreate,
-  AdminAffiliates,
-  AdminAffiliatesShow,
-  AdminAffiliatesEdit,
-  AdminAcl,
-  NotFound
-} from 'components';
+import * as cmpnnt from 'components';
 
 export default () => {
   return (
-    <Route component={App}>
-      <Route path="" component={Site}>
-        <Route path="/" component={Home}/>
-        <Route path="/login" component={Login}>
-          <Route path="/password-forgotten" component={PasswordForgotten} />
-          <Route path="/password-reset/:token" component={PasswordReset} />
+    <Route component={cmpnnt.App}>
+      <Route path="" component={cmpnnt.Site}>
+        <Route path="/" component={cmpnnt.Home}/>
+        <Route path="/login" component={cmpnnt.Login}>
+          <Route path="/password-forgotten" component={cmpnnt.PasswordForgotten} />
+          <Route path="/password-reset/:token" component={cmpnnt.PasswordReset} />
         </Route>
-        <Route path="/logout" component={Logout} />
-        <Route path="/about" component={About}/>
+        <Route path="/logout" component={cmpnnt.Logout} />
+        <Route path="/about" component={cmpnnt.About}/>
 
-        <Route component={RequireLogin}>
-          <Route path="/dashboard" component={Dashboard}/>
+        <Route component={cmpnnt.RequireLogin}>
+          <Route path="/dashboard" component={cmpnnt.Dashboard}/>
         </Route>
       </Route>
-      <Route component={RequireAdminLogin}>
-        <Route path="admin" component={Admin}>
-          <IndexRoute component={AdminUsers} />
-          <Route path="acl" component={AdminAcl} />
-          <Route path="users" component={AdminUsers} />
-          <Route path="users/new" component={AdminUserCreate} />
-          <Route path="users/:userId" component={AdminUserShow} />
-          <Route path="users/:userId/edit" component={AdminUserEdit} />
-          <Route path="affiliates" component={AdminAffiliates} />
-          <Route path="affiliates/:id" component={AdminAffiliatesShow} />
-          <Route path="affiliates/:id/edit" component={AdminAffiliatesEdit} />
+      <Route component={cmpnnt.RequireAdminLogin}>
+        <Route path="admin" component={cmpnnt.Admin}>
+          <IndexRoute component={cmpnnt.AdminUsers.List} />
+          <Route path="acl" component={cmpnnt.AdminAcl} />
+
+
+          <Route path="users" component={cmpnnt.AdminUsers.Wrap}>
+            <IndexRoute component={cmpnnt.AdminUsers.List} />
+            <Route path="new" component={cmpnnt.AdminUsers.Create} />
+            <Route path=":userId" component={cmpnnt.AdminUsers.Show} />
+            <Route path=":userId/edit" component={cmpnnt.AdminUsers.Edit} />
+          </Route>
+
+          <Route path="affiliates" component={cmpnnt.AdminAffiliates}>
+            <Route path=":id" component={cmpnnt.AdminAffiliatesShow} />
+            <Route path=":id/edit" component={cmpnnt.AdminAffiliatesEdit} />
+          </Route>
         </Route>
       </Route>
-      <Route path="*" component={NotFound} status={404} />
+      <Route path="*" component={cmpnnt.NotFound} status={404} />
     </Route>
   );
 };

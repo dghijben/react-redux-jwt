@@ -6,7 +6,6 @@ export default class MenuWrap extends Component {
   static propTypes = {
     menu: PropTypes.array.isRequired,
     active: PropTypes.bool
-
   };
 
   render() {

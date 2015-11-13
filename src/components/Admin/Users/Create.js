@@ -1,19 +1,24 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {mapDispatchToProps} from 'utils/functions';
+import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
 import {create} from 'redux/modules/admin/users/actions';
-import fields from './fields';
+import fields, {reducerIndex, reducerItem} from './fields';
 
-@connect(state=>({
-  'token': state.authorization.token,
-  'users': state.users,
-  'router': state.router
-}), mapDispatchToProps)
+@connect(state=>{
+  const obj = {
+    'token': state.authorization.token,
+    'router': state.router,
+    'acl': state.acl,
+    'reduxRouterReducer': state.reduxRouterReducer
+  };
+  obj[reducerIndex] = state[reducerIndex];
+  return obj;
+}, mapDispatchToProps)
 class Create extends Component {
 
   static propTypes = {
@@ -27,33 +32,17 @@ class Create extends Component {
   constructor(props, context) {
     super(props, context);
     this.getActionState = this.getActionState.bind(this);
-    this.clearActionState = this.clearActionState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = {
-      showModal: false
-    };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, 'users.user.actionStatus.success') === true ) {
-      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, 'users.user.id') + '/edit');
+    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
+      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
     }
   }
 
-  componentWillUnmount() {
-    // this.clearActionState();
-  }
-
   getActionState() {
-    return {
-      success: _.get(this.props, 'users.user.actionStatus.success', false),
-      failed: _.get(this.props, 'users.user.actionStatus.failed', false),
-      pending: _.get(this.props, 'users.user.actionStatus.pending', false)
-    };
-  }
-
-  clearActionState() {
-    // this.props.dispatch(clearNetworkState());
+    return getActionStatus(this.props, reducerIndex, reducerItem);
   }
 
   handleSubmit(values, dispatch) {
@@ -95,7 +84,6 @@ class Create extends Component {
                   validate={validator}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}
-                  clearActionState={this.clearActionState}
                   />
               </Col>
             </Row>

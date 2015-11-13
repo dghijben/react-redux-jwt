@@ -8,7 +8,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.ACL:
       return Object.assign({}, state, {list: state.list}, {pending: true, startTime: Date.now()});
     case actions.ACL_SUCCESS:
-      return Object.assign({}, state, {startTime: state.startTime}, {list: action.result, pending: false, success: true, user: {}});
+      return Object.assign({}, state, {startTime: state.startTime}, {list: action.result, pending: false, success: true, item: {}});
     case actions.ACL_FAIL:
       return Object.assign({}, state, {pending: false, failed: true});
 
@@ -40,7 +40,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.ROLE_CREATE_FAIL:
       return Object.assign({}, state, Object.assign({}, {item: Object.assign({}, {actionStatus: {pending: false, failed: true}})}));
 
-    case actions.USERS_CLEAR:
+    case actions.ROLES_CLEAR:
       return Object.assign({}, state, Object.assign({}, {list: {}}));
     case actions.ROLE_CLEAR:
       return Object.assign({}, state, Object.assign({}, {item: {}}));

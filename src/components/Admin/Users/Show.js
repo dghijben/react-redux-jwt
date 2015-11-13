@@ -2,11 +2,13 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {loadUser, destroyUser, isLoadedUser } from '../../../redux/modules/admin/users/actions';
-import {Well, Row, Col, FormControls, Button} from 'react-bootstrap';
+import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
+import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import {mapDispatchToProps} from 'utils/functions';
+import fields, {reducerIndex, reducerItem} from './fields';
 
 @connect(state=>({
   'users': state.users,
@@ -95,20 +97,21 @@ class Show extends Component {
               </Col>
               <Col md={10}>
                 <Pending state={_.get(this.props, 'users.user.pending', false)}>
-                  <form className="form-horizontal">
-                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voorletters" value={_.get(this.props, 'users.user.initials', '')} />
-                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Voornamen" value={_.get(this.props, 'users.user.firstname', '')} />
-                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Tussenvoegsels" value={_.get(this.props, 'users.user.middlename', '')} />
-                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="Achternaam" value={_.get(this.props, 'users.user.lastname', '')} />
-                    <FormControls.Static labelClassName="col-md-3" wrapperClassName="col-md-9" label="E-mail" value={_.get(this.props, 'users.user.email', '')} />
-                    <Row>
-                      <Col md={9} mdOffset={3}>
-                        <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
-                        {' '}
-                        <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
-                      </Col>
-                    </Row>
-                  </form>
+                  <DynamicForm
+                    checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
+                    formName="userEdit"
+                    formClass="form-horizontal"
+                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']))}
+                    initialValues={_.get(this.props, [reducerIndex, reducerItem])}
+                    static
+                  />
+                  <Row>
+                    <Col md={10} mdOffset={2}>
+                      <Button bsStyle="primary" onClick={editLink}>wijzigen</Button>
+                      {' '}
+                      <Button bsStyle="danger" onClick={this.confirmDelete}>verwijderen</Button>
+                    </Col>
+                  </Row>
                 </Pending>
               </Col>
             </Row>
