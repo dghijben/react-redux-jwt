@@ -28,13 +28,8 @@ import Admin from './Admin/Admin';
 modules.Admin = Admin;
 import AdminUsers from './Admin/Users';
 modules.AdminUsers = AdminUsers;
-import AdminAcl from './Admin/Acl/Acl';
-modules.AdminAcl = AdminAcl;
-import AdminAffiliates from './Admin/Affiliates/Index';
-modules.AdminAffiliates = AdminAffiliates;
-import AdminAffiliatesShow from './Admin/Affiliates/Show';
-modules.AdminAffiliatesShow = AdminAffiliatesShow;
-import AdminAffiliatesEdit from './Admin/Affiliates/Edit';
-modules.AdminAffiliatesEdit = AdminAffiliatesEdit;
-
+import AdminAclRoles from './Admin/Acl/Roles';
+modules.AdminAclRoles = AdminAclRoles;
+import AdminAclRoutes from './Admin/Acl/Routes';
+modules.AdminAclRoles = AdminAclRoutes;
 export default modules;

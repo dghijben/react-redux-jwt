@@ -8,7 +8,7 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/acl/actions';
+import * as actions from 'redux/modules/admin/acl/actions';
 import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
 import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
@@ -28,7 +28,7 @@ class Edit extends Component {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'users': PropTypes.object.isRequired,
-    'acl': PropTypes.object.isRequired,
+    'aclroutes': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
   }
 

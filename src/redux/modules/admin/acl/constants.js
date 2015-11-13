@@ -3,6 +3,11 @@ export const ACL_SUCCESS = 'ACL_SUCCESS';
 export const ACL_FAIL = 'ACL_FAIL';
 export const ACL_CLEAR = 'ACL_CLEAR';
 
+export const ACL_ALL = 'ACL_ALL';
+export const ACL_ALL_SUCCESS = 'ACL_ALL_SUCCESS';
+export const ACL_ALL_FAIL = 'ACL_ALL_FAIL';
+export const ACL_ALL_CLEAR = 'ACL_ALL_CLEAR';
+
 export const ROLE_LOAD = 'ROLE_LOAD';
 export const ROLE_LOAD_SUCCESS = 'ROLE_LOAD_SUCCESS';
 export const ROLE_LOAD_FAIL = 'ROLE_LOAD_FAIL';

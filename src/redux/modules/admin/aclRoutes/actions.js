@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import * as actions from './constants';
 
-const API_PATH = '/admin/acl/roles';
-const reducerIndex = 'acl';
+const API_PATH = '/admin/acl/routes';
+const reducerIndex = 'aclroutes';
 const reducerItem = 'item';
 
 export function load(params) {
   return {
-    types: [actions.ACL, actions.ACL_SUCCESS, actions.ACL_FAIL],
+    types: [actions.ACL_ROUTES, actions.ACL_ROUTES_SUCCESS, actions.ACL_ROUTES_FAIL],
     promise: (client) => client.get(API_PATH, {
       params: {
         ...params
@@ -18,7 +18,7 @@ export function load(params) {
 
 export function loadAll() {
   return {
-    types: [actions.ACL_ALL, actions.ACL_ALL_SUCCESS, actions.ACL_ALL_FAIL],
+    types: [actions.ACL_ROUTES_ALL, actions.ACL_ROUTES_ALL_SUCCESS, actions.ACL_ROUTES_ALL_FAIL],
     promise: (client) => client.get(API_PATH, {
       params: {
         'all': true
@@ -29,13 +29,13 @@ export function loadAll() {
 
 export function clearAll() {
   return {
-    type: actions.ACL_ALL_CLEAR
+    type: actions.ACL_ROUTES_ALL_CLEAR
   };
 }
 
 export function update(id, params) {
   return {
-    types: [actions.ROLE_UPDATE, actions.ROLE_UPDATE_SUCCESS, actions.ROLE_UPDATE_FAIL],
+    types: [actions.ACL_ROUTE_UPDATE, actions.ACL_ROUTE_UPDATE_SUCCESS, actions.ACL_ROUTE_UPDATE_FAIL],
     promise: (client) => client.put(API_PATH + '/' + id, {
       data: params
     }),
@@ -45,7 +45,7 @@ export function update(id, params) {
 
 export function create(params) {
   return {
-    types: [actions.ROLE_CREATE, actions.ROLE_CREATE_SUCCESS, actions.ROLE_CREATE_FAIL],
+    types: [actions.ACL_ROUTE_CREATE, actions.ACL_ROUTE_CREATE_SUCCESS, actions.ACL_ROUTE_CREATE_FAIL],
     promise: (client) => client.post(API_PATH, {
       data: params
     }),
@@ -55,14 +55,14 @@ export function create(params) {
 
 export function loadItem(id) {
   return {
-    types: [actions.ROLE_LOAD, actions.ROLE_LOAD_SUCCESS, actions.ROLE_LOAD_FAIL],
+    types: [actions.ACL_ROUTE_LOAD, actions.ACL_ROUTE_LOAD_SUCCESS, actions.ACL_ROUTE_LOAD_FAIL],
     promise: (client) => client.get(API_PATH + '/' + id)
   };
 }
 
 export function destroyItem(id) {
   return {
-    types: [actions.ROLE_DELETE, actions.ROLE_DELETE_SUCCESS, actions.ROLE_DELETE_FAIL],
+    types: [actions.ACL_ROUTE_DELETE, actions.ACL_ROUTE_DELETE_SUCCESS, actions.ACL_ROUTE_DELETE_FAIL],
     promise: (client) => client.del(API_PATH + '/' + id)
   };
 }
@@ -75,13 +75,13 @@ export function clearList() {
 
 export function clearItem() {
   return {
-    type: actions.ROLE_CLEAR
+    type: actions.ACL_ROUTE_CLEAR
   };
 }
 
 export function clearNetworkState() {
   return {
-    type: actions.ROLE_CLEAR_NETWORK_STATE
+    type: actions.ACL_ROUTE_CLEAR_NETWORK_STATE
   };
 }
 

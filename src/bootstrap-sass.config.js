@@ -1,4 +1,4 @@
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // Example file. Copy this to your project. Change then names of the referenced files or comment
 // them out. Convention is to name sass partials to start with an '_'
@@ -22,7 +22,7 @@ module.exports = {
   //   styleLoader: ExtractTextPlugin.extract('style-loader',
   // 'css-loader!sass?outputStyle=expanded'),
 
-  styleLoader: ExtractTextPlugin.extract("style-loader", "css-loader!sass?outputStyle=expanded"),
+  styleLoader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass?outputStyle=expanded'),
 
   scripts: {
     'transition': true,

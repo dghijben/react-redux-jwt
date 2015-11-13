@@ -6,9 +6,8 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/acl/actions';
-import {create} from 'redux/modules/admin/users/actions';
-import fields, {reducerIndex, reducerItem} from './fields';
+import * as actions from 'redux/modules/admin/acl/actions';
+import fields, {reducerIndex, reducerItem, path} from './fields';
 
 @connect(state=>{
   const obj = {
@@ -26,8 +25,7 @@ class Create extends Component {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'history': PropTypes.object.isRequired,
-    'users': PropTypes.object.isRequired,
-    'token': PropTypes.string.isRequired
+    'acl': PropTypes.object.isRequired
   }
 
   constructor(props, context) {
@@ -38,7 +36,7 @@ class Create extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
     }
   }
 
@@ -46,18 +44,18 @@ class Create extends Component {
     return getActionStatus(this.props, reducerIndex, reducerItem);
   }
 
-  static fetchDataDeferred(getState, dispatch) {
+/*  static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!acl.isAllLoaded(state)) {
+    if (!actions.isAllLoaded(state)) {
       promises.push(dispatch(acl.loadAll()));
     }
     return Promise.all(promises);
-  }
+  }*/
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(create(values))
+      dispatch(actions.create(values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -71,7 +69,7 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Gebruikers', to: '/admin/users'},
+      {name: 'Acl', to: '/admin/' + path},
       {name: 'Nieuw'}
     ];
 
@@ -80,16 +78,16 @@ class Create extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Nieuwe gebruiker
+            <h1>Nieuwe rol
             </h1>
             <Row>
               <Col md={2} />
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-new'}
-                  formName="userEdit"
+                  checkKey={reducerIndex + '-new'}
+                  formName={reducerIndex}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'acl.all', []))}
+                  fieldsNeeded={fields('new')}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

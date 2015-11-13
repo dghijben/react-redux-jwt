@@ -1,28 +1,34 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {mapDispatchToProps} from 'utils/functions';
+import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import {loadRecord, isLoadedRecord, update, clearNetworkState} from 'redux/modules/admin/affiliates/actions';
-import {reducerIndex, reducerItem, path} from './constants';
-import {fields} from './fields';
+import * as acl from 'redux/modules/admin/acl/actions';
+import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
+import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
-@connect(state=>({
-  'token': state.authorization.token,
-  'users': state.users,
-  'router': state.router
-}), mapDispatchToProps)
+@connect(state=>{
+  const obj = {
+    'token': state.authorization.token,
+    'router': state.router,
+    'acl': state.acl,
+    'reduxRouterReducer': state.reduxRouterReducer
+  };
+  obj[reducerIndex] = state[reducerIndex];
+  return obj;
+}, mapDispatchToProps)
 class Edit extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'users': PropTypes.object.isRequired,
+    'acl': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
   }
 
@@ -45,11 +51,7 @@ class Edit extends Component {
   }
 
   getActionState() {
-    return {
-      success: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'success'], false),
-      failed: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'failed'], false),
-      pending: _.get(this.props, [reducerIndex, reducerItem, 'actionStatus', 'pending'], false)
-    };
+    return getActionStatus(this.props, reducerIndex, reducerItem);
   }
 
   clearActionState() {
@@ -58,9 +60,15 @@ class Edit extends Component {
 
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
-    if (!isLoadedRecord(state, state.router.params.id)) {
-      return dispatch(loadRecord(state.router.params.id));
+    const promises = [];
+    if (!isLoadedUser(state, state.router.params.userId)) {
+      promises.push(dispatch(loadUser(state.router.params.userId)));
     }
+    if (!acl.isAllLoaded(state)) {
+      promises.push(dispatch(acl.loadAll()));
+    }
+
+    return Promise.all(promises);
   }
 
   confirmDelete() {
@@ -76,8 +84,11 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
+
+    console.log('values', values);
+
     return new Promise((resolve, reject) => {
-      dispatch(update(this.props.router.params.id, values))
+      dispatch(update(this.props.router.params.userId, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -95,8 +106,8 @@ class Edit extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users', to: '/admin/' + path},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown'), to: '/admin/' + path + '/' + _.get(this.props, 'router.params.id')},
+      {name: 'Gebruikers', to: '/admin/users'},
+      {name: _.get(this.props, 'users.user.firstname', 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
       {name: 'Wijzigen'}
     ];
 
@@ -105,9 +116,11 @@ class Edit extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Affiliate
+            <h1>Gebruiker
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'firstname'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'middlename'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'lastname'], '')}
               </span>
             </h1>
             <Row>
@@ -116,11 +129,11 @@ class Edit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'edit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
+                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token)}
-                  initialValues={_.get(this.props, [reducerIndex, reducerItem])}
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token, _.get(this.props, 'acl.all', []))}
+                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
                   validate={validator}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}
@@ -135,4 +148,3 @@ class Edit extends Component {
     );
   }
 } export default Edit;
-

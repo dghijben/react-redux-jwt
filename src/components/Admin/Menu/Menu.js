@@ -7,10 +7,10 @@ const tree = [
     {desc: 'Nieuwe gebruiker', to: '/admin/users/new'},
     {desc: 'Rollen', to: '/admin/roles'}
   ]},
-  {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-plug', children: [
-    {desc: 'Categorieën', to: '/admin/categories'}
-  ]},
-  {'desc': 'ACL', 'to': '/admin/acl', icon: 'fa-lock'}
+  {'desc': 'ACL', 'to': '/admin/acl', icon: 'fa-lock', children: [
+    {desc: 'Nieuwe rol', to: '/admin/acl/new'},
+    {desc: 'Routes', to: '/admin/acl/routes'},
+  ]}
 ];
 
 class Menu extends Component {

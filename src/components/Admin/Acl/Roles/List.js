@@ -1,19 +1,13 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import { load, destroyItem } from '../../../redux/modules/admin/affiliates/actions';
+import {load, destroyItem} from '../../../redux/modules/admin/acl/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
-import {Confirm} from 'components/includes';
 import DataOverview from '../includes/DataOverview';
+import {Confirm} from 'components/includes';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
-import {reducerIndex, reducerItem, name, path, searchFields} from './constants';
-
-const breadCrumbs = [
-  {name: 'Admin', to: '/admin'},
-  {name: 'Affiliates'}
-];
-
+import {searchFields, reducerIndex, reducerItem, path} from './fields';
 const fieldNames = filterFields(searchFields);
 
 @connect(state=>{
@@ -25,13 +19,13 @@ const fieldNames = filterFields(searchFields);
   return obj;
 }, mapDispatchToProps)
 
-class Index extends Component {
+class List extends Component {
 
   static propTypes = {
-    'affiliates': PropTypes.object,
+    'roles': PropTypes.object,
     'history': PropTypes.object,
-    'dispatch': PropTypes.func,
-    'children': PropTypes.object
+    'children': PropTypes.object,
+    'dispatch': PropTypes.func
   };
 
   constructor(props, context) {
@@ -50,7 +44,7 @@ class Index extends Component {
   componentWillReceiveProps(nextProps) {
     if (_.get(this.props, [reducerIndex, reducerItem, 'deleted'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
       this.setState({status: {success: true}});
-      this.props.dispatch(load(createParamsForFetch(this.props, name, fieldNames)));
+      this.props.dispatch(load(createParamsForFetch(this.props, reducerIndex, fieldNames)));
     }
 
     if (_.get(this.props, [reducerIndex, reducerItem, 'failed'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'failed'], false) === true) {
@@ -59,8 +53,9 @@ class Index extends Component {
   }
 
   static fetchDataDeferred(getState, dispatch) {
-    return dispatch(load(createParamsForFetch(getState(), name, fieldNames)));
+    return dispatch(load(createParamsForFetch(getState(), reducerIndex, fieldNames)));
   }
+
 
   fetchDataCallBack(state) {
     this.props.dispatch(load(state));
@@ -100,21 +95,28 @@ class Index extends Component {
       this.confirmDelete(item);
     };
 
+    const breadCrumbs = [
+      {name: 'Admin', to: '/admin'},
+      {name: 'Acl'}
+    ];
+
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
             <DataOverview
-              name={name}
+              name={reducerIndex}
               fetchData={this.fetchDataCallBack}
               data={_.get(this.props, reducerIndex)}
               form={{
                 key: 'form',
+                checkKey: reducerIndex + 'form',
                 fields: searchFields
               }}
               cols={[
-                {name: 'Affiliate', show: 'name'},
+                {name: 'Rol', show: 'role'},
+                {name: 'Omschrijving', show: 'desc'},
                 {name: 'Aangemaakt', show: 'created_at'},
                 {name: 'Gewijzigd', show: 'updated_at'},
                 {name: 'Acties', dropdownButton: [
@@ -133,4 +135,4 @@ class Index extends Component {
   }
 }
 
-export default Index;
+export default List;

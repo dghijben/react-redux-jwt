@@ -1,8 +1,6 @@
 import React, {Component, PropTypes} from 'react';
-import createFragment from 'react-addons-create-fragment';
 import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
-import DocumentMeta from 'react-document-meta';
 const cdn = '//cdnjs.cloudflare.com/ajax/libs/';
 import Helmet from 'react-helmet';
 var Intl = require('intl'); // eslint-disable-line
@@ -36,8 +34,6 @@ export default class Html extends Component {
           {head.link.toComponent()}
           {head.script.toComponent()}
           <link rel="shortcut icon" href="/favicon.ico" />
-          <link href={cdn + 'font-awesome/4.4.0/css/font-awesome.min.css'}
-                media="screen, projection" rel="stylesheet" type="text/css" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           {/* styles (will be present only in production with webpack extract text plugin) */}
           {Object.keys(assets.styles).map((style, key) =>

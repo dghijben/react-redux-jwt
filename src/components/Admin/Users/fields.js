@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 
 export const reducerIndex = 'users';
@@ -36,9 +37,26 @@ export const searchFields = [
   }
 ];
 
-export default function fields(userId, token) {
-  return ([
+export function initialValues(values) {
+  return Object.assign({},
+    values,
+    {roles: _.pluck(_.get(values, 'roles'), 'id')}
+  );
+}
 
+export default function fields(userId, token, roles) {
+
+  const roleOptions = () => {
+    const options = [];
+    if (typeof roles === 'object') {
+      _.sortBy(roles, 'desc').map((role) => {
+        options.push({value: role.id, desc: role.desc});
+      });
+    }
+    return options;
+  };
+
+  return ([
     {
       name: 'picture',
       label: 'Foto',
@@ -53,7 +71,6 @@ export default function fields(userId, token) {
       multi_selection: false,
       hideOnStatic: true
     },
-
     {
       name: 'initials',
       label: 'Voorletters',
@@ -90,29 +107,22 @@ export default function fields(userId, token) {
       name: 'email',
       label: 'E-mail',
       type: 'text',
-      bsSize: 'large',
       placeholder: 'E-mail',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'box',
-      label: 'Admin',
-      bsSize: 'large',
-      type: 'checkboxList',
+      name: 'roles',
+      label: 'Rollen',
+      type: 'checkboxListiOs',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
-      options: [
-        {value: 1, desc: 'option 1'},
-        {value: 2, desc: 'option 2'},
-        {value: 3, desc: 'option 3'}
-      ]
+      options: roleOptions()
     },
     {
       name: 'admin',
       label: 'Admin',
       type: 'checkbox',
-      bsSize: 'large',
       wrapperClassName: 'col-md-offset-2 col-md-10'
     },
     {

@@ -21,8 +21,6 @@ export default () => {
       <Route component={cmpnnt.RequireAdminLogin}>
         <Route path="admin" component={cmpnnt.Admin}>
           <IndexRoute component={cmpnnt.AdminUsers.List} />
-          <Route path="acl" component={cmpnnt.AdminAcl} />
-
 
           <Route path="users" component={cmpnnt.AdminUsers.Wrap}>
             <IndexRoute component={cmpnnt.AdminUsers.List} />
@@ -31,10 +29,13 @@ export default () => {
             <Route path=":userId/edit" component={cmpnnt.AdminUsers.Edit} />
           </Route>
 
-          <Route path="affiliates" component={cmpnnt.AdminAffiliates}>
-            <Route path=":id" component={cmpnnt.AdminAffiliatesShow} />
-            <Route path=":id/edit" component={cmpnnt.AdminAffiliatesEdit} />
+          <Route path="acl" component={cmpnnt.AdminAclRoles.Wrap}>
+            <IndexRoute component={cmpnnt.AdminAclRoles.List} />
+            <Route path="new" component={cmpnnt.AdminAclRoles.Create} />
+            <Route path=":id" component={cmpnnt.AdminAclRoles.Show} />
+            <Route path=":id/edit" component={cmpnnt.AdminAclRoles.Edit} />
           </Route>
+
         </Route>
       </Route>
       <Route path="*" component={cmpnnt.NotFound} status={404} />

@@ -50,7 +50,7 @@ class RequireAdminLogin extends Component {
             titleTemplate="MySite.com - %s"
             link={[
               {'rel': 'stylesheet', 'href': '/admin/css/bootstrap.min.css', 'type': 'text/css', 'media': 'screen'},
-              {'rel': 'stylesheet', 'href': '/admin/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
+              {'rel': 'stylesheet', 'href': '/font-awesome-4.4.0/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production-plugins.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-skins.min.css', 'type': 'text/css', 'media': 'screen'},

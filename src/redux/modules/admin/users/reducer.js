@@ -8,7 +8,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.USERS:
       return Object.assign({}, state, {list: state.list}, {pending: true, startTime: Date.now()});
     case actions.USERS_SUCCESS:
-      return Object.assign({}, state, {startTime: state.startTime}, {list: action.result, pending: false, success: true, user: {}});
+      return Object.assign({}, state, {startTime: state.startTime}, {list: action.result, pending: false, failed: false, success: true, user: {}});
     case actions.USERS_FAIL:
       return Object.assign({}, state, {pending: false, failed: true});
 
