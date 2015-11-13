@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Well, Row, Col, Button} from 'react-bootstrap';
-import Ribbon from '../includes/Ribbon';
+import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import * as acl from 'redux/modules/admin/acl/actions';

@@ -3,7 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
-import Ribbon from '../includes/Ribbon';
+import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
 import * as actions from 'redux/modules/admin/acl/actions';

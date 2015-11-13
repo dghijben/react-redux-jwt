@@ -3,20 +3,18 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
-import Ribbon from '../includes/Ribbon';
+import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import * as actions from 'redux/modules/admin/acl/actions';
-import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
 import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'acl': state.acl,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -27,7 +25,6 @@ class Edit extends Component {
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'users': PropTypes.object.isRequired,
     'aclroutes': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
   }
@@ -55,19 +52,15 @@ class Edit extends Component {
   }
 
   clearActionState() {
-    this.props.dispatch(clearNetworkState());
+    this.props.dispatch(actions.clearNetworkState());
   }
 
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!isLoadedUser(state, state.router.params.userId)) {
-      promises.push(dispatch(loadUser(state.router.params.userId)));
+    if (!actions.isLoadedItem(state, state.router.params.id)) {
+      promises.push(dispatch(actions.loadItem(state.router.params.id)));
     }
-    if (!acl.isAllLoaded(state)) {
-      promises.push(dispatch(acl.loadAll()));
-    }
-
     return Promise.all(promises);
   }
 
@@ -88,7 +81,7 @@ class Edit extends Component {
     console.log('values', values);
 
     return new Promise((resolve, reject) => {
-      dispatch(update(this.props.router.params.userId, values))
+      dispatch(actions.update(this.props.router.params.id, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -106,8 +99,8 @@ class Edit extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Gebruikers', to: '/admin/users'},
-      {name: _.get(this.props, 'users.user.firstname', 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
+      {name: 'Routers', to: '/admin/acl/routes'},
+      {name: _.get(this.props, [reducerIndex, reducerItem, ], 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
       {name: 'Wijzigen'}
     ];
 
