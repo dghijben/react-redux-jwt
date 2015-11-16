@@ -1,5 +1,5 @@
 import React from 'react';
-import {IndexRoute, Route} from 'react-router';
+import {IndexRoute, Route, Redirect} from 'react-router';
 import * as cmpnnt from 'components';
 
 export default () => {
@@ -29,11 +29,31 @@ export default () => {
             <Route path=":userId/edit" component={cmpnnt.AdminUsers.Edit} />
           </Route>
 
-          <Route path="acl" component={cmpnnt.AdminAclRoles.Wrap}>
-            <IndexRoute component={cmpnnt.AdminAclRoles.List} />
-            <Route path="new" component={cmpnnt.AdminAclRoles.Create} />
-            <Route path=":id" component={cmpnnt.AdminAclRoles.Show} />
-            <Route path=":id/edit" component={cmpnnt.AdminAclRoles.Edit} />
+          <Redirect from="acl" to="acl/roles" />
+          <Route path="acl" component={cmpnnt.AdminAcl}>
+            <Route path="roles" component={cmpnnt.AdminAclRoles.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAclRoles.List} />
+              <Route path="new" component={cmpnnt.AdminAclRoles.Create} />
+              <Route path=":id" component={cmpnnt.AdminAclRoles.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAclRoles.Edit} />
+            </Route>
+          </Route>
+
+          <Redirect from="affiliates" to="affiliates/sites" />
+          <Route path="affiliates" component={cmpnnt.AdminAffiliates}>
+            <Route path="sites" component={cmpnnt.AdminAffiliatesSites.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAffiliatesSites.List} />
+              <Route path="new" component={cmpnnt.AdminAffiliatesSites.Create} />
+              <Route path=":id" component={cmpnnt.AdminAffiliatesSites.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAffiliatesSites.Edit} />
+            </Route>
+
+            <Route path="categories" component={cmpnnt.AdminAffiliatesCategories.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAffiliatesCategories.List} />
+              <Route path="new" component={cmpnnt.AdminAffiliatesCategories.Create} />
+              <Route path=":id" component={cmpnnt.AdminAffiliatesCategories.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAffiliatesCategories.Edit} />
+            </Route>
           </Route>
 
         </Route>

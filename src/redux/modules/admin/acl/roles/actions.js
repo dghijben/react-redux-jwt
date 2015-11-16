@@ -2,12 +2,12 @@ import _ from 'lodash';
 import * as actions from './constants';
 
 const API_PATH = '/admin/acl/roles';
-const reducerIndex = 'acl';
+const reducerIndex = 'aclRoles';
 const reducerItem = 'item';
 
 export function load(params) {
   return {
-    types: [actions.ACL, actions.ACL_SUCCESS, actions.ACL_FAIL],
+    types: [actions.ADMIN_ACL_ROLES, actions.ADMIN_ACL_ROLES_SUCCESS, actions.ADMIN_ACL_ROLES_FAIL],
     promise: (client) => client.get(API_PATH, {
       params: {
         ...params
@@ -18,7 +18,7 @@ export function load(params) {
 
 export function loadAll() {
   return {
-    types: [actions.ACL_ALL, actions.ACL_ALL_SUCCESS, actions.ACL_ALL_FAIL],
+    types: [actions.ADMIN_ACL_ROLES_ALL, actions.ADMIN_ACL_ROLES_ALL_SUCCESS, actions.ADMIN_ACL_ROLES_ALL_FAIL],
     promise: (client) => client.get(API_PATH, {
       params: {
         'all': true
@@ -29,13 +29,13 @@ export function loadAll() {
 
 export function clearAll() {
   return {
-    type: actions.ACL_ALL_CLEAR
+    type: actions.ADMIN_ACL_ROLES_ALL_CLEAR
   };
 }
 
 export function update(id, params) {
   return {
-    types: [actions.ROLE_UPDATE, actions.ROLE_UPDATE_SUCCESS, actions.ROLE_UPDATE_FAIL],
+    types: [actions.ADMIN_ACL_ROLE_UPDATE, actions.ADMIN_ACL_ROLE_UPDATE_SUCCESS, actions.ADMIN_ACL_ROLE_UPDATE_FAIL],
     promise: (client) => client.put(API_PATH + '/' + id, {
       data: params
     }),
@@ -45,7 +45,7 @@ export function update(id, params) {
 
 export function create(params) {
   return {
-    types: [actions.ROLE_CREATE, actions.ROLE_CREATE_SUCCESS, actions.ROLE_CREATE_FAIL],
+    types: [actions.ADMIN_ACL_ROLE_CREATE, actions.ADMIN_ACL_ROLE_CREATE_SUCCESS, actions.ADMIN_ACL_ROLE_CREATE_FAIL],
     promise: (client) => client.post(API_PATH, {
       data: params
     }),
@@ -55,33 +55,33 @@ export function create(params) {
 
 export function loadItem(id) {
   return {
-    types: [actions.ROLE_LOAD, actions.ROLE_LOAD_SUCCESS, actions.ROLE_LOAD_FAIL],
+    types: [actions.ADMIN_ACL_ROLE_LOAD, actions.ADMIN_ACL_ROLE_LOAD_SUCCESS, actions.ADMIN_ACL_ROLE_LOAD_FAIL],
     promise: (client) => client.get(API_PATH + '/' + id)
   };
 }
 
 export function destroyItem(id) {
   return {
-    types: [actions.ROLE_DELETE, actions.ROLE_DELETE_SUCCESS, actions.ROLE_DELETE_FAIL],
+    types: [actions.ADMIN_ACL_ROLE_DELETE, actions.ADMIN_ACL_ROLE_DELETE_SUCCESS, actions.ADMIN_ACL_ROLE_DELETE_FAIL],
     promise: (client) => client.del(API_PATH + '/' + id)
   };
 }
 
 export function clearList() {
   return {
-    type: actions.ACL_CLEAR
+    type: actions.ADMIN_ACL_ACL_CLEAR
   };
 }
 
 export function clearItem() {
   return {
-    type: actions.ROLE_CLEAR
+    type: actions.ADMIN_ACL_ROLE_CLEAR
   };
 }
 
 export function clearNetworkState() {
   return {
-    type: actions.ROLE_CLEAR_NETWORK_STATE
+    type: actions.ADMIN_ACL_ROLE_CLEAR_NETWORK_STATE
   };
 }
 

@@ -67,7 +67,7 @@ class App extends Component {
           link={[
             {'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/font-awesome-4.4.0/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'}
-            ]}
+          ]}
           />
         <Navbar>
           <NavBrand>React-Bootstrap</NavBrand>

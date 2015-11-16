@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ReactDOM from 'react-dom/server';
 import serialize from 'serialize-javascript';
-const cdn = '//cdnjs.cloudflare.com/ajax/libs/';
 import Helmet from 'react-helmet';
 var Intl = require('intl'); // eslint-disable-line
 /**

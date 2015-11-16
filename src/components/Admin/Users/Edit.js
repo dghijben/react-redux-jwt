@@ -8,7 +8,7 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/acl/actions';
+import * as acl from 'redux/modules/admin/acl/roles/actions';
 import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
 import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
@@ -16,7 +16,7 @@ import fields, {reducerIndex, reducerItem, initialValues} from './fields';
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'acl': state.acl,
+    'aclRoles': state.aclRoles,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -28,7 +28,7 @@ class Edit extends Component {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'users': PropTypes.object.isRequired,
-    'acl': PropTypes.object.isRequired,
+    'aclRoles': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
   }
 
@@ -61,11 +61,12 @@ class Edit extends Component {
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!isLoadedUser(state, state.router.params.userId)) {
-      promises.push(dispatch(loadUser(state.router.params.userId)));
-    }
     if (!acl.isAllLoaded(state)) {
       promises.push(dispatch(acl.loadAll()));
+    }
+
+    if (!isLoadedUser(state, state.router.params.userId)) {
+      promises.push(dispatch(loadUser(state.router.params.userId)));
     }
 
     return Promise.all(promises);
@@ -84,8 +85,6 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
-
-    console.log('values', values);
 
     return new Promise((resolve, reject) => {
       dispatch(update(this.props.router.params.userId, values))
@@ -132,7 +131,7 @@ class Edit extends Component {
                   checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token, _.get(this.props, 'acl.all', []))}
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token, _.get(this.props, 'aclRoles.all', []))}
                   initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
                   validate={validator}
                   onSubmit={this.handleSubmit}

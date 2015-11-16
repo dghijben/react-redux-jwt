@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
 import authReducer from './auth/authReducer';
 import usersReducer from './admin/users/reducer';
-import affiliatesReducer from './admin/affiliates/reducer';
-import aclReducer from './admin/acl/reducer';
+import affiliatesSitesReducer from './admin/affiliates/sites/reducer';
+import affiliatesCategoriesReducer from './admin/affiliates/categories/reducer';
+import aclRolesReducer from './admin/acl/roles/reducer';
 import { reducer as formReducer } from 'redux-form';
 import { routerStateReducer } from 'redux-router';
 import reduxFormReducer from './reduxForm/reducer';
@@ -12,8 +13,9 @@ export default combineReducers({
   router: routerStateReducer,
   authorization: authReducer,
   users: usersReducer,
-  affiliates: affiliatesReducer,
+  affiliatesSites: affiliatesSitesReducer,
+  affiliatesCategories: affiliatesCategoriesReducer,
   form: formReducer.plugin(reduxFormReducer),
-  acl: aclReducer,
+  aclRoles: aclRolesReducer,
   reduxRouterReducer: reduxRouterReducer
 });

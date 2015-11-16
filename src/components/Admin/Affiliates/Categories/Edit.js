@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import connectData from 'helpers/connectData';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
@@ -8,13 +9,16 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/acl/roles/actions';
-import fields, {reducerIndex, reducerItem, initialValues} from './fields';
+import * as actions from 'redux/modules/admin/affiliates/categories/actions';
+import fields, {reducerIndex, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
+@connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
+    'affiliatesCategories': state.affiliatesCategories,
+    'affiliatesSites': state.affiliatesSites,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -25,8 +29,9 @@ class Edit extends Component {
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'aclroutes': PropTypes.object.isRequired,
-    'token': PropTypes.string.isRequired
+    'token': PropTypes.string.isRequired,
+    'affiliatesCategories': PropTypes.object.isRequired,
+    'affiliatesSites': PropTypes.object.isRequired,
   }
 
   constructor(props, context) {
@@ -55,15 +60,6 @@ class Edit extends Component {
     this.props.dispatch(actions.clearNetworkState());
   }
 
-  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const promises = [];
-    if (!actions.isLoadedItem(state, state.router.params.id)) {
-      promises.push(dispatch(actions.loadItem(state.router.params.id)));
-    }
-    return Promise.all(promises);
-  }
-
   confirmDelete() {
     this.setState({showModal: true});
   }
@@ -77,9 +73,7 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
-
-    console.log('values', values);
-
+    console.log(values);
     return new Promise((resolve, reject) => {
       dispatch(actions.update(this.props.router.params.id, values))
         .then((ret)=> {
@@ -99,9 +93,10 @@ class Edit extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Routers', to: '/admin/acl/routes'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, ], 'unknown'), to: '/admin/users/' + _.get(this.props, 'router.params.userId')},
-      {name: 'Wijzigen'}
+      {name: 'Affiliates', to: '/admin/affiliates'},
+      {name: 'Categorieen', to: '/admin/affiliates/categories'},
+      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown'), to: '/admin/affiliates/categories/' + _.get(this.props, [reducerIndex, reducerItem, 'id'])},
+      {name: 'wijzigen'}
     ];
 
     return (
@@ -109,11 +104,9 @@ class Edit extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Gebruiker
+            <h1>Site
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'firstname'], '')}
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'middlename'], '')}
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'lastname'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
               </span>
             </h1>
             <Row>
@@ -125,7 +118,7 @@ class Edit extends Component {
                   checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token, _.get(this.props, 'acl.all', []))}
+                  fieldsNeeded={fields(_.get(this.props, 'affiliatesSites.all', []))}
                   initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
                   validate={validator}
                   onSubmit={this.handleSubmit}

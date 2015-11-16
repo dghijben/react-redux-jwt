@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import {load, destroyItem} from 'redux/modules/admin/acl/actions';
+import {load, destroyItem} from 'redux/modules/admin/acl/roles/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';

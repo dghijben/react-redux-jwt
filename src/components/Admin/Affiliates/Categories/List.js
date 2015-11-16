@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import {load, destroyItem} from 'redux/modules/admin/acl/roles/actions';
+import {load, destroyItem} from 'redux/modules/admin/affiliates/categories/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
@@ -97,7 +97,8 @@ class List extends Component {
 
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Acl'}
+      {name: 'Affiliates', to: '/admin/affiliates'},
+      {name: 'Categorieen'}
     ];
 
     return (
@@ -115,8 +116,8 @@ class List extends Component {
                 fields: searchFields
               }}
               cols={[
-                {name: 'Rol', show: 'role'},
-                {name: 'Omschrijving', show: 'desc'},
+                {name: 'Categorie', show: 'name'},
+                {name: 'Actief', show: 'active', translate: {false: 'Nee', true: ' Ja'}},
                 {name: 'Aangemaakt', show: 'created_at'},
                 {name: 'Gewijzigd', show: 'updated_at'},
                 {name: 'Acties', dropdownButton: [

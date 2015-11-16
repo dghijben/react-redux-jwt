@@ -8,8 +8,7 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/acl/actions';
-import {loadUser, isLoadedUser, update, clearNetworkState} from 'redux/modules/admin/users/actions';
+import * as acl from 'redux/modules/admin/acl/roles/actions';
 import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
 @connect(state=>{
@@ -55,19 +54,15 @@ class Edit extends Component {
   }
 
   clearActionState() {
-    this.props.dispatch(clearNetworkState());
+    this.props.dispatch(acl.clearNetworkState());
   }
 
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!isLoadedUser(state, state.router.params.userId)) {
-      promises.push(dispatch(loadUser(state.router.params.userId)));
+    if (!acl.isLoadedItem(state, state.router.params.id)) {
+      promises.push(dispatch(acl.loadItem(state.router.params.id)));
     }
-    if (!acl.isAllLoaded(state)) {
-      promises.push(dispatch(acl.loadAll()));
-    }
-
     return Promise.all(promises);
   }
 
@@ -84,11 +79,8 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
-
-    console.log('values', values);
-
     return new Promise((resolve, reject) => {
-      dispatch(update(this.props.router.params.userId, values))
+      dispatch(acl.update(this.props.router.params.id, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);

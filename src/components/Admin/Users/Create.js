@@ -6,7 +6,7 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/acl/actions';
+import * as acl from 'redux/modules/admin/acl/roles/actions';
 import {create} from 'redux/modules/admin/users/actions';
 import fields, {reducerIndex, reducerItem} from './fields';
 
@@ -14,7 +14,7 @@ import fields, {reducerIndex, reducerItem} from './fields';
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'acl': state.acl,
+    'aclRoles': state.aclRoles,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -27,6 +27,7 @@ class Create extends Component {
     'dispatch': PropTypes.func,
     'history': PropTypes.object.isRequired,
     'users': PropTypes.object.isRequired,
+    'aclRoles': PropTypes.object,
     'token': PropTypes.string.isRequired
   }
 
@@ -89,7 +90,7 @@ class Create extends Component {
                   checkKey={'userEdit-new'}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'acl.all', []))}
+                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'aclRoles.all', []))}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

@@ -7,12 +7,12 @@ import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
-import * as acl from 'redux/modules/admin/acl/actions';
+import * as acl from 'redux/modules/admin/acl/roles/actions';
 import {mapDispatchToProps} from 'utils/functions';
 import fields, {reducerIndex, reducerItem, initialValues} from './fields';
 
 @connect(state=>({
-  'acl': state.acl,
+  'aclRoles': state.aclRoles,
   'users': state.users,
   'router': state.router
 }), mapDispatchToProps)
@@ -20,7 +20,7 @@ class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'acl': PropTypes.object.isRequired,
+    'aclRoles': PropTypes.object,
     'users': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
@@ -47,12 +47,14 @@ class Show extends Component {
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!isLoadedUser(state, state.router.params.userId)) {
-      promises.push(dispatch(loadUser(state.router.params.userId)));
-    }
     if (!acl.isAllLoaded(state)) {
       promises.push(dispatch(acl.loadAll()));
     }
+
+    if (!isLoadedUser(state, state.router.params.userId)) {
+      promises.push(dispatch(loadUser(state.router.params.userId)));
+    }
+
     return Promise.all(promises);
   }
 
@@ -107,7 +109,7 @@ class Show extends Component {
                     checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
                     formName="userEdit"
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), null, _.get(this.props, 'acl.all', []))}
+                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), null, _.get(this.props, 'aclRoles.all', []))}
                     initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
                     static
                   />

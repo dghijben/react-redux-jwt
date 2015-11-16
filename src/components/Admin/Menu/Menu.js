@@ -8,8 +8,18 @@ const tree = [
     {desc: 'Rollen', to: '/admin/roles'}
   ]},
   {'desc': 'ACL', 'to': '/admin/acl', icon: 'fa-lock', children: [
-    {desc: 'Nieuwe rol', to: '/admin/acl/new'},
-    {desc: 'Routes', to: '/admin/acl/routes'},
+    {desc: 'Rollen', to: '/admin/acl/roles', children: [
+      {desc: 'Nieuwe rol', to: '/admin/acl/roles/new', icon: 'fa-plus-square'}
+    ]},
+    {desc: 'Routes', to: '/admin/acl/routes'}
+  ]},
+  {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-lock', children: [
+    {desc: 'Sites', to: '/admin/affiliates/sites', children: [
+      {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new', icon: 'fa-plus-square'}
+    ]},
+    {desc: 'Categorieen', to: '/admin/affiliates/categories', children: [
+      {desc: 'Nieuwe categorie', to: '/admin/affiliates/categories/new'}
+    ]},
   ]}
 ];
 

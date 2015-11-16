@@ -1,23 +1,32 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import connectData from 'helpers/connectData';
 import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
-import * as acl from 'redux/modules/admin/acl/roles/actions';
+import * as acl from 'redux/modules/admin/affiliates/sites/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerItem, initialValues} from './fields';
+import fields, {reducerIndex, reducerItem, initialValues, path, fetchDataDeferred} from './fields';
 
-@connect(state=>({
-  'acl': state.acl,
-  'router': state.router
-}), mapDispatchToProps)
+
+@connectData(null, fetchDataDeferred)
+@connect(state=>{
+  const obj = {
+    'router': state.router,
+    'affiliatesCategories': state.affiliatesCategories,
+    'reduxRouterReducer': state.reduxRouterReducer
+  };
+  obj[reducerIndex] = state[reducerIndex];
+  return obj;
+}, mapDispatchToProps)
 class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'acl': PropTypes.object.isRequired,
+    'affiliatesSites': PropTypes.object.isRequired,
+    'affiliatesCategories': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
   }
@@ -36,17 +45,8 @@ class Show extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
-      this.props.history.pushState({}, '/admin/' + reducerIndex);
+      this.props.history.pushState({}, '/admin/' + path);
     }
-  }
-
-  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const promises = [];
-    if (!acl.isLoadedItem(state, state.router.params.id)) {
-      promises.push(dispatch(acl.loadItem(state.router.params.id)));
-    }
-    return Promise.all(promises);
   }
 
   confirmDelete() {
@@ -69,12 +69,13 @@ class Show extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Acl', to: '/admin/acl'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'desc'], 'unknown')},
+      {name: 'Affiliates', to: '/admin/affiliates'},
+      {name: 'Sites', to: '/admin/affiliates'},
+      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown')},
     ];
 
     const editLink = () => {
-      this.props.history.pushState({}, '/admin/' + reducerIndex + '/' + _.get(this.props, 'router.params.id') + '/edit');
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(this.props, 'router.params.id') + '/edit');
     };
 
     return (
@@ -84,7 +85,7 @@ class Show extends Component {
           <Well>
             <h1>Rol
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'desc'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
               </span>
             </h1>
 
@@ -98,7 +99,7 @@ class Show extends Component {
                     checkKey={reducerIndex + '_' + reducerItem + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
                     formName={reducerIndex + '_' + reducerItem}
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']))}
+                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), null, _.get(this.props, 'affiliatesCategories.all', []))}
                     initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
                     static
                   />

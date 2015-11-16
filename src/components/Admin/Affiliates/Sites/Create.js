@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import connectData from 'helpers/connectData';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/acl/roles/actions';
-import fields, {reducerIndex, reducerItem, path} from './fields';
+import * as actions from 'redux/modules/admin/affiliates/sites/actions';
+import fields, {reducerIndex, reducerItem, path, fetchDataDeferred} from './fields';
 
+@connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
@@ -21,6 +23,7 @@ import fields, {reducerIndex, reducerItem, path} from './fields';
 class Create extends Component {
 
   static propTypes = {
+    'token': PropTypes.string,
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'history': PropTypes.object.isRequired,
@@ -43,15 +46,6 @@ class Create extends Component {
     return getActionStatus(this.props, reducerIndex, reducerItem);
   }
 
-/*  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const promises = [];
-    if (!actions.isAllLoaded(state)) {
-      promises.push(dispatch(acl.loadAll()));
-    }
-    return Promise.all(promises);
-  }*/
-
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
       dispatch(actions.create(values))
@@ -68,8 +62,9 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Acl', to: '/admin/' + path},
-      {name: 'Nieuw'}
+      {name: 'Affiliates', to: '/admin/affiliates'},
+      {name: 'Sites'},
+      {name: 'Nieuw'},
     ];
 
     return (
@@ -77,7 +72,7 @@ class Create extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Nieuwe rol
+            <h1>Nieuwe site
             </h1>
             <Row>
               <Col md={2} />
@@ -86,7 +81,7 @@ class Create extends Component {
                   checkKey={reducerIndex + '-new'}
                   formName={reducerIndex}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new')}
+                  fieldsNeeded={fields('new', this.props.token)}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

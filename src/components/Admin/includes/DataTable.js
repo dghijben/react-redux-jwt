@@ -53,7 +53,11 @@ export default class DataTable extends Component {
   _getValue(record, col, key) {
     if (_.has(col, 'show')) {
       if (_.isString(col.show)) {
-        return _.get(record, col.show, 'kip');
+
+        if (_.has(col, 'translate')) {
+          return _.get(col, ['translate', _.get(record, col.show, '')], '');
+        }
+        return _.get(record, col.show, '');
       }
       if (_.isArray(col.show)) {
         const value = [];
