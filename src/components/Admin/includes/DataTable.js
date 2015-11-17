@@ -3,6 +3,7 @@ import React, {Component, PropTypes } from 'react';
 import {Alert, DropdownButton, MenuItem} from 'react-bootstrap';
 import Failed from 'components/includes/Failed';
 import Pending from 'components/includes/Pending';
+import {Image} from 'react-bootstrap';
 const Paginator = require('react-laravel-paginator');
 
 export default class DataTable extends Component {
@@ -26,7 +27,7 @@ export default class DataTable extends Component {
   _renderCols() {
     return _.map(this.props.cols, (col, key) => {
       return (
-        <th key={key}>
+        <th key={key} width={_.get(col, 'width', 'auto')}>
           {_.get(col, 'name', '')}
         </th>
       );
@@ -51,6 +52,12 @@ export default class DataTable extends Component {
   }
 
   _getValue(record, col, key) {
+    if (_.has(col, 'image')) {
+      if (_.has(record, col.image)) {
+        return (<Image src={'/bin/' + _.get(record, col.image)} responsive thumbnail/>);
+      }
+    }
+
     if (_.has(col, 'show')) {
       if (_.isString(col.show)) {
 
