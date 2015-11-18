@@ -6,52 +6,58 @@ import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
+import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/affiliates/sites/actions';
-import fields, {reducerIndex, reducerItem, path, fetchDataDeferred} from './fields';
+import {update, clearNetworkState} from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'affiliatesCategories': state.affiliatesCategories,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
   return obj;
 }, mapDispatchToProps)
-class Create extends Component {
+class Edit extends Component {
 
   static propTypes = {
-    'token': PropTypes.string,
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'history': PropTypes.object.isRequired,
-    'affiliatesCategories': PropTypes.object.isRequired
+    'data': PropTypes.object.isRequired,
+    'token': PropTypes.string.isRequired
   }
 
   constructor(props, context) {
     super(props, context);
     this.getActionState = this.getActionState.bind(this);
+    this.clearActionState = this.clearActionState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = {
+      showModal: false
+    };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
-    }
+  componentWillUnmount() {
+    this.clearActionState();
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
+  }
+
+  clearActionState() {
+    this.props.dispatch(clearNetworkState());
   }
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(actions.create(values))
+      dispatch(update(reducerKey, this.props.router.params.userId, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
+            console.log('error');
             reject(ret.error);
           } else {
             resolve();
@@ -61,31 +67,42 @@ class Create extends Component {
   }
 
   render() {
+    const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Sites'},
-      {name: 'Nieuw'},
+      {name: 'Kortingscodes', to: '/admin/discount-codes'},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name']), to: '/admin/discount-codes/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
+      {name: 'Wijzigen'}
     ];
+
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Nieuwe site
+            <h1>Gebruiker
+              <span>
+                {' '} {_.get(item, ['firstname'], '')}
+                {' '} {_.get(item, ['middlename'], '')}
+                {' '} {_.get(item, ['lastname'], '')}
+              </span>
             </h1>
             <Row>
-              <Col md={2} />
+              <Col md={2}>
+                <UserPic responsive thumbnail pictures={_.get(item, ['picture'], [])} />
+              </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={reducerIndex + '-new-' + _.get(this.props, 'affiliatesCategories.allStatus.success', false)}
-                  formName={reducerIndex}
+                  checkKey={'userEdit-' + _.get(item, ['id'])}
+                  formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'affiliatesCategories.all', []))}
-                  initialValues={{}}
+                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token)}
+                  initialValues={initialValues(item)}
                   validate={validator}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}
+                  clearActionState={this.clearActionState}
                   />
               </Col>
             </Row>
@@ -94,4 +111,4 @@ class Create extends Component {
       </div>
     );
   }
-} export default Create;
+} export default Edit;

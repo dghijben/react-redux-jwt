@@ -20,6 +20,9 @@ const tree = [
     {desc: 'Categorieen', to: '/admin/affiliates/categories', children: [
       {desc: 'Nieuwe categorie', to: '/admin/affiliates/categories/new'}
     ]},
+    {desc: 'Kortingscodes', to: '/admin/affiliates/discount-codes', children: [
+      {desc: 'Nieuwe kortingscode', to: '/admin/affiliates/discount-codes/new'}
+    ]},
   ]}
 ];
 

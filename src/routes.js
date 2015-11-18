@@ -54,8 +54,14 @@ export default () => {
               <Route path=":id" component={cmpnnt.AdminAffiliatesCategories.Show} />
               <Route path=":id/edit" component={cmpnnt.AdminAffiliatesCategories.Edit} />
             </Route>
-          </Route>
 
+            <Route path="discount-codes" component={cmpnnt.AdminAffiliatesDiscountCodes.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAffiliatesDiscountCodes.List} />
+              <Route path="new" component={cmpnnt.AdminAffiliatesDiscountCodes.Create} />
+              <Route path=":id" component={cmpnnt.AdminAffiliatesDiscountCodes.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAffiliatesDiscountCodes.Edit} />
+            </Route>
+          </Route>
         </Route>
       </Route>
       <Route path="*" component={cmpnnt.NotFound} status={404} />

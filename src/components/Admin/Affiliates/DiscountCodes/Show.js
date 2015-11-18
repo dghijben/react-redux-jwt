@@ -1,21 +1,21 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {loadItem, destroyItem, isLoadedItem } from 'redux/modules/data/actions';
+import connectData from 'helpers/connectData';
+import {destroyItem} from 'redux/modules/data/actions';
 import {Well, Row, Col, Button} from 'react-bootstrap';
-import Ribbon from '../includes/Ribbon';
+import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
-import * as acl from 'redux/modules/admin/acl/roles/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerKey, reducerItem, initialValues} from './fields';
+import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
+@connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'aclRoles': state.aclRoles,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -49,20 +49,6 @@ class Show extends Component {
     }
   }
 
-  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const promises = [];
-    if (!acl.isAllLoaded(state)) {
-      promises.push(dispatch(acl.loadAll()));
-    }
-
-    if (!isLoadedItem(state, state.router.params.userId)) {
-      promises.push(dispatch(loadItem(reducerKey, state.router.params.userId)));
-    }
-
-    return Promise.all(promises);
-  }
-
   confirmDelete() {
     this.setState({showModal: true});
   }
@@ -84,8 +70,9 @@ class Show extends Component {
     const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Users', to: '/admin/users'},
-      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'firstname'], '')},
+      {name: 'Affiliates', to: '/admin/affiliates'},
+      {name: 'Kortingscodes', to: '/admin/discount-codes'},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'])}
     ];
 
     const editLink = () => {

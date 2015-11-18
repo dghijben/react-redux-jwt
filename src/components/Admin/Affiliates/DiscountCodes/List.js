@@ -3,8 +3,8 @@ import React, {Component, PropTypes } from 'react';
 import {load, destroyItem} from 'redux/modules/data/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
-import Ribbon from '../includes/Ribbon';
-import DataOverview from '../includes/DataOverview';
+import Ribbon from 'components/Admin/includes/Ribbon';
+import DataOverview from 'components/Admin/includes/DataOverview';
 import {Confirm} from 'components/includes';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 import {searchFields, reducerIndex, reducerKey, reducerItem, path} from './fields';
@@ -22,7 +22,7 @@ const fieldNames = filterFields(searchFields);
 class List extends Component {
 
   static propTypes = {
-    'users': PropTypes.object,
+    'discountCodes': PropTypes.object,
     'history': PropTypes.object,
     'children': PropTypes.object,
     'dispatch': PropTypes.func

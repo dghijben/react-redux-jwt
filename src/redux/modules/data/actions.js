@@ -6,7 +6,9 @@ const reducerItem = 'item';
 
 const apiPaths = {
   'users': '/admin/users',
-  'aclRoles': '/admin/acl/roles'
+  'aclRoles': '/admin/acl/roles',
+  'sites': '/admin/affiliates/sites',
+  'discountCodes': '/admin/affiliates/discount-codes'
 };
 
 export function load(key, params) {

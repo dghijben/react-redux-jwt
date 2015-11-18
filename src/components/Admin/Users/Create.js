@@ -7,8 +7,8 @@ import Ribbon from '../includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
 import * as acl from 'redux/modules/admin/acl/roles/actions';
-import {create} from 'redux/modules/admin/users/actions';
-import fields, {reducerIndex, reducerItem} from './fields';
+import {create} from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerItem} from './fields';
 
 @connect(state=>{
   const obj = {
@@ -38,13 +38,13 @@ class Create extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success']) === true ) {
+      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
     }
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -58,7 +58,7 @@ class Create extends Component {
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(create(values))
+      dispatch(create(reducerKey, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -87,7 +87,7 @@ class Create extends Component {
               <Col md={2} />
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-new'}
+                  checkKey={'userEdit-new-' + _.get(this.props, 'aclRoles.allStatus.success', false)}
                   formName="userEdit"
                   formClass="form-horizontal"
                   fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'aclRoles.all', []))}
