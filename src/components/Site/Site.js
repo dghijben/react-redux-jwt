@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { PropTypes as historyPropTypes, Link } from 'react-router';
-import { Navbar, NavBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Navbar, NavbarBrand, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
@@ -70,7 +70,7 @@ class App extends Component {
           ]}
           />
         <Navbar>
-          <NavBrand>React-Bootstrap</NavBrand>
+          <NavbarBrand>React-Bootstrap</NavbarBrand>
           <Nav bsStyle="tabs">
             <NavItem eventKey={2} {...bootstrapLink(history, null, '/')} title="Item">Home</NavItem>
             <NavItem eventKey={1} {...bootstrapLink(history, null, '/admin')}>Admin</NavItem>
@@ -83,7 +83,7 @@ class App extends Component {
               <MenuItem eventKey="4.4">Separated link</MenuItem>
             </NavDropdown>
           </Nav>
-          <Nav navbar right>
+          <Nav navbar pullRight>
             {this.authorized()}
           </Nav>
         </Navbar>

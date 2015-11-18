@@ -30,8 +30,10 @@
     "postinstallx": "webpack --display-error-details --config webpack/prod.config.js",
     "lint": "eslint -c .eslintrc src api",
     "start-dev": "node ./node_modules/better-npm-run start-dev",
+    "start-cluster": "node ./node_modules/better-npm-run start-cluster",
     "watch-client": "node ./node_modules/better-npm-run watch-client",
     "dev": "concurrent --kill-others \"npm run watch-client\" \"npm run start-dev\" ",
+    "cluster": "concurrent --kill-others \"npm run watch-client\" \"npm run start-cluster\" ",
     "test": "karma start",
     "test-node": "./node_modules/mocha/bin/mocha ./api/**/__tests__/*-test.js --compilers js:babel-core/register"
   },
@@ -54,6 +56,15 @@
         "APIPORT": 9106
       }
     },
+    "start-cluster": {
+      "command": "node ./bin/cluster.js",
+      "env": {
+        "NODE_PATH": "./src",
+        "NODE_ENV": "development",
+        "PORT": 3000,
+        "APIPORT": 9106
+      }
+    },
     "watch-client": {
       "command": "node webpack/webpack-dev-server.js",
       "env": {
@@ -67,6 +78,7 @@
     "babel-plugin-typecheck": "2.0.0",
     "body-parser": "1.14.1",
     "classnames": "^2.2.0",
+    "cluster": "^0.7.7",
     "compression": "1.6.0",
     "deep-equal": "^1.0.1",
     "express": "4.13.3",
