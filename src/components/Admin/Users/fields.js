@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 
-export const reducerIndex = 'users';
-export const reducerItem = 'user';
+export const reducerIndex = 'data';
+export const reducerKey = 'users';
+export const reducerItem = 'item';
 export const path = 'users';
+
 export const searchFields = [
   {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
     buttonBefore: {

@@ -87,13 +87,14 @@ class DataOverview extends Component {
 
   handleSearch(data: Object) {
     const obj = {};
+    // reset the page index
     obj[this.props.name] = {
       ...data,
+      page: 1
     };
 
     this.setState(obj, this.pushState);
   }
-
 
   form() {
     if (_.get(this.props, 'form', null)) {

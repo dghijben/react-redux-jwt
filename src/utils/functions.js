@@ -133,10 +133,10 @@ export function intersect(a, b) {
   return result;
 }
 
-export function getActionStatus(props, reducerIndex, reducerItem) {
+export function getActionStatus(props, reducer) {
   return {
-    success: _.get(props, [reducerIndex, reducerItem, 'actionStatus', 'success'], false),
-    failed: _.get(props, [reducerIndex, reducerItem, 'actionStatus', 'failed'], false),
-    pending: _.get(props, [reducerIndex, reducerItem, 'actionStatus', 'pending'], false)
+    success: _.get(props, [...reducer, 'actionStatus', 'success'], false),
+    failed: _.get(props, [...reducer, 'actionStatus', 'failed'], false),
+    pending: _.get(props, [...reducer, 'actionStatus', 'pending'], false)
   };
 }

@@ -5,9 +5,9 @@ import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
-import * as acl from 'redux/modules/admin/acl/roles/actions';
+import * as actions from 'redux/modules/data/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerItem, initialValues} from './fields';
+import fields, {path, reducerIndex, reducerKey, reducerItem, initialValues} from './fields';
 
 @connect(state=>{
   const obj = {
@@ -39,7 +39,7 @@ class Show extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
       this.props.history.pushState({}, '/admin/' + reducerIndex);
     }
   }
@@ -47,8 +47,8 @@ class Show extends Component {
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
     const promises = [];
-    if (!acl.isLoadedItem(state, state.router.params.id)) {
-      promises.push(dispatch(acl.loadItem(state.router.params.id)));
+    if (!actions.isLoadedItem(reducerKey, state, state.router.params.id)) {
+      promises.push(dispatch(actions.loadItem(reducerKey, state.router.params.id)));
     }
     return Promise.all(promises);
   }
@@ -63,7 +63,7 @@ class Show extends Component {
 
   confirmed() {
     this.setState({showModal: false});
-    this.props.dispatch(acl.destroyItem(this.props.router.params.id));
+    this.props.dispatch(actions.destroyItem(reducerKey, this.props.router.params.id));
   }
 
   renderModal() {
@@ -71,14 +71,16 @@ class Show extends Component {
   }
 
   render() {
+    const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
+
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Acl', to: '/admin/acl'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'desc'], 'unknown')},
+      {name: _.get(item, ['desc'], 'unknown')},
     ];
 
     const editLink = () => {
-      this.props.history.pushState({}, '/admin/' + reducerIndex + '/' + _.get(this.props, 'router.params.id') + '/edit');
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(this.props, 'router.params.id') + '/edit');
     };
 
     return (
@@ -88,22 +90,22 @@ class Show extends Component {
           <Well>
             <h1>Rol
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'desc'], '')}
+                {' '} {_.get(item, ['desc'], '')}
               </span>
             </h1>
 
             <Row>
               <Col md={2}>
-                Extra info?
+                .
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, [reducerIndex, reducerItem, 'pending'], false)}>
+                <Pending state={_.get(item, ['pending'], false)}>
                   <DynamicForm
-                    checkKey={reducerIndex + '_' + reducerItem + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
-                    formName={reducerIndex + '_' + reducerItem}
+                    checkKey={reducerIndex + reducerKey + reducerItem + _.get(item, ['id'])}
+                    formName={reducerIndex + '_' + reducerKey + '_' + reducerItem}
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']))}
-                    initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
+                    fieldsNeeded={fields(_.get(item, ['id']))}
+                    initialValues={initialValues(item)}
                     static
                   />
                   <Row>

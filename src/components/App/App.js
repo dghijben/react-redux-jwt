@@ -23,7 +23,6 @@ class App extends Component {
     return Promise.all(promises);
   }
 
-
   render() {
     return (
         this.props.children

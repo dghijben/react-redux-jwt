@@ -2,6 +2,7 @@ import React from 'react';
 import { FormattedNumber, FormattedMessage } from 'react-intl';
 
 export default class Home extends React.Component {
+
   render() {
     return (
       <div>

@@ -1,11 +1,29 @@
-import {Component, PropTypes} from 'react';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
+import {mapDispatchToProps} from 'utils/functions';
+import {clearList} from 'redux/modules/data/actions';
+import {reducerKey} from './fields';
 
-export default class Wrap extends Component {
+
+@connect(() => { return {}; }, mapDispatchToProps)
+class Wrap extends Component {
   static propTypes = {
-    'children': PropTypes.object
+    'children': PropTypes.object,
+    'dispatch': PropTypes.func
   };
 
+  componentWillUnmount() {
+    this.props.dispatch(clearList(reducerKey));
+    // console.log('UNMOUNT');
+  }
+
   render() {
-    return this.props.children;
+    return (
+      <div>
+        {this.props.children}
+      </div>
+    );
   }
 }
+
+export default Wrap;

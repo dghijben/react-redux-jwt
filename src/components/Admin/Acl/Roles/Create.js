@@ -6,8 +6,8 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/acl/roles/actions';
-import fields, {reducerIndex, reducerItem, path} from './fields';
+import * as actions from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerItem, path} from './fields';
 
 @connect(state=>{
   const obj = {
@@ -34,27 +34,18 @@ class Create extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success']) === true ) {
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
     }
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
-
-/*  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const promises = [];
-    if (!actions.isAllLoaded(state)) {
-      promises.push(dispatch(acl.loadAll()));
-    }
-    return Promise.all(promises);
-  }*/
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(actions.create(values))
+      dispatch(actions.create(reducerKey, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -68,7 +59,7 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Acl', to: '/admin/' + path},
+      {name: 'Acl', to: '/admin/acl'},
       {name: 'Nieuw'}
     ];
 
@@ -83,8 +74,8 @@ class Create extends Component {
               <Col md={2} />
               <Col md={10}>
                 <DynamicForm
-                  checkKey={reducerIndex + '-new'}
-                  formName={reducerIndex}
+                  checkKey={reducerIndex + reducerKey + '-new'}
+                  formName={reducerIndex + reducerKey}
                   formClass="form-horizontal"
                   fieldsNeeded={fields('new')}
                   initialValues={{}}

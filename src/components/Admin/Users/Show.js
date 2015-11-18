@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {loadUser, destroyUser, isLoadedUser } from '../../../redux/modules/admin/users/actions';
+import {loadItem, destroyItem, isLoadedItem } from '../../../redux/modules/data/actions';
 import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from '../includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
@@ -9,19 +9,24 @@ import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import * as acl from 'redux/modules/admin/acl/roles/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerItem, initialValues} from './fields';
+import fields, {reducerIndex, reducerKey, reducerItem, initialValues} from './fields';
 
-@connect(state=>({
-  'aclRoles': state.aclRoles,
-  'users': state.users,
-  'router': state.router
-}), mapDispatchToProps)
+@connect(state=>{
+  const obj = {
+    'token': state.authorization.token,
+    'router': state.router,
+    'aclRoles': state.aclRoles,
+    'reduxRouterReducer': state.reduxRouterReducer
+  };
+  obj[reducerIndex] = state[reducerIndex];
+  return obj;
+}, mapDispatchToProps)
 class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'aclRoles': PropTypes.object,
-    'users': PropTypes.object.isRequired,
+    'data': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
   }
@@ -51,8 +56,8 @@ class Show extends Component {
       promises.push(dispatch(acl.loadAll()));
     }
 
-    if (!isLoadedUser(state, state.router.params.userId)) {
-      promises.push(dispatch(loadUser(state.router.params.userId)));
+    if (!isLoadedItem(state, state.router.params.userId)) {
+      promises.push(dispatch(loadItem(reducerKey, state.router.params.userId)));
     }
 
     return Promise.all(promises);
@@ -68,7 +73,7 @@ class Show extends Component {
 
   confirmed() {
     this.setState({showModal: false});
-    this.props.dispatch(destroyUser(this.props.router.params.userId));
+    this.props.dispatch(destroyItem(reducerKey, this.props.router.params.userId));
   }
 
   renderModal() {
@@ -76,10 +81,11 @@ class Show extends Component {
   }
 
   render() {
+    const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Users', to: '/admin/users'},
-      {name: _.get(this.props, 'users.user.firstname', 'unknown')},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'firstname'], '')},
     ];
 
     const editLink = () => {
@@ -93,24 +99,24 @@ class Show extends Component {
           <Well>
             <h1>Gebruiker
               <span>
-                {' '} {_.get(this.props, 'users.user.firstname', '')}
-                {' '} {_.get(this.props, 'users.user.middlename', '')}
-                {' '} {_.get(this.props, 'users.user.lastname', '')}
+                 {' '} {_.get(item, ['firstname'], '')}
+                {' '} {_.get(item, ['middlename'], '')}
+                {' '} {_.get(item, ['lastname'], '')}
               </span>
             </h1>
 
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail pictures={_.get(this.props, 'users.user.picture', [])} />
+                <UserPic responsive thumbnail pictures={_.get(item, ['picture'], [])} />
               </Col>
               <Col md={10}>
                 <Pending state={_.get(this.props, 'users.user.pending', false)}>
                   <DynamicForm
-                    checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
+                    checkKey={'userEdit-' + _.get(item, ['id'])}
                     formName="userEdit"
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), null, _.get(this.props, 'aclRoles.all', []))}
-                    initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
+                    fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, 'aclRoles.all', []))}
+                    initialValues={initialValues(item)}
                     static
                   />
                   <Row>

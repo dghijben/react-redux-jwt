@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 
-export const reducerIndex = 'aclRoles';
+export const reducerIndex = 'data';
+export const reducerKey = 'aclRoles';
 export const reducerItem = 'item';
 export const path = 'acl/roles';
 
