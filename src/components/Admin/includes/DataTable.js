@@ -54,7 +54,7 @@ export default class DataTable extends Component {
   _getValue(record, col, key) {
     if (_.has(col, 'image')) {
       if (_.has(record, col.image)) {
-        return (<Image src={'/bin/' + _.get(record, col.image)} responsive thumbnail/>);
+        return (<Image src={'/image/small/' + _.get(record, col.image)} responsive thumbnail/>);
       }
     }
 

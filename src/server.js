@@ -32,11 +32,15 @@ const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
-  target: 'http://localhost:' + config.apiPort + '/api',
+  target: 'http://' + config.apiHost + ':' + config.apiPort + '/api',
 });
 
 const proxyBin = httpProxy.createProxyServer({
-  target: 'http://localhost:' + config.apiPort + '/bin',
+  target: 'http://' + config.apiHost + ':' + config.apiPort + '/api',
+});
+
+const proxyImg = httpProxy.createProxyServer({
+  target: 'http://' + config.apiHost + ':' + config.apiPort + '/image',
 });
 
 const translations = globSync('./src/langs/*.json')
@@ -53,7 +57,7 @@ const translations = globSync('./src/langs/*.json')
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
 
-app.use(require('serve-static')(path.join(__dirname, '..', 'static')));
+app.use(Express.static(path.join(__dirname, '..', 'static')));
 
 // Proxy to API server
 app.use('/api', (req, res) => {
@@ -64,6 +68,12 @@ app.use('/api', (req, res) => {
 app.use('/bin', (req, res) => {
   proxyBin.web(req, res);
 });
+
+// Proxy to BINARY server
+app.use('/image', (req, res) => {
+  proxyImg.web(req, res);
+});
+
 
 // added the error handling to avoid https://github.com/nodejitsu/node-http-proxy/issues/527
 proxy.on('error', (error, req, res) => {
@@ -170,7 +180,7 @@ if (config.port) {
       console.error(err);
     }
     console.info('----\n==> ✅  %s is running, talking to API server on %s.', config.app.title, config.apiPort);
-    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', (process.env.HOST || 'localhost'), config.port);
+    console.info('==> 💻  Open http://%s:%s in a browser to view the app.', config.host, config.port);
   });
 } else {
   console.error('==>     ERROR: No PORT environment variable has been specified');

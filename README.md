@@ -1,17 +1,17 @@
 # React Redux Universal Hot Example
 
 [![build status](https://img.shields.io/travis/erikras/react-redux-universal-hot-example/master.svg?style=flat-square)](https://travis-ci.org/erikras/react-redux-universal-hot-example)
-[![react-redux-universal channel on discord](https://img.shields.io/badge/discord-react--redux--universal%40reactiflux-blue.svg)](https://discordapp.com/channels/102860784329052160/105739309289623552)
-[![Demo on Heroku](https://img.shields.io/badge/demo-heroku-lightgrey.png)](https://react-redux.herokuapp.com)
-[![Dependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example.svg)](https://david-dm.org/erikras/react-redux-universal-hot-example)
-[![devDependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example/dev-status.svg)](https://david-dm.org/erikras/react-redux-universal-hot-example#info=devDependencies)
-[![PayPal donate button](http://img.shields.io/paypal/donate.png?color=yellowgreen)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=E2LK57ZQ9YRMN)
+[![Dependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example.svg?style=flat-square)](https://david-dm.org/erikras/react-redux-universal-hot-example)
+[![devDependency Status](https://david-dm.org/erikras/react-redux-universal-hot-example/dev-status.svg?style=flat-square)](https://david-dm.org/erikras/react-redux-universal-hot-example#info=devDependencies)
+[![react-redux-universal channel on discord](https://img.shields.io/badge/discord-react--redux--universal%40reactiflux-brightgreen.svg?style=flat-square)](https://discord.gg/0ZcbPKXt5bZZb1Ko)
+[![Demo on Heroku](https://img.shields.io/badge/demo-heroku-brightgreen.svg?style=flat-square)](https://react-redux.herokuapp.com)
+[![PayPal donate button](https://img.shields.io/badge/donate-paypal-brightgreen.svg?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=E2LK57ZQ9YRMN)
 
 ---
 
 ## About
 
-This is a starter boiler plate app I've put together using the following technologies:
+This is a starter boilerplate app I've put together using the following technologies:
 
 * ~~Isomorphic~~ [Universal](https://medium.com/@mjackson/universal-javascript-4761051b7ae9) rendering
 * Both client and server make calls to load data from separate API server
@@ -39,19 +39,27 @@ I cobbled this together from a wide variety of similar "starter" repositories. A
 
 ## Installation
 
-```
+```bash
 npm install
 ```
 
 ## Running Dev Server
 
-```
+```bash
 npm run dev
 ```
 
+### Using Redux DevTools
+
+In development, Redux Devtools are enabled by default. You can toggle visibility and move the dock around using the following keyboard shortcuts:
+
+- <kbd>Ctrl+H</kbd> Toggle DevTools Dock
+- <kbd>Ctrl+Q</kbd> Move Dock Position
+- see [redux-devtools-dock-monitor](https://github.com/gaearon/redux-devtools-dock-monitor) for more detail information.
+
 ## Building and Running Production Server
 
-```
+```bash
 npm run build
 npm run start
 ```
@@ -143,7 +151,7 @@ To run the tests in the project, just simply run `npm test` if you have `Chrome`
 
 To keep watching your test suites that you are working on, just set `singleRun: false` in the `karma.conf.js` file. Please be sure set it to `true` if you are running `npm test` on a continuous integration server (travis-ci, etc).
 
-## Heroku Deploy
+## Deployment on Heroku
 
 To get this project to work on Heroku, you need to:
 
@@ -155,20 +163,27 @@ To get this project to work on Heroku, you need to:
 
 The first deploy might take a while, but after that your `node_modules` dir should be cached.
 
-## The Future
-
-* [Inline Styles](docs/InlineStyles.md) - CSS is dead.
-
 ## FAQ
 
-#### Help! It doesn't work on Windows! What do I do?
-
-Fear not. [chtefi](https://github.com/chtefi) has figured out [what needs to be changed](https://github.com/erikras/react-redux-universal-hot-example/pull/21/files) to make it work on Windows 8.
+This project moves fast and has an active community, so if you have a question that is not answered below please visit our [Discord channel](https://discord.gg/0ZcbPKXt5bZZb1Ko) or file an issue.
 
 #### How do I disable the dev tools?
 
 They will only show in development, but if you want to disable them even there, set `__DEVTOOLS__` to `false` in `/webpack/dev.config.js`.
 
+## Roadmap 
+
+Although this isn't a library, we recently started versioning to make it easier to track breaking changes and emerging best practices. 
+
+* [Babel 6](https://github.com/babel/babel) - Coming soon with v1 (see [#488](https://github.com/erikras/react-redux-universal-hot-example/issues/488))
+* [Inline Styles](docs/InlineStyles.md) - CSS is dead
+
+## Contributing
+
+I am more than happy to accept external contributions to the project in the form of feedback, bug reports and even better - pull requests :) 
+
+If you would like to submit a pull request, please make an effort to follow the guide in [CONTRIBUTING.md](CONTRIBUTING.md). 
+ 
 ---
 Thanks for checking this out.
 

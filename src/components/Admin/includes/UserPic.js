@@ -25,7 +25,7 @@ export default class UserPic extends Component {
 
     if (!_.isEmpty(picture)) {
       const fileName = picture.file_name;
-      this.setState({src: '/bin/' + fileName});
+      this.setState({src: '/image/medium/' + fileName});
     } else {
       this.setState({src: ''});
     }
