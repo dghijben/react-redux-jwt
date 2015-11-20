@@ -44,7 +44,8 @@
         "NODE_PATH": "./src",
         "NODE_ENV": "production",
         "PORT": 4000,
-        "APIPORT": 9106
+        "APIHOST": "api.babyblox.nl",
+        "APIPORT": 80
       }
     },
     "start-dev": {
