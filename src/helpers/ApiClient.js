@@ -56,7 +56,10 @@ class _ApiClient {
         }
 
         if (params) {
+          params.time = Date.now().toString();
           request.query(params);
+        } else {
+          request.query([Date.now().toString()]);
         }
 
         const token = cookie.load('token');
@@ -76,6 +79,11 @@ class _ApiClient {
             }
           }
         }
+
+        // IE cache headers
+        request.set('X-Requested-With', 'XMLHttpRequest');
+        request.set('Expires', '-1');
+        request.set('Cache-Control', 'no-cache,no-store,must-revalidate,max-age=-1,private');
 
         if (data) {
           request.send(data);
