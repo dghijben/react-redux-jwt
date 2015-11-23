@@ -117,6 +117,7 @@ class List extends Component {
                 fields: searchFields
               }}
               cols={[
+                {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
                 {name: 'Name', show: 'name'},
                 {name: 'CPS', show: 'cps'},
                 {name: 'CPL', show: 'cpl'},

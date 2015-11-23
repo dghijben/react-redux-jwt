@@ -67,7 +67,7 @@ class Create extends Component {
     ];
 
     const checkKey = () => {
-      return '';
+      return _.has(this.props, [reducerIndex, reducerKeySites, 'allStatus', 'success']);
     };
 
     return (

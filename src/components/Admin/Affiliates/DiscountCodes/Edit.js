@@ -75,6 +75,13 @@ class Edit extends Component {
       {name: 'Wijzigen'}
     ];
 
+    const checkKey = () => {
+      return [
+        _.has(this.props, [reducerIndex, reducerKeySites, 'allStatus', 'success']),
+        _.get(item, ['name'])
+      ];
+    };
+
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
@@ -82,7 +89,7 @@ class Edit extends Component {
           <Well>
             <h1>Kortingscode
               <span>
-                {' '} {_.get(item, ['name'], '')}
+                {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'])}
               </span>
             </h1>
             <Row>
@@ -91,7 +98,7 @@ class Edit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'discount-' + _.get(item, ['id'])}
+                  checkKey={'discount-' + checkKey()}
                   formName="discount"
                   formClass="form-horizontal"
                   fieldsNeeded={fields(_.get(item, ['id']), this.props.token, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}

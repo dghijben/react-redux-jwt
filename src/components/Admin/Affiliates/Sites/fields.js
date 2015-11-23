@@ -96,7 +96,7 @@ export default function fields(id, token, categories) {
     {
       name: 'description',
       label: 'Omschrijving',
-      type: 'text',
+      type: 'rte',
       placeholder: 'Omschrijving',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
