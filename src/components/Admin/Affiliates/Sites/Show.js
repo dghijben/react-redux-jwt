@@ -43,6 +43,7 @@ class Show extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
+      this.props.dispatch(actions.clearItem(reducerKey));
       this.props.history.pushState({}, '/admin/' + path);
     }
   }

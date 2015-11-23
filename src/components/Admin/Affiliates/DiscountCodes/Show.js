@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import connectData from 'helpers/connectData';
-import {destroyItem} from 'redux/modules/data/actions';
+import {destroyItem, clearItem} from 'redux/modules/data/actions';
 import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
@@ -45,6 +45,7 @@ class Show extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, 'users.user.deleted', false) === true) {
+      this.props.dispatch(clearItem(reducerKey));
       this.props.history.pushState({}, '/admin/users');
     }
   }

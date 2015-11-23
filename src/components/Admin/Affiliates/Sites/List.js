@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import {load, destroyItem} from 'redux/modules/data/actions';
+import {load, destroyItem, clearItem} from 'redux/modules/data/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
@@ -69,6 +69,7 @@ class List extends Component {
 
   close() {
     this.setState({showModal: false, status: {}});
+    this.props.dispatch(clearItem(reducerKey));
   }
 
   confirmed() {
