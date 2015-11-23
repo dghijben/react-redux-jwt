@@ -4,8 +4,9 @@ import * as actions from 'redux/modules/data/actions';
 
 export const reducerIndex = 'data';
 export const reducerKey = 'discountCodes';
+export const reducerKeySites = 'sites';
 export const reducerItem = 'item';
-export const path = 'users';
+export const path = 'affiliates/discount-codes';
 
 export const searchFields = [
   {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
@@ -30,12 +31,12 @@ export const searchFields = [
     bsStyle: 'default',
     items: [
       {default: 'Sorteren'},
-      {desc: <span>Voornaam <i className="fa fa-angle-up"></i></span>, field: 'firstnameAsc'},
-      {desc: <span>Voornaam <i className="fa fa-angle-down"></i></span>, field: 'firstnameDesc'},
-      {desc: <span>Achternaam <i className="fa fa-angle-up"></i></span>, field: 'lastnameAsc'},
-      {desc: <span>Achternaam <i className="fa fa-angle-down"></i></span>, field: 'lastnameDesc'},
-      {desc: <span>Email <i className="fa fa-angle-up"></i></span>, field: 'emailAsc'},
-      {desc: <span>Email <i className="fa fa-angle-down"></i></span>, field: 'emailDesc'}
+      {desc: <span>Titel <i className="fa fa-angle-up"></i></span>, field: 'nameAsc'},
+      {desc: <span>Titel <i className="fa fa-angle-down"></i></span>, field: 'nameDesc'},
+      {desc: <span>Start <i className="fa fa-angle-up"></i></span>, field: 'startAsc'},
+      {desc: <span>Start <i className="fa fa-angle-down"></i></span>, field: 'startDesc'},
+      {desc: <span>Stop <i className="fa fa-angle-up"></i></span>, field: 'endAsc'},
+      {desc: <span>Stop <i className="fa fa-angle-down"></i></span>, field: 'endDesc'}
     ]
   }
 ];
@@ -43,21 +44,22 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {roles: _.pluck(_.get(values, 'roles'), 'id')}
+    {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
+    {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
   );
 }
 
-export default function fields(userId, token) {
+export default function fields(userId, token, affiliates) {
 
-/*  const roleOptions = () => {
+  const allOptions = () => {
     const options = [];
-    if (typeof roles === 'object') {
-      _.sortBy(roles, 'desc').map((role) => {
-        options.push({value: role.id, desc: role.desc});
+    if (typeof affiliates === 'object') {
+      _.sortBy(affiliates, 'name').map((item) => {
+        options.push({value: item.id, desc: item.name});
       });
     }
     return options;
-  };*/
+  };
 
   return ([
     {
@@ -85,30 +87,53 @@ export default function fields(userId, token) {
     {
       name: 'description',
       label: 'Omschrijving',
-      type: 'text',
+      type: 'rte',
       placeholder: 'Omschrijving',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
+
+    },
+    {
+      name: 'discount_concat',
+      showOnStatic: true,
+      label: 'Korting',
+      type: 'text',
+      placeholder: 'Korting',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+
     },
     {
       name: 'discount',
+      hideOnStatic: true,
       label: 'Korting',
       type: 'text',
-      placeholder: 'Korint',
+      placeholder: 'Korting',
       labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10'
+      wrapperClassName: 'col-md-10',
+      buttonBefore: {
+        name: 'discount_type', type: 'dropdown', onlySelf: false,
+        items: [
+          {desc: '€', field: '1'},
+          {desc: '%', field: '2'},
+        ]
+      },
     },
     {
       name: 'start',
       label: 'Start datum',
-      type: 'text',
+      type: 'dateTime',
+      mode: 'date',
+      inputFormat: 'YYYY-MM-DD',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
     {
       name: 'end',
       label: 'Eind datum',
-      type: 'text',
+      type: 'dateTime',
+      mode: 'date',
+      inputFormat: 'YYYY-MM-DD',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
@@ -124,50 +149,7 @@ export default function fields(userId, token) {
       type: 'radio',
       searchable: true,
       chunks: 3,
-      options: [
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-        {desc: 1, value: 2},
-        {desc: 'mango', value: 3},
-        {desc: 'thee', value: 4},
-        {desc: 4, value: 5},
-        {desc: 5, value: 6},
-        {desc: 6, value: 7},
-      ],
+      options: allOptions(),
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
@@ -192,8 +174,8 @@ export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const promises = [];
 
-  if (!actions.isAllLoaded('sites', state)) {
-    promises.push(dispatch(actions.loadAll('sites')));
+  if (!actions.isAllLoaded(reducerKeySites, state)) {
+    promises.push(dispatch(actions.loadAll(reducerKeySites)));
   }
 
   if (_.has(state, 'router.params.id')) {

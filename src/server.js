@@ -36,7 +36,7 @@ const proxy = httpProxy.createProxyServer({
 });
 
 const proxyBin = httpProxy.createProxyServer({
-  target: 'http://' + config.apiHost + ':' + config.apiPort + '/api',
+  target: 'http://' + config.apiHost + ':' + config.apiPort + '/bin',
 });
 
 const proxyImg = httpProxy.createProxyServer({

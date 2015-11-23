@@ -59,7 +59,8 @@ class RequireAdminLogin extends Component {
               {'rel': 'stylesheet', 'href': 'http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700', 'type': 'text/css', 'media': 'screen'}
             ]}
             script={[
-              {src: '/plupload-2.1.8/js/plupload.full.min.js'}
+              {src: '/plupload-2.1.8/js/plupload.full.min.js'},
+              {src: '//tinymce.cachefly.net/4.2/tinymce.min.js'}
             ]}
             />
           {this.props.children}

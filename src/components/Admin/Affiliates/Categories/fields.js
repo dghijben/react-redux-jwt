@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
-import * as actions from 'redux/modules/admin/affiliates/categories/actions';
-import * as siteActions from 'redux/modules/admin/affiliates/sites/actions';
-export const reducerIndex = 'affiliatesCategories';
+import * as actions from 'redux/modules/data/actions';
+export const reducerIndex = 'data';
+export const reducerKey = 'categories';
 export const reducerItem = 'item';
 export const path = 'affiliates/categories';
+
+export const reducerKeySites = 'sites';
 
 export const searchFields = [
   {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
@@ -65,9 +67,11 @@ export default function fields(affiliates) {
     {
       name: 'affiliates',
       label: 'Affiliates',
-      type: 'checkboxListiOs',
+      type: 'checkboxList',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
+      chunks: 3,
+      searchable: true,
       options: allOptions()
     },
     {
@@ -91,12 +95,14 @@ export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const promises = [];
 
-  if (!siteActions.isAllLoaded(state)) {
-    promises.push(dispatch(siteActions.loadAll()));
+  if (!actions.isAllLoaded(reducerKeySites, state)) {
+    promises.push(dispatch(actions.loadAll(reducerKeySites)));
   }
 
-  if (!actions.isLoadedItem(state, state.router.params.id)) {
-    promises.push(dispatch(actions.loadItem(state.router.params.id)));
+  if (_.has(state, 'router.params.id')) {
+    if (!actions.isLoadedItem(reducerKey, state, state.router.params.id)) {
+      promises.push(dispatch(actions.loadItem(reducerKey, state.router.params.id)));
+    }
   }
 
   return Promise.all(promises);

@@ -58,8 +58,6 @@ class List extends Component {
 
 
   fetchDataCallBack(state) {
-    console.log(state);
-
     this.props.dispatch(load(reducerKey, state));
   }
 

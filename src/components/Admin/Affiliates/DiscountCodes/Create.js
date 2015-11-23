@@ -8,7 +8,7 @@ import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
 import {create} from 'redux/modules/data/actions';
-import fields, {reducerIndex, reducerKey, reducerItem, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -37,7 +37,7 @@ class Create extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/users/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
+      this.props.history.pushState({}, '/admin/affiliates/discount-codes/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
     }
   }
 
@@ -62,7 +62,7 @@ class Create extends Component {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Kortingscodes', to: '/admin/discount-codes'},
+      {name: 'Kortingscodes', to: '/admin/affiliates/discount-codes'},
       {name: 'Nieuw'}
     ];
 
@@ -84,7 +84,7 @@ class Create extends Component {
                   checkKey={reducerKey + checkKey()}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token)}
+                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

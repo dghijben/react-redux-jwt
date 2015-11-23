@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import React, {Component, PropTypes } from 'react';
-import {load, destroyItem} from 'redux/modules/admin/affiliates/categories/actions';
+import {load, destroyItem} from 'redux/modules/data/actions';
 import { connect } from 'react-redux';
 import {Well} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DataOverview from 'components/Admin/includes/DataOverview';
 import {Confirm} from 'components/includes';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
-import {searchFields, reducerIndex, reducerItem, path} from './fields';
+import {searchFields, reducerIndex, reducerKey, reducerItem, path} from './fields';
 const fieldNames = filterFields(searchFields);
 
 @connect(state=>{
@@ -42,23 +42,22 @@ class List extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(this.props, [reducerIndex, reducerItem, 'deleted'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
+    if (_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === false && _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
       this.setState({status: {success: true}});
-      this.props.dispatch(load(createParamsForFetch(this.props, reducerIndex, fieldNames)));
+      this.props.dispatch(load(reducerKey, createParamsForFetch(this.props, reducerIndex, fieldNames)));
     }
 
-    if (_.get(this.props, [reducerIndex, reducerItem, 'failed'], false) === false && _.get(nextProps, [reducerIndex, reducerItem, 'failed'], false) === true) {
+    if (_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'failed'], false) === false && _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'failed'], false) === true) {
       this.setState({status: {failed: true}});
     }
   }
 
   static fetchDataDeferred(getState, dispatch) {
-    return dispatch(load(createParamsForFetch(getState(), reducerIndex, fieldNames)));
+    return dispatch(load(reducerKey, createParamsForFetch(getState(), reducerIndex, fieldNames)));
   }
 
-
   fetchDataCallBack(state) {
-    this.props.dispatch(load(state));
+    this.props.dispatch(load(reducerKey, state));
   }
 
   confirmDelete(item) {
@@ -70,7 +69,7 @@ class List extends Component {
   }
 
   confirmed() {
-    this.props.dispatch(destroyItem(this.state.destroyId));
+    this.props.dispatch(destroyItem(reducerKey, this.state.destroyId));
   }
 
   renderModal() {
@@ -109,7 +108,7 @@ class List extends Component {
             <DataOverview
               name={reducerIndex}
               fetchData={this.fetchDataCallBack}
-              data={_.get(this.props, reducerIndex)}
+              data={_.get(this.props, [reducerIndex, reducerKey])}
               form={{
                 key: 'form',
                 checkKey: reducerIndex + 'form',

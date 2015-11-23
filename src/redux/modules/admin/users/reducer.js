@@ -29,7 +29,7 @@ export default function reducer(state = initialState, action = {}) {
     case actions.USER_UPDATE:
       return Object.assign({}, state, Object.assign({}, {user: Object.assign({}, state.user, {actionStatus: {pending: true}})}));
     case actions.USER_UPDATE_SUCCESS:
-      { console.log(...action);
+      {
         return Object.assign({}, state, Object.assign({}, {
           user: Object.assign({}, ...action.result, {
             actionStatus: {

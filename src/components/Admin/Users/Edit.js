@@ -42,7 +42,7 @@ class Edit extends Component {
   }
 
   componentWillUnmount() {
-    this.clearActionState();
+    this.clearActionState(reducerKey);
   }
 
   getActionState() {
@@ -72,7 +72,6 @@ class Edit extends Component {
       dispatch(update(reducerKey, this.props.router.params.userId, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
-            console.log('error');
             reject(ret.error);
           } else {
             resolve();

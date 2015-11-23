@@ -4,6 +4,7 @@ import {Alert, DropdownButton, MenuItem} from 'react-bootstrap';
 import Failed from 'components/includes/Failed';
 import Pending from 'components/includes/Pending';
 import {Image} from 'react-bootstrap';
+import moment from 'moment';
 const Paginator = require('react-laravel-paginator');
 
 export default class DataTable extends Component {
@@ -63,6 +64,14 @@ export default class DataTable extends Component {
 
         if (_.has(col, 'translate')) {
           return _.get(col, ['translate', _.get(record, col.show, '')], '');
+        }
+
+        if (_.has(col, 'filter') && col.filter === 'date') {
+          return moment(_.get(record, col.show, ''), 'x').format('YYYY-MM-DD');
+        }
+
+        if (_.has(col, 'filter') && col.filter === 'dateTime') {
+          return moment(_.get(record, col.show, ''), 'x').format('YYYY-MM-DD HH:mm');
         }
         return _.get(record, col.show, '');
       }

@@ -77,9 +77,6 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
-
-    console.log('values', values);
-
     return new Promise((resolve, reject) => {
       dispatch(actions.update(this.props.router.params.id, values))
         .then((ret)=> {

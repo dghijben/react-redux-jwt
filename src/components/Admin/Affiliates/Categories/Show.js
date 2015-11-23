@@ -8,7 +8,7 @@ import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import * as actions from 'redux/modules/admin/affiliates/categories/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerItem, initialValues, path, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, path, fetchDataDeferred} from './fields';
 
 
 @connectData(null, fetchDataDeferred)
@@ -25,8 +25,6 @@ class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'affiliatesCategories': PropTypes.object.isRequired,
-    'affiliatesSites': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
   }
@@ -44,7 +42,7 @@ class Show extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'deleted'], false) === true) {
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
       this.props.history.pushState({}, '/admin/' + path);
     }
   }
@@ -59,7 +57,7 @@ class Show extends Component {
 
   confirmed() {
     this.setState({showModal: false});
-    this.props.dispatch(actions.destroyItem(this.props.router.params.id));
+    this.props.dispatch(actions.destroyItem(reducerKey, this.props.router.params.id));
   }
 
   renderModal() {
@@ -71,7 +69,7 @@ class Show extends Component {
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
       {name: 'Categorieen', to: '/admin/affiliates/categories'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown')},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown')},
     ];
 
     const editLink = () => {
@@ -85,7 +83,7 @@ class Show extends Component {
           <Well>
             <h1>Rol
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
             </h1>
 
@@ -94,13 +92,13 @@ class Show extends Component {
                 Extra info?
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, [reducerIndex, reducerItem, 'pending'], false)}>
+                <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>
                   <DynamicForm
-                    checkKey={reducerIndex + '_' + reducerItem + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
-                    formName={reducerIndex + '_' + reducerItem}
+                    checkKey={reducerIndex + reducerKey + reducerItem + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
+                    formName={reducerIndex + reducerKey + reducerItem}
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(this.props, 'affiliatesSites.all', []))}
-                    initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
+                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
+                    initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
                     static
                   />
                   <Row>

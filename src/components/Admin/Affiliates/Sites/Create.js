@@ -7,15 +7,14 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/affiliates/sites/actions';
-import fields, {reducerIndex, reducerItem, path, fetchDataDeferred} from './fields';
+import * as actions from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerKeyCats, reducerItem, path, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
     'token': state.authorization.token,
     'router': state.router,
-    'affiliatesCategories': state.affiliatesCategories,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -28,7 +27,6 @@ class Create extends Component {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
     'history': PropTypes.object.isRequired,
-    'affiliatesCategories': PropTypes.object.isRequired
   }
 
   constructor(props, context) {
@@ -38,18 +36,18 @@ class Create extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success']) === true ) {
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
     }
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(actions.create(values))
+      dispatch(actions.create(reducerKey, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -78,10 +76,10 @@ class Create extends Component {
               <Col md={2} />
               <Col md={10}>
                 <DynamicForm
-                  checkKey={reducerIndex + '-new-' + _.get(this.props, 'affiliatesCategories.allStatus.success', false)}
+                  checkKey={reducerIndex + '-new-' + _.get(this.props, [reducerIndex, reducerKeyCats, 'allStatus', 'success'], false)}
                   formName={reducerIndex}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'affiliatesCategories.all', []))}
+                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'data.categories.all', []))}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

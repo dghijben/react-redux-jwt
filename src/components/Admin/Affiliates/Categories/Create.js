@@ -7,8 +7,8 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/affiliates/categories/actions';
-import fields, {reducerIndex, reducerItem, path, fetchDataDeferred} from './fields';
+import * as actions from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, path, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -36,18 +36,18 @@ class Create extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerItem, 'actionStatus', 'success']) === true ) {
-      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerItem, 'id']) + '/edit');
+    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success']) === true ) {
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'id']) + '/edit');
     }
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(actions.create(values))
+      dispatch(actions.create(reducerKey, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -80,7 +80,7 @@ class Create extends Component {
                   checkKey={reducerIndex + '-new'}
                   formName={reducerIndex}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, 'affiliatesSites.all', []))}
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

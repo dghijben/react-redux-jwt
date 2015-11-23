@@ -9,7 +9,7 @@ import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -71,12 +71,12 @@ class Show extends Component {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Kortingscodes', to: '/admin/discount-codes'},
+      {name: 'Kortingscodes', to: '/admin/affiliates/discount-codes'},
       {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'])}
     ];
 
     const editLink = () => {
-      this.props.history.pushState({}, '/admin/users/' + _.get(this.props, 'router.params.userId') + '/edit');
+      this.props.history.pushState({}, '/admin/affiliates/discount-codes/' + _.get(this.props, 'router.params.id') + '/edit');
     };
 
     return (
@@ -84,11 +84,9 @@ class Show extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Gebruiker
+            <h1>Kortingscode
               <span>
-                 {' '} {_.get(item, ['firstname'], '')}
-                {' '} {_.get(item, ['middlename'], '')}
-                {' '} {_.get(item, ['lastname'], '')}
+                 {' '} {_.get(item, ['name'], '')}
               </span>
             </h1>
 
@@ -97,12 +95,12 @@ class Show extends Component {
                 <UserPic responsive thumbnail pictures={_.get(item, ['picture'], [])} />
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, 'users.user.pending', false)}>
+                <Pending state={_.get(this.props, [reducerKey, reducerIndex, 'pending'], false)}>
                   <DynamicForm
                     checkKey={'userEdit-' + _.get(item, ['id'])}
                     formName="userEdit"
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, 'aclRoles.all', []))}
+                    fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
                     initialValues={initialValues(item)}
                     static
                   />

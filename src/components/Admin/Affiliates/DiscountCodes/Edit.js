@@ -9,7 +9,7 @@ import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import {update, clearNetworkState} from 'redux/modules/data/actions';
-import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -49,15 +49,14 @@ class Edit extends Component {
   }
 
   clearActionState() {
-    this.props.dispatch(clearNetworkState());
+    this.props.dispatch(clearNetworkState(reducerKey));
   }
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(update(reducerKey, this.props.router.params.userId, values))
+      dispatch(update(reducerKey, this.props.router.params.id, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
-            console.log('error');
             reject(ret.error);
           } else {
             resolve();
@@ -71,8 +70,8 @@ class Edit extends Component {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Kortingscodes', to: '/admin/discount-codes'},
-      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name']), to: '/admin/discount-codes/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
+      {name: 'Kortingscodes', to: '/admin/affiliates/discount-codes'},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name']), to: '/admin/affiliates/discount-codes/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
       {name: 'Wijzigen'}
     ];
 
@@ -81,11 +80,9 @@ class Edit extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Gebruiker
+            <h1>Kortingscode
               <span>
-                {' '} {_.get(item, ['firstname'], '')}
-                {' '} {_.get(item, ['middlename'], '')}
-                {' '} {_.get(item, ['lastname'], '')}
+                {' '} {_.get(item, ['name'], '')}
               </span>
             </h1>
             <Row>
@@ -94,10 +91,10 @@ class Edit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-' + _.get(item, ['id'])}
-                  formName="userEdit"
+                  checkKey={'discount-' + _.get(item, ['id'])}
+                  formName="discount"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token)}
+                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
                   initialValues={initialValues(item)}
                   validate={validator}
                   onSubmit={this.handleSubmit}

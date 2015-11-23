@@ -9,8 +9,8 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as actions from 'redux/modules/admin/affiliates/categories/actions';
-import fields, {reducerIndex, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import * as actions from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred, reducerKeySites} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -53,11 +53,11 @@ class Edit extends Component {
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
 
   clearActionState() {
-    this.props.dispatch(actions.clearNetworkState());
+    this.props.dispatch(actions.clearNetworkState(reducerKey));
   }
 
   confirmDelete() {
@@ -73,9 +73,8 @@ class Edit extends Component {
   }
 
   handleSubmit(values, dispatch) {
-    console.log(values);
     return new Promise((resolve, reject) => {
-      dispatch(actions.update(this.props.router.params.id, values))
+      dispatch(actions.update(reducerKey, this.props.router.params.id, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -95,10 +94,9 @@ class Edit extends Component {
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
       {name: 'Categorieen', to: '/admin/affiliates/categories'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown'), to: '/admin/affiliates/categories/' + _.get(this.props, [reducerIndex, reducerItem, 'id'])},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown'), to: '/admin/affiliates/categories/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
       {name: 'wijzigen'}
     ];
-
     return (
       <div>
         <Ribbon breadCrumbs={breadCrumbs}/>
@@ -106,20 +104,20 @@ class Edit extends Component {
           <Well>
             <h1>Site
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
             </h1>
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerItem, 'picture'], [])} />
+                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'picture'], [])} />
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
-                  formName="userEdit"
+                  checkKey={'edit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']) + _.has(this.props, [reducerIndex, reducerKeySites, 'all'])}
+                  formName="edit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, 'affiliatesSites.all', []))}
-                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
+                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
                   validate={validator}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}

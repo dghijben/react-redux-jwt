@@ -8,6 +8,7 @@ const apiPaths = {
   'users': '/admin/users',
   'aclRoles': '/admin/acl/roles',
   'sites': '/admin/affiliates/sites',
+  'categories': '/admin/affiliates/categories',
   'discountCodes': '/admin/affiliates/discount-codes'
 };
 

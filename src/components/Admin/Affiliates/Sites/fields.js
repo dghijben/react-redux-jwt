@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import React from 'react';
 
-import * as acl from 'redux/modules/admin/affiliates/sites/actions';
-import * as affCats from 'redux/modules/admin/affiliates/categories/actions';
 
-export const reducerIndex = 'affiliatesSites';
+import * as actions from 'redux/modules/data/actions';
+
+export const reducerIndex = 'data';
+export const reducerKey = 'sites';
 export const reducerItem = 'item';
 export const path = 'affiliates/sites';
+
+export const reducerKeyCats = 'categories';
 
 export const searchFields = [
   {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
@@ -133,9 +136,11 @@ export default function fields(id, token, categories) {
     {
       name: 'categories',
       label: 'Categorieen',
-      type: 'checkboxListiOs',
+      type: 'checkboxList',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
+      chunks: 3,
+      searchable: true,
       options: catOptions()
     },
 
@@ -160,13 +165,13 @@ export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const promises = [];
 
-  if (!affCats.isAllLoaded(state)) {
-    promises.push(dispatch(affCats.loadAll()));
+  if (!actions.isAllLoaded(reducerKeyCats, state)) {
+    promises.push(dispatch(actions.loadAll(reducerKeyCats)));
   }
 
   if (_.has(state, 'router.params.id')) {
-    if (!acl.isLoadedItem(state, state.router.params.id)) {
-      promises.push(dispatch(acl.loadItem(state.router.params.id)));
+    if (!actions.isLoadedItem(reducerKey, state, state.router.params.id)) {
+      promises.push(dispatch(actions.loadItem(reducerKey, state.router.params.id)));
     }
   }
 

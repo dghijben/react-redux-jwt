@@ -9,8 +9,8 @@ import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
-import * as acl from 'redux/modules/admin/affiliates/sites/actions';
-import fields, {reducerIndex, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import * as actions from 'redux/modules/data/actions';
+import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -18,7 +18,6 @@ import fields, {reducerIndex, reducerItem, initialValues, fetchDataDeferred} fro
     'token': state.authorization.token,
     'router': state.router,
     'acl': state.acl,
-    'affiliatesCategories': state.affiliatesCategories,
     'reduxRouterReducer': state.reduxRouterReducer
   };
   obj[reducerIndex] = state[reducerIndex];
@@ -29,8 +28,7 @@ class Edit extends Component {
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'token': PropTypes.string.isRequired,
-    'affiliatesCategories': PropTypes.object.isRequired
+    'token': PropTypes.string.isRequired
   }
 
   constructor(props, context) {
@@ -52,11 +50,11 @@ class Edit extends Component {
   }
 
   getActionState() {
-    return getActionStatus(this.props, reducerIndex, reducerItem);
+    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
   }
 
   clearActionState() {
-    this.props.dispatch(acl.clearNetworkState());
+    this.props.dispatch(actions.clearNetworkState(reducerKey));
   }
 
   confirmDelete() {
@@ -73,7 +71,7 @@ class Edit extends Component {
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(acl.update(this.props.router.params.id, values))
+      dispatch(actions.update(reducerKey, this.props.router.params.id, values))
         .then((ret)=> {
           if (_.has(ret, 'error')) {
             reject(ret.error);
@@ -93,7 +91,7 @@ class Edit extends Component {
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
       {name: 'Sites', to: '/admin/affiliates/sites'},
-      {name: _.get(this.props, [reducerIndex, reducerItem, 'name'], 'unknown'), to: '/admin/affiliates/sites/' + _.get(this.props, [reducerIndex, reducerItem, 'id'])},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown'), to: '/admin/affiliates/sites/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
       {name: 'Wijzigen'}
     ];
 
@@ -104,20 +102,20 @@ class Edit extends Component {
           <Well>
             <h1>Site
               <span>
-                {' '} {_.get(this.props, [reducerIndex, reducerItem, 'name'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
             </h1>
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerItem, 'picture'], [])} />
+                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'picture'], [])} />
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerItem, 'id'])}
+                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerItem, 'id']), this.props.token, _.get(this.props, 'affiliatesCategories.all', []))}
-                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerItem]))}
+                  fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']), this.props.token, _.get(this.props, 'data.categories.all', []))}
+                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
                   validate={validator}
                   onSubmit={this.handleSubmit}
                   getActionState={this.getActionState}
