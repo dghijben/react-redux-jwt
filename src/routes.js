@@ -18,6 +18,8 @@ export default () => {
           <Route path="/dashboard" component={cmpnnt.Dashboard}/>
         </Route>
       </Route>
+      <Route path="cms" component={cmpnnt.Cms.Index} />
+
       <Route component={cmpnnt.RequireAdminLogin}>
         <Route path="admin" component={cmpnnt.Admin}>
           <IndexRoute component={cmpnnt.AdminUsers.List} />

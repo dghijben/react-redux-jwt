@@ -45,4 +45,10 @@ modules.AdminAffiliatesDiscountCodes = AdminAffiliatesDiscountCodes;
 import AdminAffiliatesOffers from './Admin/Affiliates/Offers';
 modules.AdminAffiliatesOffers = AdminAffiliatesOffers;
 
+const Cms = {};
+import IndexCms from './Cms/Cms';
+Cms.Index = IndexCms;
+
+modules.Cms = Cms;
+
 export default modules;
