@@ -8,13 +8,16 @@ const tree = [
   ]},
   {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-lock', children: [
     {desc: 'Sites', to: '/admin/affiliates/sites', children: [
-      {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new', icon: 'fa-plus-square'}
+      {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new'}
     ]},
     {desc: 'Categorieen', to: '/admin/affiliates/categories', children: [
       {desc: 'Nieuwe categorie', to: '/admin/affiliates/categories/new'}
     ]},
     {desc: 'Kortingscodes', to: '/admin/affiliates/discount-codes', children: [
       {desc: 'Nieuwe kortingscode', to: '/admin/affiliates/discount-codes/new'}
+    ]},
+    {desc: 'Aanbiedingen', to: '/admin/affiliates/offers', children: [
+      {desc: 'Nieuwe aanbieding', to: '/admin/affiliates/offers/new'}
     ]},
   ]}
 ];

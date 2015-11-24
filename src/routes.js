@@ -61,6 +61,13 @@ export default () => {
               <Route path=":id" component={cmpnnt.AdminAffiliatesDiscountCodes.Show} />
               <Route path=":id/edit" component={cmpnnt.AdminAffiliatesDiscountCodes.Edit} />
             </Route>
+
+            <Route path="offers" component={cmpnnt.AdminAffiliatesOffers.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAffiliatesOffers.List} />
+              <Route path="new" component={cmpnnt.AdminAffiliatesOffers.Create} />
+              <Route path=":id" component={cmpnnt.AdminAffiliatesOffers.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAffiliatesOffers.Edit} />
+            </Route>
           </Route>
         </Route>
       </Route>

@@ -9,7 +9,8 @@ const apiPaths = {
   'aclRoles': '/admin/acl/roles',
   'sites': '/admin/affiliates/sites',
   'categories': '/admin/affiliates/categories',
-  'discountCodes': '/admin/affiliates/discount-codes'
+  'discountCodes': '/admin/affiliates/discount-codes',
+  'offers': '/admin/affiliates/offers'
 };
 
 export function load(key, params) {

@@ -9,7 +9,7 @@ import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {path, title, reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -46,7 +46,7 @@ class Show extends Component {
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
       this.props.dispatch(clearItem(reducerKey));
-      this.props.history.pushState({}, '/admin/users');
+      this.props.history.pushState({}, '/admin/' + path);
     }
   }
 
@@ -72,12 +72,12 @@ class Show extends Component {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
       {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Kortingscodes', to: '/admin/affiliates/discount-codes'},
+      {name: title, to: '/admin/' + path},
       {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'])}
     ];
 
     const editLink = () => {
-      this.props.history.pushState({}, '/admin/affiliates/discount-codes/' + _.get(this.props, 'router.params.id') + '/edit');
+      this.props.history.pushState({}, '/admin/' + path + '/' + _.get(this.props, 'router.params.id') + '/edit');
     };
 
     return (
@@ -85,7 +85,7 @@ class Show extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Kortingscode
+            <h1>{title}
               <span>
                  {' '} {_.get(item, ['name'], '')}
               </span>
@@ -98,8 +98,8 @@ class Show extends Component {
               <Col md={10}>
                 <Pending state={_.get(this.props, [reducerKey, reducerIndex, 'pending'], false)}>
                   <DynamicForm
-                    checkKey={'userEdit-' + _.get(item, ['id'])}
-                    formName="userEdit"
+                    checkKey={reducerKey + _.get(item, ['id'])}
+                    formName={reducerKey}
                     formClass="form-horizontal"
                     fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
                     initialValues={initialValues(item)}

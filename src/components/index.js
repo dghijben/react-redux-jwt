@@ -42,5 +42,7 @@ import AdminAffiliatesCategories from './Admin/Affiliates/Categories';
 modules.AdminAffiliatesCategories = AdminAffiliatesCategories;
 import AdminAffiliatesDiscountCodes from './Admin/Affiliates/DiscountCodes';
 modules.AdminAffiliatesDiscountCodes = AdminAffiliatesDiscountCodes;
+import AdminAffiliatesOffers from './Admin/Affiliates/Offers';
+modules.AdminAffiliatesOffers = AdminAffiliatesOffers;
 
 export default modules;
