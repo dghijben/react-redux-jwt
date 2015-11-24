@@ -16,7 +16,6 @@ class MenuItem extends Component {
     children: React.PropTypes.func
   };
 
-
   constructor(context, props) {
     super(context, props);
     this.content = this.content.bind(this);
@@ -24,15 +23,24 @@ class MenuItem extends Component {
     this.icon = this.icon.bind(this);
     this.openClose = this.openClose.bind(this);
     this.showChildren = this.showChildren.bind(this);
-    this.state = { active: false };
+    this.state = { active: false, history: false };
   }
 
   componentWillMount() {
     if (this.context.history.isActive(this.props.item.to)) {
       this.setState({active: true});
+    } else {
+      this.setState({active: false});
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.context.history.isActive(nextProps.item.to)) {
+      this.setState({active: true});
+    } else {
+      this.setState({active: false});
+    }
+  }
 
   content() {
     const {item} = this.props;
@@ -50,11 +58,11 @@ class MenuItem extends Component {
   }
 
   showChildren() {
-    if (this.state.active === false) {
+/*    if (this.state.active === false) {
       this.setState({active: true});
-    } else {
+    } else if (this.state.history === false) {
       this.setState({active: false});
-    }
+    }*/
   }
 
   openClose() {
