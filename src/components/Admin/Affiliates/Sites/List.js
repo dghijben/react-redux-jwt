@@ -120,10 +120,12 @@ class List extends Component {
               cols={[
                 {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
                 {name: 'Name', show: 'name'},
-                {name: 'CPS', show: 'cps'},
+                {name: 'CPM', show: 'cpm'},
                 {name: 'CPL', show: 'cpl'},
-                {name: 'URL Site', show: 'url_site'},
-                {name: 'Aangemaakt', show: 'created_at'},
+                {name: 'CPS', show: 'cps'},
+                {name: 'CPC', show: 'cpc'},
+                {name: 'CSR', show: 'csr'},
+                {name: 'eCPC', show: 'ecpc'},
                 {name: 'Gewijzigd', show: 'updated_at'},
                 {name: 'Acties', dropdownButton: [
                   {name: 'bekijken', onClick: show},

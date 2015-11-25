@@ -6,13 +6,15 @@ import * as actions from 'redux/modules/data/actions';
 
 export const reducerIndex = 'data';
 export const reducerKey = 'sites';
+export const reducerKeyCsv = 'sitesCsv';
 export const reducerItem = 'item';
 export const path = 'affiliates/sites';
 
 export const reducerKeyCats = 'categories';
 
 export const searchFields = [
-  {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
+  {
+    name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',
     buttonBefore: {
       name: 'searchField', type: 'dropdown', onlySelf: false,
       items: [
@@ -29,7 +31,8 @@ export const searchFields = [
       value: <i className="fa fa-search"></i>
     }
   },
-  { name: 'order',
+  {
+    name: 'order',
     submit: true,
     type: 'dropdown',
     bsStyle: 'default',
@@ -78,7 +81,7 @@ export default function fields(id, token, categories) {
       placeholder: 'Bestand',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
-      url: '/api/admin/users/' + id + '/upload',
+      url: '/api/admin/affiliates/sites/' + id + '/upload',
       headers: {
         Authorization: 'Bearer ' + token
       },
@@ -102,6 +105,14 @@ export default function fields(id, token, categories) {
       wrapperClassName: 'col-md-10'
     },
     {
+      name: 'cpm',
+      label: 'CPM',
+      placeholder: 'CPM',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+    },
+    {
       name: 'cpl',
       label: 'CPL',
       placeholder: 'Cost per lead',
@@ -113,6 +124,30 @@ export default function fields(id, token, categories) {
       name: 'cps',
       label: 'CPS',
       placeholder: 'Cost per sale',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+    },
+    {
+      name: 'cpc',
+      label: 'CPC',
+      placeholder: 'Cost per click',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+    },
+    {
+      name: 'csr',
+      label: 'CSR',
+      placeholder: 'CSR',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+    },
+    {
+      name: 'ecpc',
+      label: 'eCPC',
+      placeholder: 'eCPC',
       type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
@@ -134,6 +169,30 @@ export default function fields(id, token, categories) {
       wrapperClassName: 'col-md-10',
     },
     {
+      name: 'start',
+      label: 'Start datum',
+      type: 'dateTime',
+      mode: 'date',
+      inputFormat: 'YYYY-MM-DD',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'end',
+      label: 'Eind datum',
+      type: 'dateTime',
+      mode: 'date',
+      inputFormat: 'YYYY-MM-DD',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'active',
+      label: 'Actief',
+      type: 'checkbox',
+      wrapperClassName: 'col-md-offset-2 col-md-10'
+    },
+    {
       name: 'categories',
       label: 'Categorieen',
       type: 'checkboxList',
@@ -150,11 +209,67 @@ export default function fields(id, token, categories) {
         col: [
           {
             md: 10, mdOffset: 2, children: [
-            {type: 'success', message: 'Het formulier is opgeslagen'},
-            {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
+              {type: 'success', message: 'Het formulier is opgeslagen'},
+              {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
             ]
           },
           {hideOnStatic: true, md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'versturen'}]}
+        ]
+      }
+    }
+  ]);
+}
+
+
+export function fieldsUpload(token) {
+
+  return ([
+    {
+      name: 'csv',
+      label: 'Csv',
+      type: 'plupload',
+      placeholder: 'Bestand',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      url: '/api/admin/affiliates/sites/upload-csv',
+      headers: {
+        Authorization: 'Bearer ' + token
+      },
+      multi_selection: false,
+      hideOnStatic: true
+    },
+    {
+      name: 'field_delimiter',
+      label: 'Scheidings karakter',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'field_enclosure',
+      label: 'Veld omsluit karakter',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'update_all',
+      label: 'Bestaande sites bijwerken',
+      type: 'checkbox',
+      wrapperClassName: 'col-md-offset-2 col-md-10'
+    },
+
+    {
+      row: {
+        hideOnStatic: true,
+        col: [
+          {
+            md: 10, mdOffset: 2, children: [
+              {type: 'success', message: 'Het formulier is opgeslagen'},
+              {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
+            ]
+          },
+          {hideOnStatic: true, md: 10, mdOffset: 2, children: [{type: 'submit', name: 'submit', value: 'inlezen'}]}
         ]
       }
     }

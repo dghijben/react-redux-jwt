@@ -46,6 +46,7 @@ export default () => {
             <Route path="sites" component={cmpnnt.AdminAffiliatesSites.Wrap}>
               <IndexRoute component={cmpnnt.AdminAffiliatesSites.List} />
               <Route path="new" component={cmpnnt.AdminAffiliatesSites.Create} />
+              <Route path="upload-csv" component={cmpnnt.AdminAffiliatesSites.UploadCsv} />
               <Route path=":id" component={cmpnnt.AdminAffiliatesSites.Show} />
               <Route path=":id/edit" component={cmpnnt.AdminAffiliatesSites.Edit} />
             </Route>

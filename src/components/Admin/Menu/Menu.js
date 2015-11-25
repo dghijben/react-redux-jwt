@@ -8,7 +8,8 @@ const tree = [
   ]},
   {'desc': 'Affiliates', 'to': '/admin/affiliates', icon: 'fa-lock', children: [
     {desc: 'Sites', to: '/admin/affiliates/sites', children: [
-      {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new'}
+      {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new'},
+      {desc: 'Upload CSV', to: '/admin/affiliates/sites/upload-csv'}
     ]},
     {desc: 'Categorieen', to: '/admin/affiliates/categories', children: [
       {desc: 'Nieuwe categorie', to: '/admin/affiliates/categories/new'}

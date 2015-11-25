@@ -94,6 +94,14 @@ export default function fields(userId, token, affiliates) {
 
     },
     {
+      name: 'discount_code',
+      label: 'Kortingscode',
+      type: 'text',
+      placeholder: 'Kortingscode',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
       name: 'discount_concat',
       showOnStatic: true,
       label: 'Korting',

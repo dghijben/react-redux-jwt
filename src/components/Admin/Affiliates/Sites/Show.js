@@ -82,7 +82,7 @@ class Show extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Rol
+            <h1>Site
               <span>
                 {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
@@ -90,7 +90,7 @@ class Show extends Component {
 
             <Row>
               <Col md={2}>
-                Extra info?
+                {' '}
               </Col>
               <Col md={10}>
                 <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>

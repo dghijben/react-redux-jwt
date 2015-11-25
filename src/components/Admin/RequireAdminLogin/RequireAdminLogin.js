@@ -55,6 +55,7 @@ class RequireAdminLogin extends Component {
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-production-plugins.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/css/smartadmin-skins.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/admin/user.css', 'type': 'text/css', 'media': 'screen'},
+              {'rel': 'stylesheet', 'href': '/bootstrap-datetimepicker.min.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': '/css/animate.css', 'type': 'text/css', 'media': 'screen'},
               {'rel': 'stylesheet', 'href': 'http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700', 'type': 'text/css', 'media': 'screen'}
             ]}
