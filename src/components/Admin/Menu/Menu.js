@@ -3,6 +3,9 @@ import MenuWrap from './MenuWrap';
 
 const tree = [
   {'desc': 'Admin', 'to': '/admin', icon: 'fa-home'},
+  {'desc': 'Accounts', 'to': '/admin/accounts', icon: 'fa-building-o', children: [
+    {desc: 'Nieuw account', to: '/admin/accounts/new'}
+  ]},
   {'desc': 'Users', 'to': '/admin/users', icon: 'fa-users', children: [
     {desc: 'Nieuwe gebruiker', to: '/admin/users/new'}
   ]},

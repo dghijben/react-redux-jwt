@@ -26,6 +26,8 @@ import NotFound from './NotFound/NotFound';
 modules.NotFound = NotFound;
 import Admin from './Admin/Admin';
 modules.Admin = Admin;
+import AdminAccounts from './Admin/Accounts';
+modules.AdminAccounts = AdminAccounts;
 import AdminUsers from './Admin/Users';
 modules.AdminUsers = AdminUsers;
 import AdminAcl from './Admin/Acl/Acl';
