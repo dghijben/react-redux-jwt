@@ -96,14 +96,18 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
 
-  const locale = req.query.locale || 'nl';
+  cookie.plugToRequest(req, res);
+  const token = cookie.load('locale');
+  const locale = req.query.locale || token || 'nl';
   const messages = translations[locale];
 
   if (!messages) {
     return res.status(404).send('Locale is not supported.');
   }
   const i18n = {locale, messages};
-  cookie.plugToRequest(req, res);
+
+  cookie.save('locale', locale);
+
 
 /*
   if (typeof(req.headers.cookie) !== 'undefined') {
