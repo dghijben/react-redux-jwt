@@ -12,7 +12,8 @@ export default class DataTable extends Component {
     records: PropTypes.array.isRequired,
     cols: PropTypes.array.isRequired,
     paginator: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    checked: PropTypes.array
   }
 
   constructor() {
@@ -53,6 +54,17 @@ export default class DataTable extends Component {
   }
 
   _getValue(record, col, key) {
+    if (_.has(col, 'checkbox')) {
+      const click = (e) => { col.checkbox(e, record); };
+      return (
+        <input
+        key={'checkbox' + record.id}
+        type="checkbox"
+        onChange={click}
+        defaultChecked={_.indexOf(this.props.checked, record.id) > -1}
+        />
+      );
+    }
     if (_.has(col, 'image')) {
       if (_.has(record, col.image)) {
         return (<Image src={'/image/small/' + _.get(record, col.image)} responsive thumbnail/>);
@@ -104,7 +116,7 @@ export default class DataTable extends Component {
       };
 
       if (_.has(button, 'divider')) {
-        return <MenuItem key={key} divider />;
+        return <MenuItem key={key} divider/>;
       }
 
       return <MenuItem key={key} eventKey={key} onSelect={click}>{button.name}</MenuItem>;
@@ -133,12 +145,12 @@ export default class DataTable extends Component {
           <div className="table-responsive">
             <table className="table table-bordered">
               <thead>
-                <tr>
-                  {cols}
-                </tr>
+              <tr>
+                {cols}
+              </tr>
               </thead>
               <tbody>
-                {records}
+              {records}
               </tbody>
             </table>
           </div>

@@ -8,6 +8,7 @@ import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
+import Resource from './Resource';
 import {update, clearNetworkState} from 'redux/modules/data/actions';
 import fields, {path, title, reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
@@ -35,8 +36,12 @@ class Edit extends Component {
     this.getActionState = this.getActionState.bind(this);
     this.clearActionState = this.clearActionState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderResource = this.renderResource.bind(this);
+    this.showResource = this.showResource.bind(this);
+    this.closeResource = this.closeResource.bind(this);
     this.state = {
-      showModal: false
+      showModal: false,
+      showResource: false
     };
   }
 
@@ -64,6 +69,24 @@ class Edit extends Component {
         });
     });
   }
+
+  showResource(values, list, cb) {
+    this.setState({
+      showResource: true,
+      resourceValues: values,
+      resourceList: list,
+      resourceCB: cb
+    });
+  }
+
+  closeResource() {
+    this.setState({showResource: false});
+  }
+
+  renderResource() {
+    return (<Resource show={this.state.showResource} close={this.closeResource} values={_.clone(this.state.resourceValues)} list={_.clone(this.state.resourceList)} callBack={this.state.resourceCB}/>);
+  }
+
 
   render() {
     const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
@@ -101,7 +124,7 @@ class Edit extends Component {
                   checkKey={reducerKey + checkKey()}
                   formName={reducerKey}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
+                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, this.showResource)}
                   initialValues={initialValues(item)}
                   validate={validator}
                   onSubmit={this.handleSubmit}
@@ -110,6 +133,7 @@ class Edit extends Component {
                   />
               </Col>
             </Row>
+            {this.renderResource()}
           </Well>
         </div>
       </div>

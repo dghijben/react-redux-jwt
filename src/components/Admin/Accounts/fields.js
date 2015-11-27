@@ -42,7 +42,7 @@ export function initialValues(values) {
   );
 }
 
-export default function fields(userId, token) {
+export default function fields(userId, token, resource) {
 
   /*  const allOptions = () => {
    const options = [];
@@ -183,13 +183,12 @@ export default function fields(userId, token) {
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'payment_account_confirmed',
+      name: 'payment_confirmed',
       label: 'Rekening gecontroleerd',
       type: 'checkbox',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-offset-2 col-md-10'
     },
-
     {
       name: 'members',
       label: 'Aantal leden',
@@ -199,16 +198,7 @@ export default function fields(userId, token) {
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'description',
-      showOnStatic: true,
-      label: 'Omschrijving',
-      type: 'rte',
-      labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10'
-    },
-    {
       name: 'goal1',
-      showOnStatic: true,
       label: 'Doel 1',
       type: 'rte',
       labelClassName: 'col-md-2',
@@ -216,7 +206,6 @@ export default function fields(userId, token) {
     },
     {
       name: 'goal2',
-      showOnStatic: true,
       label: 'Doel 2',
       type: 'rte',
       labelClassName: 'col-md-2',
@@ -228,7 +217,13 @@ export default function fields(userId, token) {
       type: 'checkbox',
       wrapperClassName: 'col-md-offset-2 col-md-10'
     },
-
+    { name: 'users',
+      label: 'Gebruikers',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      type: 'resource',
+      callResource: resource
+    },
     {
       row: {
         hideOnStatic: true,
