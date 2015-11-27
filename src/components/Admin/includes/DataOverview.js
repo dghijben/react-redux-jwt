@@ -25,7 +25,8 @@ class DataOverview extends Component {
     'dispatch': PropTypes.func,
     'pushState': PropTypes.func,
     'searchForm': PropTypes.object,
-    'fetchData': PropTypes.func
+    'fetchData': PropTypes.func,
+    'checked': PropTypes.array
   };
 
   constructor() {
@@ -127,6 +128,7 @@ class DataOverview extends Component {
         lastPage: lastPage,
         onChange: this.switchPage
       }}
+      checked={_.get(this.props, 'checked', [])}
       />);
 
     return (

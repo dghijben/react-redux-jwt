@@ -24,6 +24,13 @@ export default () => {
         <Route path="admin" component={cmpnnt.Admin}>
           <IndexRoute component={cmpnnt.AdminUsers.List} />
 
+          <Route path="accounts" component={cmpnnt.AdminAccounts.Wrap}>
+            <IndexRoute component={cmpnnt.AdminAccounts.List} />
+            <Route path="new" component={cmpnnt.AdminAccounts.Create} />
+            <Route path=":id" component={cmpnnt.AdminAccounts.Show} />
+            <Route path=":id/edit" component={cmpnnt.AdminAccounts.Edit} />
+          </Route>
+
           <Route path="users" component={cmpnnt.AdminUsers.Wrap}>
             <IndexRoute component={cmpnnt.AdminUsers.List} />
             <Route path="new" component={cmpnnt.AdminUsers.Create} />

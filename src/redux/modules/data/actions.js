@@ -5,6 +5,7 @@ const reducerIndex = 'data';
 const reducerItem = 'item';
 
 const apiPaths = {
+  'accounts': '/admin/accounts',
   'users': '/admin/users',
   'aclRoles': '/admin/acl/roles',
   'sites': '/admin/affiliates/sites',
