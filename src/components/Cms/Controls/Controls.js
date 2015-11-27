@@ -7,7 +7,8 @@ export default class Controls extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{position: 'relative'}}>
+        <div></div>
         {this.props.children}
       </div>
     );

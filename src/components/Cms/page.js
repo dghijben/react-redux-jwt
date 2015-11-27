@@ -46,7 +46,6 @@ export default {
               'content': 'HEADER H5'
             }
           },
-
           {
             'row': {
               'settings': {},
@@ -69,7 +68,7 @@ export default {
               ]
             }
           },
-          {'rte': {content: '<h1>HOI!!!</h1>'}}
+          {'rte': {content: '<h1>HOI!!!</h1><p>Pinokkio</p>'}}
         ]
       }
     }
