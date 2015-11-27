@@ -9,7 +9,7 @@ import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {path, title, reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {path, title, reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -101,7 +101,7 @@ class Show extends Component {
                     checkKey={'show-' + reducerKey + _.get(item, ['id'])}
                     formName={reducerKey}
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
+                    fieldsNeeded={fields(_.get(item, ['id']), null, null, _.get(item, 'users', []))}
                     initialValues={initialValues(item)}
                     static
                   />
