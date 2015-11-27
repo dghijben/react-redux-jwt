@@ -96,22 +96,24 @@ const reducerKey = 'users';
   body() {
     return (
       <Modal.Body>
-        <DataOverview
-          name={reducerIndex}
-          fetchData={this.fetchDataCallBack}
-          data={_.get(this.props, [reducerIndex, reducerKey])}
-          form={{
-            key: 'form',
-            checkKey: reducerIndex + 'form',
-            fields: searchFields
-          }}
-          cols={[
-            {name: '', checkbox: (e, record) => { this.onChange(e, record); }},
-            {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
-            {name: 'Naam', show: ['firstname', 'middlename', 'lastname']},
-          ]}
-          checked={this.state.values}
-        />
+        <div>
+          <DataOverview
+            name={reducerIndex}
+            fetchData={this.fetchDataCallBack}
+            data={_.get(this.props, [reducerIndex, reducerKey])}
+            form={{
+              key: 'form',
+              checkKey: reducerIndex + 'form',
+              fields: searchFields
+            }}
+            cols={[
+              {name: '', checkbox: (e, record) => { this.onChange(e, record); }},
+              {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
+              {name: 'Naam', show: ['firstname', 'middlename', 'lastname']},
+            ]}
+            checked={this.state.values}
+          />
+        </div>
       </Modal.Body>
     );
 
@@ -124,7 +126,7 @@ const reducerKey = 'users';
 
     return (
       <Modal.Footer>
-        <Button onClick={this.props.close}>cancel</Button>
+        <Button onClick={this.props.close}>close</Button>
         <Button onClick={callBack} bsStyle="primary">choose</Button>
       </Modal.Footer>
     );
@@ -133,10 +135,11 @@ const reducerKey = 'users';
   render() {
 
     return (
-      <Modal show={this.props.show} onHide={this.props.close}>
+      <Modal show={this.props.show} onHide={this.props.close} bsSize="large">
         <Modal.Header>
           <Modal.Title>Data resource</Modal.Title>
         </Modal.Header>
+
         {this.body()}
         {this.footer()}
       </Modal>

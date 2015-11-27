@@ -9,8 +9,6 @@ export default class CmsCol extends Component {
     settings: PropTypes.object
   };
 
-
-
   render() {
     console.log('PROPS', this.props);
     const {settings} = this.props;

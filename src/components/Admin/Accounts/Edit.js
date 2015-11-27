@@ -10,7 +10,7 @@ import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import Resource from './Resource';
 import {update, clearNetworkState} from 'redux/modules/data/actions';
-import fields, {path, title, reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {path, title, reducerIndex, reducerKey, reducerKeyUsers, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -100,7 +100,7 @@ class Edit extends Component {
 
     const checkKey = () => {
       return [
-        _.has(this.props, [reducerIndex, reducerKeySites, 'allStatus', 'success']),
+        _.has(this.props, [reducerIndex, reducerKeyUsers, 'allStatus', 'success']),
         _.get(item, ['name'])
       ];
     };
@@ -121,10 +121,10 @@ class Edit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={reducerKey + checkKey()}
+                  checkKey={'edit-' + reducerKey + checkKey()}
                   formName={reducerKey}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, this.showResource)}
+                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, this.showResource, _.get(item, 'users', []))}
                   initialValues={initialValues(item)}
                   validate={validator}
                   onSubmit={this.handleSubmit}

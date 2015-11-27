@@ -38,11 +38,12 @@ export function initialValues(values) {
   return Object.assign({},
     values,
     {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
+    {users: _.pluck(_.get(values, 'users'), 'id')},
     {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
   );
 }
 
-export default function fields(userId, token, resource) {
+export default function fields(userId, token, resource, resourceList) {
 
   /*  const allOptions = () => {
    const options = [];
@@ -53,6 +54,17 @@ export default function fields(userId, token, resource) {
    }
    return options;
    };*/
+
+  const list = () => {
+    const options = [];
+    _.map(resourceList, (option) => {
+      options.push({
+        value: option.id,
+        desc: option.firstname + ' ' + option.middlename + ' ' + option.lastname
+      });
+    });
+    return options;
+  };
 
   return ([
     {
@@ -222,7 +234,8 @@ export default function fields(userId, token, resource) {
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
       type: 'resource',
-      callResource: resource
+      callResource: resource,
+      list: list()
     },
     {
       row: {
