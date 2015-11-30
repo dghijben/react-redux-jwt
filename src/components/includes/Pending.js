@@ -20,11 +20,13 @@ export default class Pending extends Component {
       return ([
         <div key="1" className="pendingOverlayBackground"></div>,
         (<div key="2" className="pendingOverlayContent">
-          <div className="pendingOverLayTable">
-            <h1>
-              LADEN{' '}
-              <i className="fa fa-spinner fa-pulse"></i>
-            </h1>
+          <div className="block">
+            <div className="centered">
+              <h1>
+                LADEN{' '}
+                <i className="fa fa-spinner fa-pulse"></i>
+              </h1>
+            </div>
           </div>
         </div>)
       ]);

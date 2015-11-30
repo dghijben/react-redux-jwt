@@ -3,8 +3,11 @@ import React from 'react';
 
 export const reducerIndex = 'data';
 export const reducerKey = 'users';
+export const reducerKeyRoles = 'roles';
 export const reducerItem = 'item';
 export const path = 'users';
+export const title = 'Gebruikers';
+
 
 export const searchFields = [
   {name: 'search', type: 'text', placeholder: 'zoeken...', bsSize: 'large',

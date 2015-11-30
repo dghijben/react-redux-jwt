@@ -60,7 +60,7 @@ class Edit extends Component {
       promises.push(dispatch(acl.loadAll()));
     }
 
-    if (!isLoadedItem(state, state.router.params.userId)) {
+    if (!isLoadedItem(reducerKey, state, state.router.params.userId)) {
       promises.push(dispatch(loadItem(reducerKey, state.router.params.userId)));
     }
 

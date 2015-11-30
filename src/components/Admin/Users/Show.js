@@ -56,7 +56,7 @@ class Show extends Component {
       promises.push(dispatch(acl.loadAll()));
     }
 
-    if (!isLoadedItem(state, state.router.params.userId)) {
+    if (!isLoadedItem(reducerKey, state, state.router.params.userId)) {
       promises.push(dispatch(loadItem(reducerKey, state.router.params.userId)));
     }
 
@@ -110,7 +110,7 @@ class Show extends Component {
                 <UserPic responsive thumbnail pictures={_.get(item, ['picture'], [])} />
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, 'users.user.pending', false)}>
+                <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>
                   <DynamicForm
                     checkKey={'userEdit-' + _.get(item, ['id'])}
                     formName="userEdit"

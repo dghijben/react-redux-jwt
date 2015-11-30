@@ -6,7 +6,7 @@ export const reducerIndex = 'data';
 export const reducerKey = 'offers';
 export const reducerKeySites = 'sites';
 export const reducerItem = 'item';
-export const path = 'affiliates/Offers';
+export const path = 'affiliates/offers';
 export const title = 'Aanbiedingen';
 
 export const searchFields = [
@@ -35,8 +35,7 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
-    {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
+    {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')}
   );
 }
 
@@ -60,7 +59,7 @@ export default function fields(userId, token, affiliates) {
       placeholder: 'Bestand',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
-      url: '/api/admin/affiliates/discount-codes/' + userId + '/upload',
+      url: '/api/admin/affiliates/offers/' + userId + '/upload',
       headers: {
         Authorization: 'Bearer ' + token
       },
@@ -83,32 +82,6 @@ export default function fields(userId, token, affiliates) {
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
 
-    },
-    {
-      name: 'discount_concat',
-      showOnStatic: true,
-      label: 'Korting',
-      type: 'text',
-      placeholder: 'Korting',
-      labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10'
-
-    },
-    {
-      name: 'discount',
-      hideOnStatic: true,
-      label: 'Korting',
-      type: 'text',
-      placeholder: 'Korting',
-      labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10',
-      buttonBefore: {
-        name: 'discount_type', type: 'dropdown', onlySelf: false,
-        items: [
-          {desc: '€', field: '1'},
-          {desc: '%', field: '2'},
-        ]
-      },
     },
     {
       name: 'start',
