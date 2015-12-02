@@ -74,7 +74,7 @@ export default function fields(userId, token, resource, resourceList) {
       placeholder: 'Bestand',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
-      url: '/api/admin/affiliates/discount-codes/' + userId + '/upload',
+      url: '/api/admin/accounts/' + userId + '/upload',
       headers: {
         Authorization: 'Bearer ' + token
       },

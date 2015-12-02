@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import { Button, Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col } from 'react-bootstrap';
 import LoginForm from './LoginForm';
 import { authenticate } from '../../../redux/modules/auth/authActions';
 
@@ -72,7 +72,7 @@ class Login extends Component {
                   <p>Heeft u nog geen account? Maak deze dan gratis en snel aan. U kunt direct
                     inloggen en aan de slag gaan.</p>
                   <div className="clearfix">
-                    <Button className="pull-right" bsStyle="primary" pullRight>nu aanmelden</Button>
+                    <Link to="/register" className="btn btn-primary pull-right">nu aanmelden</Link>
                   </div>
 
               </Col>

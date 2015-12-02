@@ -6,6 +6,8 @@ import Home from './Site/Home/Home';
 modules.Home = Home;
 import Login from './Site/Login/Login';
 modules.Login = Login;
+import Register from './Site/Register/Register';
+modules.Register = Register;
 import PasswordForgotten from './Site/Login/PasswordForgotten/PasswordForgotten';
 modules.PasswordForgotten = PasswordForgotten;
 import PasswordReset from './Site/Login/PasswordReset/PasswordReset';
