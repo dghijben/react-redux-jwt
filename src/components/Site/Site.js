@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { PropTypes as historyPropTypes, Link } from 'react-router';
-import { NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import { PropTypes as historyPropTypes } from 'react-router';
+import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
@@ -25,25 +25,31 @@ class App extends Component {
   }
 
   userDropDown() {
-    const firstname = _.get(this.props, 'authorization.user.firstname', 'unknown');
-    const title = <span><i className="fa fa-user"></i> {' '} {firstname}</span>;
+    const title = <span><i className="fa fa-user"></i> Mijn account</span>;
     return (
       <NavDropdown eventKey={4} title={title} id="dropdown-usermenu">
-        <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.context.history, null, '/dashboard')}>Dashboard</MenuItem>
-        <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.context.history, null, '/admin')}>Admin</MenuItem>
-        <MenuItem eventKey="4.3" onSelect={()=>{ console.log('clicked'); }}>Settings</MenuItem>
+        <MenuItem header>{_.get(this.props.authorization, ['user', 'firstname'], 'Account')}</MenuItem>
         <MenuItem divider/>
-        <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.context.history, null, '/logout')}>Uitloggen</MenuItem>
+        <MenuItem eventKey="4.1" {...bootstrapSelectLink(this.context.history, null, '/dashboard')}>
+          <i className="fa fa-dashboard "></i> Dashboard
+        </MenuItem>
+        <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.context.history, null, '/admin')}><i className="fa fa-database"></i>Admin</MenuItem>
+        <MenuItem eventKey="4.3" onSelect={()=>{ console.log('clicked'); }}><i className="fa fa-wrench"></i> Settings</MenuItem>
+        <MenuItem divider/>
+        <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.context.history, null, '/logout')}><i className="fa fa-lock"></i> Uitloggen</MenuItem>
       </NavDropdown>
     );
   }
 
   loginLink() {
-    return (
-      <NavItem eventKey={1} {...bootstrapLink(this.context.history, null, '/login')}>
-        <i className="fa fa-user"></i> <i className="fa fa-unlock"></i>
+    return ([
+      <NavItem key={1} eventKey={1} {...bootstrapLink(this.context.history, null, '/login')}>
+        <i className="fa fa-external-link"></i>Inloggen
+      </NavItem>,
+      <NavItem key={2} eventKey={1} {...bootstrapLink(this.context.history, null, '/register')}>
+        <i className="fa fa-terminal"></i>Registreren
       </NavItem>
-    );
+    ]);
   }
 
   logoutLink() {
@@ -65,10 +71,11 @@ class App extends Component {
           link={[
             {'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/font-awesome-4.4.0/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
-            {'rel': 'stylesheet', 'href': '/css/animate.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/style.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/revslider/revslider-index.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/colors/green.css', 'type': 'text/css', 'media': 'screen'},
+            {'rel': 'stylesheet', 'href': '/css/animate.css', 'type': 'text/css', 'media': 'screen'},
+            {'rel': 'stylesheet', 'href': '/css/custom.css', 'type': 'text/css', 'media': 'screen'}
           ]}
           script={[
             {src: '/boss/js/modernizr.js'},
@@ -94,27 +101,10 @@ class App extends Component {
             <div className="navbar-top clearfix">
               <div className="container">
                 <div className="pull-left">
-                  <ul className="navbar-top-nav clearfix hidden-sm hidden-xs">
-                    <li><Link to="/dashboard"><i className="fa fa-user"></i>My Account</Link></li>
-                    <li><Link to="/login"><i className="fa fa-external-link"></i>Login</Link></li>
-                    <li><a href="register.html"><i className="fa fa-terminal"></i>Register</a></li>
-                  </ul>
-                  <div className="dropdown account-dropdown visible-sm visible-xs">
-                    <a className="dropdown-toggle" href="#" id="account-dropdown" data-toggle="dropdown"
-                       aria-expanded="true">
-                      <i className="fa fa-user"></i>My Account
-                      <span className="angle"></span>
-                    </a>
-                    <ul className="dropdown-menu" role="menu" aria-labelledby="account-dropdown">
-                      <li role="presentation"><a role="menuitem" tabIndex="-1" href="shop-dashboard.html"><i
-                        className="fa fa-user"></i>My Account</a></li>
-                      <li role="presentation"><a role="menuitem" tabIndex="-1" href="login.html"><i
-                        className="fa fa-external-link"></i>Login</a></li>
-                      <li role="presentation"><a role="menuitem" tabIndex="-1" href="register.html"><i
-                        className="fa fa-terminal"></i>Register</a></li>
-                      <li role="presentation"><a role="menuitem" tabIndex="-1" href="#"><i className="fa fa-gift"></i>My
-                        Wishlist</a></li>
-                    </ul>
+                  <div className="dropdown account-dropdown ">
+                    <Nav bsStyle="pills">
+                      {this.authorized()}
+                    </Nav>
                   </div>
                 </div>
 
@@ -139,38 +129,6 @@ class App extends Component {
                       <i className="fa fa-skype"></i>
                     </a>
                   </div>
-
-                  <div className="dropdowns-container pull-right clearfix">
-                    <div className="dropdown currency-dropdown pull-right">
-                      <a className="dropdown-toggle" href="#" id="currency-dropdown" data-toggle="dropdown"
-                         aria-expanded="true">
-                        Currency
-                        <span className="angle"></span>
-                      </a>
-                      <ul className="dropdown-menu" role="menu" aria-labelledby="currency-dropdown">
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Us Dollar</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Euro</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Turkish TL</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Pound</a></li>
-                      </ul>
-                    </div>
-
-                    <div className="dropdown language-dropdown pull-right">
-                      <a className="dropdown-toggle" href="#" id="language-dropdown" data-toggle="dropdown"
-                         aria-expanded="true">
-                        Languages
-                        <span className="angle"></span>
-                      </a>
-                      <ul className="dropdown-menu" role="menu" aria-labelledby="language-dropdown">
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">English</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Spanish</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Turkish</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">German</a></li>
-                        <li role="presentation"><a role="menuitem" tabIndex="-1" href="#">Italian</a></li>
-                      </ul>
-                    </div>
-                  </div>
-
                 </div>
               </div>
             </div>

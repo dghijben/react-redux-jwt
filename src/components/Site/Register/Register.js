@@ -1,43 +1,50 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import {mapDispatchToProps, getActionStatus} from 'utils/functions';
-import { Tabs, Tab, Row, Col } from 'react-bootstrap';
+import {Link} from 'react-router';
+import {mapDispatchToProps} from 'utils/functions';
+import {Grid, Row, Col } from 'react-bootstrap';
 import validator from './validate';
+import {setToken, getUser} from 'redux/modules/auth/authActions';
 import DynamicForm from 'redux-form-generator';
-import {create} from 'redux/modules/data/actions';
 import {fields1, reducerIndex, reducerKey, reducerItem} from './fields';
+import connectToState from 'helpers/connectToState';
 
-@connect(state=>{
+@connectToState(reducerIndex, reducerKey, reducerItem)
+@connect(state=> {
   const obj = {
-    'token': state.authorization.token
+    'authorization': state.authorization
   };
   obj[reducerIndex] = state[reducerIndex];
   return obj;
 }, mapDispatchToProps)
 class Register extends Component {
 
-  getActionState() {
-    return getActionStatus(this.props, [reducerIndex, reducerKey, reducerItem]);
-  }
+  static propTypes = {
+    'handleSubmit': PropTypes.func,
+    'getActionState': PropTypes.func,
+    'dispatch': PropTypes.func,
+    'pushState': PropTypes.func
+  };
 
-  handleSubmit(values, dispatch) {
-    return new Promise((resolve, reject) => {
-      dispatch(create(reducerKey, values))
-        .then((ret)=> {
-          if (_.has(ret, 'error')) {
-            reject(ret.error);
-          } else {
-            resolve();
-          }
-        });
-    });
-  }
+  componentWillReceiveProps(nextProps) {
 
+    if (!_.has(this.props, ['data', 'register', 'item', 'token']) && _.has(nextProps, ['data', 'register', 'item', 'token'])) {
+      this.props.dispatch(setToken(_.get(nextProps, ['data', 'register', 'item', 'token'])));
+    }
+
+    if (!_.has(this.props, ['data', 'register', 'item', 'token']) && _.has(nextProps, ['data', 'register', 'item', 'token'])) {
+      this.props.dispatch(getUser(_.get(nextProps, ['data', 'register', 'item', 'token'])));
+    }
+
+    if (_.get(nextProps, 'authorization.loggedIn') === true) {
+      if (_.get(nextProps, 'authorization.user.success', false) === true) {
+        this.props.pushState(null, '/dashboard');
+      }
+    }
+  }
 
   render() {
-
     const checkKey = () => {
       return reducerIndex;
     };
@@ -48,43 +55,40 @@ class Register extends Component {
           <div className="container">
             <div className="row">
               <div className="col-md-6">
-                <h1>Registeren</h1>
-                <p className="page-header-desc">Club aanmelden in 3 stappen.</p>
+                <h1>Registratie pagina</h1>
+                <p className="page-header-desc">Registreer je club.</p>
               </div>
               <div className="col-md-6">
                 <ol className="breadcrumb">
                   <li><Link to="/">Home</Link></li>
-                  <li className="active">Login</li>
+                  <li className="active">Registreren</li>
                 </ol>
               </div>
             </div>
           </div>
         </div>
 
+
         <div className="container">
-          <Row>
-            <Col md={12}>
-              <div className="form-wrapper">
-                <h2 className="title-underblock custom mb40">Registreer uw club</h2>
-                <Tabs bsStyle="pills">
-                  <Tab eventKey={1} title="1. ADRES GEGEVENS">
-                    <DynamicForm
-                      checkKey={reducerKey + checkKey()}
-                      formName={reducerKey}
-                      formClass="dummy"
-                      fieldsNeeded={fields1()}
-                      initialValues={{}}
-                      validate={validator}
-                      onSubmit={this.handleSubmit}
-                      getActionState={this.getActionState}
-                      />
-                  </Tab>
-                  <Tab eventKey={2} title="2. BANK GEGEVENS" disabled>Tab 2 content</Tab>
-                  <Tab eventKey={3} title="3. CLUB GEGEVENS" disabled>Tab 3 content</Tab>
-                </Tabs>
-              </div>
-            </Col>
-          </Row>
+          <Grid>
+            <Row>
+              <Col md={6}>
+                <div className="form-wrapper">
+                  <h2 className="title-underblock custom mb30">Account registreren</h2>
+                  <DynamicForm
+                    checkKey={reducerKey + checkKey()}
+                    formName={reducerKey}
+                    formClass="dummy"
+                    fieldsNeeded={fields1()}
+                    initialValues={{}}
+                    validate={validator}
+                    onSubmit={this.props.handleSubmit}
+                    getActionState={this.props.getActionState}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Grid>
         </div>
       </div>
     );

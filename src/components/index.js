@@ -16,8 +16,6 @@ import Logout from './Site/Logout/Logout';
 modules.Logout = Logout;
 import About from './Site/About/About';
 modules.About = About;
-import Dashboard from './Site/Dashboard/Dashboard';
-modules.Dashboard = Dashboard;
 import RequireLogin from './Site/RequireLogin/RequireLogin';
 modules.RequireLogin = RequireLogin;
 import RequireAdminLogin from './Admin/RequireAdminLogin/RequireAdminLogin';
@@ -49,10 +47,22 @@ modules.AdminAffiliatesDiscountCodes = AdminAffiliatesDiscountCodes;
 import AdminAffiliatesOffers from './Admin/Affiliates/Offers';
 modules.AdminAffiliatesOffers = AdminAffiliatesOffers;
 
+/**
+ * Import Dashboard
+ */
+const Dashboard = {};
+import IndexDashboard from './Site/Dashboard/Dashboard';
+Dashboard.Index = IndexDashboard;
+import DashboardRegister from './Site/Dashboard/Register/Register';
+Dashboard.Register = DashboardRegister;
+modules.Dashboard = Dashboard;
+
+/**
+ * Import CMS
+ */
 const Cms = {};
 import IndexCms from './Cms/Cms';
 Cms.Index = IndexCms;
-
 modules.Cms = Cms;
 
 export default modules;

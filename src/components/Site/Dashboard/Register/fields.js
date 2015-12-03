@@ -5,36 +5,110 @@ export const reducerItem = 'item';
 export function fields1() {
 
   return ([
+
     {
-      name: 'email',
-      label: 'Email',
-      type: 'text',
-      placeholder: 'Email',
-      labelClassName: 'input-desc',
+      row: {
+        col: [
+          {
+            md: 6,
+            children: [{
+              name: 'name',
+              label: 'Account / Club',
+              type: 'text',
+              placeholder: 'Account / Club',
+              labelClassName: 'input-desc',
+
+            }]
+          },
+          {
+            md: 6,
+            children: [{
+              name: 'address',
+              label: 'Adres + huisnummer',
+              type: 'text',
+              placeholder: 'Adres + huisnummer',
+              labelClassName: 'input-desc'
+
+            }]
+          }
+        ]
+      }
     },
     {
-      name: 'password',
-      label: 'Wachtwoord',
-      type: 'password',
-      placeholder: 'Wachtwoord',
-      help: 'Minimaal 6 tekens, cijfers, letters en hoofdletters',
-      labelClassName: 'input-desc'
+      row: {
+        col: [
+          {
+            md: 6,
+            children: [{
+              name: 'postcode',
+              label: 'Postcode',
+              type: 'text',
+              placeholder: 'Postcode',
+              labelClassName: 'input-desc'
+            }]
+          },
+          {
+            md: 6,
+            children: [{
+              name: 'city',
+              label: 'Plaats',
+              type: 'text',
+              placeholder: 'Plaats',
+              labelClassName: 'input-desc'
+            }]
+          }
+        ]
+      }
     },
     {
-      name: 'password_confirmation',
-      label: 'Wachtwoord nogmaals',
-      type: 'password',
-      placeholder: 'Wachtwoord nogmaals',
-      labelClassName: 'input-desc'
-    },
-    {
+      row: {
+        col: [
+          {
+            md: 6,
+            children: [{
+              name: 'telephone',
+              label: 'Telefoon',
+              type: 'text',
+              placeholder: 'Telefoon',
+              labelClassName: 'input-desc'
+
+            }]
+          },
+          {
+            md: 6,
+            children: [{
+              name: 'email',
+              label: 'Email',
+              type: 'text',
+              placeholder: 'Email',
+              labelClassName: 'input-desc'
+            }]
+          }
+        ]
+      }
+    }, {
+      row: {
+        col: [
+          {
+            md: 6,
+            children: [{
+              name: 'website',
+              label: 'Website',
+              type: 'text',
+              placeholder: 'Website',
+              labelClassName: 'input-desc'
+            }]
+          }
+        ]
+      }
+    }, {
       row: {
         hideOnStatic: true,
         col: [
           {
-            md: 12,
+            md: 10, mdOffset: 2,
             children: [
-              {type: 'success', message: 'Uw account is aangemaakt.'},
+              {type: 'success', message: 'Het formulier is opgeslagen'},
               {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
             ]
           },

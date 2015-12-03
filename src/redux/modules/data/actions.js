@@ -12,7 +12,8 @@ const apiPaths = {
   'sitesCsv': '/admin/affiliates/sites/csv',
   'categories': '/admin/affiliates/categories',
   'discountCodes': '/admin/affiliates/discount-codes',
-  'offers': '/admin/affiliates/offers'
+  'offers': '/admin/affiliates/offers',
+  'register': '/auth/register'
 };
 
 export function load(key, params) {
