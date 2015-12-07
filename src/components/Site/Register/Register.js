@@ -21,6 +21,7 @@ import connectToState from 'helpers/connectToState';
 class Register extends Component {
 
   static propTypes = {
+    'clearItem': PropTypes.func,
     'handleSubmit': PropTypes.func,
     'getActionState': PropTypes.func,
     'dispatch': PropTypes.func,
@@ -39,9 +40,14 @@ class Register extends Component {
 
     if (_.get(nextProps, 'authorization.loggedIn') === true) {
       if (_.get(nextProps, 'authorization.user.success', false) === true) {
-        this.props.pushState(null, '/dashboard');
+        this.props.pushState(null, '/dashboard/register');
       }
     }
+  }
+
+  componentWillUnmount() {
+    console.log('jibbi');
+    this.props.clearItem();
   }
 
   render() {
@@ -67,7 +73,6 @@ class Register extends Component {
             </div>
           </div>
         </div>
-
 
         <div className="container">
           <Grid>

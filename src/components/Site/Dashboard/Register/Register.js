@@ -3,9 +3,9 @@ import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {mapDispatchToProps} from 'utils/functions';
 import { Tabs, Tab, Row, Col } from 'react-bootstrap';
-import validator from './validate';
+import validator, {validateBank, validateExtra} from './validate';
 import DynamicForm from 'redux-form-generator';
-import {fields1, reducerIndex, reducerKey, reducerItem} from './fields';
+import {fields1, fieldsBank, fieldsExtra, reducerIndex, reducerKey, reducerItem} from './fields';
 import connectToState from 'helpers/connectToState';
 
 @connectToState(reducerIndex, reducerKey, reducerItem)
@@ -32,7 +32,7 @@ class Register extends Component {
     this.state = {
       disabled: {
         tab1: false,
-        tab2: false,
+        tab2: true,
         tab3: true
       },
       activeKey: 1
@@ -44,6 +44,7 @@ class Register extends Component {
   }
 
   handleSubmitTab1() {
+    console.log('x');
     // Unlock tab 2
     const state = Object.assign(
       {},
@@ -62,7 +63,21 @@ class Register extends Component {
   }
 
   handleSubmitTab2() {
-
+    // Unlock tab 3
+    const state = Object.assign(
+      {},
+      this.state,
+      {
+        disabled: Object.assign(
+          {},
+          this.state.disabled,
+          {
+            tab3: false
+          }),
+        activeKey: 3
+      }
+    );
+    this.setState(state);
   }
 
 
@@ -96,9 +111,9 @@ class Register extends Component {
               <div className="form-wrapper">
                 <h2 className="title-underblock custom mb40">Registreer uw club</h2>
                 <Tabs bsStyle="pills" activeKey={this.state.activeKey} onSelect={this.setActiveKey}>
-                  <Tab eventKey={1} title="1. ADRES GEGEVENS">
+                  <Tab eventKey={1} title="1. CLUB GEGEVENS">
                     <DynamicForm
-                      checkKey={reducerKey + checkKey()}
+                      checkKey={reducerKey + checkKey() + 'tab1'}
                       formName={reducerKey}
                       formClass="dummy"
                       fieldsNeeded={fields1()}
@@ -108,8 +123,28 @@ class Register extends Component {
                       getActionState={this.props.getActionState}
                     />
                   </Tab>
-                  <Tab eventKey={2} title="2. BANK GEGEVENS" disabled={this.state.disabled.tab2}>Tab 2 content</Tab>
-                  <Tab eventKey={3} title="3. CLUB GEGEVENS" disabled={this.state.disabled.tab3}>Tab 3 content</Tab>
+                  <Tab eventKey={2} title="2. BANK GEGEVENS" disabled={this.state.disabled.tab2}>
+                    <DynamicForm
+                      checkKey={reducerKey + checkKey() + 'tab2'}
+                      formName={reducerKey}
+                      fieldsNeeded={fieldsBank()}
+                      initialValues={{}}
+                      validate={validateBank}
+                      onSubmit={this.handleSubmitTab2}
+                      getActionState={this.props.getActionState}
+                    />
+                  </Tab>
+                  <Tab eventKey={3} title="3. CLUB GEGEVENS" disabled={this.state.disabled.tab3}>
+                    <DynamicForm
+                      checkKey={reducerKey + checkKey() + 'tab2'}
+                      formName={reducerKey}
+                      fieldsNeeded={fieldsExtra()}
+                      initialValues={{}}
+                      validate={validateExtra}
+                      onSubmit={this.handleSubmit}
+                      getActionState={this.props.getActionState}
+                    />
+                  </Tab>
                 </Tabs>
               </div>
             </Col>

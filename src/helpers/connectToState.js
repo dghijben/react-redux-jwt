@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
-import {create, clearNetworkState} from 'redux/modules/data/actions';
+import {create, clearNetworkState, clearItem} from 'redux/modules/data/actions';
 
 export default function connectToState(reducerIndex, reducerKey, reducerItem) {
   return (DecoratedComponent) => {
@@ -21,6 +21,7 @@ export default function connectToState(reducerIndex, reducerKey, reducerItem) {
         super(props);
         this.getActionState = this.getActionState.bind(this);
         this.clearActionState = this.clearActionState.bind(this);
+        this.clearItem = this.clearItem.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
       }
 
@@ -32,8 +33,11 @@ export default function connectToState(reducerIndex, reducerKey, reducerItem) {
         this.props.dispatch(clearNetworkState(reducerKey));
       }
 
+      clearItem() {
+        this.props.dispatch(clearItem(reducerKey));
+      }
+
       handleSubmit(values, dispatch) {
-        console.log(values);
         return new Promise((resolve, reject) => {
           dispatch(create(reducerKey, values))
             .then((ret)=> {
@@ -50,6 +54,7 @@ export default function connectToState(reducerIndex, reducerKey, reducerItem) {
         return (<DecoratedComponent
           getActionState={this.getActionState}
           clearActionState={this.clearActionState}
+          clearItem={this.clearItem}
           handleSubmit={this.handleSubmit}
         />);
       }

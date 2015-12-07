@@ -83,7 +83,7 @@ class App extends Component {
             {src: '/boss/js/jquery.hoverIntent.min.js'},
             {src: '/boss/js/bootstrap.min.js'},
             {src: '/boss/js/main.js'},
-            {src: '//tinymce.cachefly.net/4.2/tinymce.min.js'}
+            {src: '//xtinymce.cachefly.net/4.2/tinymce.min.js'}
           ]}
           />
 

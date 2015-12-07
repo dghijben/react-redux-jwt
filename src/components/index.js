@@ -8,6 +8,8 @@ import Login from './Site/Login/Login';
 modules.Login = Login;
 import Register from './Site/Register/Register';
 modules.Register = Register;
+import RegisterVerify from './Site/Register/Verify';
+modules.RegisterVerify = RegisterVerify;
 import PasswordForgotten from './Site/Login/PasswordForgotten/PasswordForgotten';
 modules.PasswordForgotten = PasswordForgotten;
 import PasswordReset from './Site/Login/PasswordReset/PasswordReset';
@@ -55,6 +57,8 @@ import IndexDashboard from './Site/Dashboard/Dashboard';
 Dashboard.Index = IndexDashboard;
 import DashboardRegister from './Site/Dashboard/Register/Register';
 Dashboard.Register = DashboardRegister;
+
+
 modules.Dashboard = Dashboard;
 
 /**

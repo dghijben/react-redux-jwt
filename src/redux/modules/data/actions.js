@@ -13,7 +13,8 @@ const apiPaths = {
   'categories': '/admin/affiliates/categories',
   'discountCodes': '/admin/affiliates/discount-codes',
   'offers': '/admin/affiliates/offers',
-  'register': '/auth/register'
+  'register': '/auth/register',
+  'registerVerify': '/auth/register/verify',
 };
 
 export function load(key, params) {
@@ -70,6 +71,7 @@ export function create(key, params) {
 }
 
 export function loadItem(key, id) {
+  console.log('load', key, id, _.get(apiPaths, key) + '/' + id);
   return {
     types: [actions.DATA_ITEM_LOAD, actions.DATA_ITEM_LOAD_SUCCESS, actions.DATA_ITEM_LOAD_FAIL],
     key,
@@ -120,6 +122,13 @@ export function isLoaded(key, globalState, params) {
 export function isLoadedItem(key, globalState, id) {
   return globalState[reducerIndex] && globalState[reducerIndex][key] && globalState[reducerIndex][key][reducerItem] &&
     ((parseInt(globalState[reducerIndex][key][reducerItem].id, 10) === parseInt(id, 10)
+    ) || globalState[reducerIndex][key][reducerItem].failed === true)
+    ;
+}
+
+export function isLoadedItemByString(key, globalState, id) {
+  return globalState[reducerIndex] && globalState[reducerIndex][key] && globalState[reducerIndex][key][reducerItem] &&
+    ((String(globalState[reducerIndex][key][reducerItem].id) === String(id)
     ) || globalState[reducerIndex][key][reducerItem].failed === true)
     ;
 }
