@@ -43,7 +43,7 @@ export function initialValues(values) {
   );
 }
 
-export default function fields(userId, token, resource, resourceList) {
+export default function fields(id, token, resource, resourceList) {
 
   /*  const allOptions = () => {
    const options = [];
@@ -74,7 +74,7 @@ export default function fields(userId, token, resource, resourceList) {
       placeholder: 'Bestand',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10',
-      url: '/api/admin/accounts/' + userId + '/upload',
+      url: '/api/admin/accounts/' + id + '/upload',
       headers: {
         Authorization: 'Bearer ' + token
       },

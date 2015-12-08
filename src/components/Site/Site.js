@@ -80,10 +80,11 @@ class App extends Component {
           script={[
             {src: '/boss/js/modernizr.js'},
             {src: '/boss/js/jquery.min.js'},
+            {src: '//cdn.tinymce.com/4/tinymce.min.js'},
             {src: '/boss/js/jquery.hoverIntent.min.js'},
             {src: '/boss/js/bootstrap.min.js'},
-            {src: '/boss/js/main.js'},
-            {src: '//xtinymce.cachefly.net/4.2/tinymce.min.js'}
+            {src: '/boss/js/main.js'}
+
           ]}
           />
 

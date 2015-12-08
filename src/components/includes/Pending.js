@@ -22,10 +22,7 @@ export default class Pending extends Component {
         (<div key="2" className="pendingOverlayContent">
           <div className="block">
             <div className="centered">
-              <h1>
-                LADEN{' '}
-                <i className="fa fa-spinner fa-pulse"></i>
-              </h1>
+              <i className="fa fa-spinner fa-pulse fa-3x"></i>
             </div>
           </div>
         </div>)

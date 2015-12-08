@@ -15,6 +15,7 @@ const apiPaths = {
   'offers': '/admin/affiliates/offers',
   'register': '/auth/register',
   'registerVerify': '/auth/register/verify',
+  'dashboardAccount': '/dashboard/accounts'
 };
 
 export function load(key, params) {

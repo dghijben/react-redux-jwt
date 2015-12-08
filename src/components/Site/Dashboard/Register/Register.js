@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
@@ -7,33 +8,36 @@ import validator, {validateBank, validateExtra} from './validate';
 import DynamicForm from 'redux-form-generator';
 import {fields1, fieldsBank, fieldsExtra, reducerIndex, reducerKey, reducerItem} from './fields';
 import connectToState from 'helpers/connectToState';
+import * as actions from 'redux/modules/data/actions';
 
 @connectToState(reducerIndex, reducerKey, reducerItem)
 @connect(state=> {
   const obj = {
     'token': state.authorization.token
   };
-  obj[reducerIndex] = state[reducerIndex];
+  obj[reducerKey] = state.form[reducerKey];
   return obj;
 }, mapDispatchToProps)
 class Register extends Component {
 
   static propTypes = {
     'handleSubmit': PropTypes.func,
-    'getActionState': PropTypes.func
+    'getActionState': PropTypes.func,
+    'dashboardAccount': PropTypes.object
   }
 
   constructor() {
     super();
     this.handleSubmitTab1 = this.handleSubmitTab1.bind(this);
     this.handleSubmitTab2 = this.handleSubmitTab2.bind(this);
+    this.handleSubmitTab3 = this.handleSubmitTab3.bind(this);
     this.setActiveKey = this.setActiveKey.bind(this);
 
     this.state = {
       disabled: {
         tab1: false,
-        tab2: true,
-        tab3: true
+        tab2: false,
+        tab3: false
       },
       activeKey: 1
     };
@@ -44,8 +48,6 @@ class Register extends Component {
   }
 
   handleSubmitTab1() {
-    console.log('x');
-    // Unlock tab 2
     const state = Object.assign(
       {},
       this.state,
@@ -78,6 +80,26 @@ class Register extends Component {
       }
     );
     this.setState(state);
+  }
+
+  handleSubmitTab3(valuesTab, dispatch) {
+    const values = _.omit(_.mapValues(this.props.dashboardAccount, (n) => {
+      if (typeof n === 'object') {
+        return n.value;
+      }
+      return null;
+    }), _.isNull);
+
+    return new Promise((resolve, reject) => {
+      dispatch(actions.create(reducerKey, values))
+        .then((ret)=> {
+          if (ret.hasOwnProperty('error')) {
+            reject(ret.error);
+          } else {
+            resolve();
+          }
+        });
+    });
   }
 
 
@@ -141,7 +163,7 @@ class Register extends Component {
                       fieldsNeeded={fieldsExtra()}
                       initialValues={{}}
                       validate={validateExtra}
-                      onSubmit={this.handleSubmit}
+                      onSubmit={this.handleSubmitTab3}
                       getActionState={this.props.getActionState}
                     />
                   </Tab>
