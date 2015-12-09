@@ -23,7 +23,6 @@ const runMyApp = () => {
 // Three different types of scroll behavior available.
 // Documented here: https://github.com/rackt/scroll-behavior
   const scrollablehistory = useScroll(createHistory);
-
   const dest = document.getElementById('reactdata');
   const store = createStore(reduxReactRouter, makeRouteHooksSafe(getRoutes), scrollablehistory, client, window.__data);
   listener(store);
@@ -49,7 +48,7 @@ const runMyApp = () => {
     }
   }
 
-  if (__DEVTOOLS__) {
+  if (__DEVTOOLS__ && !window.devToolsExtension) {
     const DevTools = require('./containers/DevTools/DevTools');
     ReactDOM.render(
       <Provider store={store} key="provider">

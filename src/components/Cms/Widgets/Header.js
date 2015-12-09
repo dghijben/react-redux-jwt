@@ -22,19 +22,16 @@ export default class Header extends Component {
   componentWillMount() {
     // BUG in REACT, IT DOES NOT WORK WHEN
     // reactDOM/server is used
-    this.setState({'content': _.get(this.props, 'content')});
+    // this.setState({'content': _.get(this.props, 'content')});
   }
 
   emitChange(e) {
-    this.setState({content: e.target.getContent()});
+    // this.setState({content: e.target.getContent()});
 
     this.props.updateJson(this.props.keyPath, e.target.getContent());
   }
 
   render() {
-
-    console.log(this.props.keyPath);
-
     let tag = 'h1';
     if (_.has(this.props, 'settings')) {
       const indexOf = _.indexOf(tags, _.get(this.props, 'settings.type'));

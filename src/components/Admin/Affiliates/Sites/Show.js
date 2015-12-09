@@ -9,7 +9,7 @@ import DynamicForm from 'redux-form-generator';
 import * as actions from 'redux/modules/data/actions';
 import {mapDispatchToProps} from 'utils/functions';
 import fields, {reducerIndex, reducerKey, reducerKeyCats, reducerItem, initialValues, path, fetchDataDeferred} from './fields';
-
+import UserPic from 'components/Admin/includes/UserPic';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -90,7 +90,7 @@ class Show extends Component {
 
             <Row>
               <Col md={2}>
-                {' '}
+                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'picture'], [])} />
               </Col>
               <Col md={10}>
                 <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>

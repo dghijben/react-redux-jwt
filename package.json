@@ -35,7 +35,8 @@
     "dev": "concurrent --kill-others \"npm run watch-client\" \"npm run start-dev\" ",
     "cluster": "concurrent --kill-others \"npm run watch-client\" \"npm run start-cluster\" ",
     "test": "karma start",
-    "test-node": "./node_modules/mocha/bin/mocha ./api/**/__tests__/*-test.js --compilers js:babel-core/register"
+    "test-node": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register",
+    "test-node-watch": "./node_modules/mocha/bin/mocha $(find api -name '*-test.js') --compilers js:babel-core/register --watch"
   },
   "betterScripts": {
     "start-prod": {
@@ -135,6 +136,7 @@
     "url-loader": "0.5.6",
     "validator": "^4.2.1",
     "webpack-isomorphic-tools": "2.2.15"
+
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
@@ -159,6 +161,7 @@
     "json-loader": "^0.5.3",
     "karma": "^0.13.14",
     "karma-chrome-launcher": "^0.2.1",
+
     "karma-cli": "^0.1.1",
     "karma-mocha": "^0.2.1",
     "karma-mocha-reporter": "^1.1.1",

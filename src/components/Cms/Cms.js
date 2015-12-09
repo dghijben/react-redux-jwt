@@ -7,12 +7,26 @@ import {isLoaded, getUser} from '../../redux/modules/auth/authActions';
 import json from './page.js';
 import {dataMapper} from './includes/functions';
 import {Grid} from 'react-bootstrap';
+let counter = 0;
 
 @connect(state => ({authorization: state.authorization}))
 class App extends Component {
   constructor(context, props) {
     super(context, props);
     this.updateJson = this.updateJson.bind(this);
+    this.addField = this.addField.bind(this);
+    this.state = {json: {}, update: true};
+  }
+
+  componentWillMount() {
+    this.setState({json: json});
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.update === true ) {
+      return true;
+    }
+    return false;
   }
 
   static fetchData(getState, dispatch) {
@@ -28,14 +42,33 @@ class App extends Component {
   }
 
   updateJson(path, data) {
-    const jsonUpdated = _.set(json, path, data);
-    console.log(data);
-    console.log('JSON', jsonUpdated);
-
+    this.setState({json: _.set(json, path, data), update: false});
   }
 
+  addField(where) {
+    const key = ['content', 0, 'section', 'children', 0];
+    const index = _.last(key);
+    const path = _.dropRight(key);
+    const offset = where === 'after' ? 1 : 0;
+
+    const children = _.get(json, path);
+    children.splice(index + offset, 0, {
+      'header': {
+        'settings': {
+          type: 'h3'
+        },
+        'content': 'Added header' + counter++
+      }
+    });
+
+    this.setState({json: _.set(json, path, children), update: true});
+  }
 
   render() {
+
+    const before = () => { this.addField('before'); };
+    const after = () => { this.addField('after'); };
+
     return (
       <div>
         <Helmet
@@ -49,8 +82,10 @@ class App extends Component {
             {src: '//tinymce.cachefly.net/4.2/tinymce.min.js'}
           ]}
           />
+				<button onClick={before}>Veld toevoegen ervoor</button>
+        <button onClick={after}>Veld toevoegen erna</button>
         <Grid>
-          {dataMapper(json.content, ['content'], this.updateJson)}
+          {dataMapper(this.state.json.content, ['content'], this.updateJson)}
         </Grid>
 
       </div>

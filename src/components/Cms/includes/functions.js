@@ -13,14 +13,13 @@ export function dataMapper(jsonData, path = [], updateJson = () => {}) {
           if (key === 'children') {
             const keyPath = _.clone(path);
             keyPath.push(index2);
-            keyPath.push(cKey);
+            keyPath.push(objKey);
             keyPath.push(key);
-
             return React.createElement(_.get(Widgets, cKey), {...props, updateJson: updateJson, key: key, keyPath: keyPath, settings: data[objKey].settings});
           } else if (key === 'content') {
             const keyPath = _.clone(path);
             keyPath.push(parseInt(index2, 10));
-            keyPath.push(cKey);
+            keyPath.push(objKey);
             keyPath.push(key);
 
             return React.createElement(_.get(Widgets, cKey), {content: props, updateJson: updateJson, key: key, keyPath: keyPath, settings: data[objKey].settings});
