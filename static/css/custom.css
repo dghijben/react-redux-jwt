@@ -35,3 +35,7 @@
 .pendingOverlayContent .centered {
     text-align: center;
 }
+
+.panel-heading {
+    padding: 10px 15px;
+}

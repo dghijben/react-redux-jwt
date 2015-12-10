@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
+import Helmet from 'react-helmet';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -40,6 +41,9 @@ class Login extends Component {
 
     return (
       <div>
+        <Helmet
+          title="Inloggen"
+        />
         <div className="page-header dark larger larger-desc">
           <div className="container">
             <div className="row">

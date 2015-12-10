@@ -15,7 +15,7 @@ export default function(store) {
     } else {
       if (_.get(state, 'authorization.token', null) !== null) {
         if (!cookie.load('token')) {
-          cookie.save('token', state.authorization.token, ["Path='/'"]);
+          cookie.save('token', state.authorization.token, {path: '/'});
         }
       }
     }

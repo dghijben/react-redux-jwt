@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { PropTypes as historyPropTypes } from 'react-router';
 import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
@@ -69,7 +70,7 @@ class App extends Component {
           title="Site"
           titleTemplate="MySite.com - %s"
           link={[
-            {'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.css', 'type': 'text/css', 'media': 'screen'},
+            {'rel': 'stylesheet', 'href': 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/font-awesome-4.4.0/css/font-awesome.min.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/style.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/revslider/revslider-index.css', 'type': 'text/css', 'media': 'screen'},
@@ -143,9 +144,8 @@ class App extends Component {
                     <span className="sr-only">Toggle navigation</span>
                     <span className="icon-bar"></span>
                   </button>
-
-                  <a className="navbar-brand text-uppercase" href="index.html"
-                     title="Boss - Multipurpose Premium Html5 Template">Boss</a>
+                  <Link to="/" className="navbar-brand text-uppercase"
+                     title="Boss - Multipurpose Premium Html5 Template">Boss</Link>
 
                   <button type="button" className="navbar-btn btn-icon btn-circle pull-right last visible-sm visible-xs"
                           data-toggle="collapse" data-target="#header-search-form"><i className="fa fa-search"></i>

@@ -96,7 +96,19 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
 
+
+  // There is some bug that keeps a cookie in memory while infact there was nog a cookie send.
+  // So let see if request headers have a cookie,
+  // If not reset cookie.
   cookie.plugToRequest(req, res);
+  if (typeof(req.headers.cookie) !== 'undefined') {
+    cookie.setRawCookie(req.headers.cookie);
+  } else {
+    //Force empty cookie
+    cookie.setRawCookie('');
+  }
+
+
   const token = cookie.load('locale');
   const locale = req.query.locale || token || 'nl';
   const messages = translations[locale];
@@ -109,14 +121,9 @@ app.use((req, res) => {
   cookie.save('locale', locale);
 
 
-/*
-  if (typeof(req.headers.cookie) !== 'undefined') {
-    cookie.setRawCookie(req.headers.cookie);
-  } else {
-    //Force empty cookie
-    cookie.setRawCookie('cookie:');
-  }
-*/
+
+
+
   const client = new ApiClient(req);
 
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);

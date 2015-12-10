@@ -10,7 +10,8 @@ export default function validate(data) {
   if (validator.isNull(data.description)) errors.description = msgMandatory;
   if (validator.isNull(data.address)) errors.address = msgMandatory;
   if (validator.isNull(data.postcode)) errors.postcode = msgMandatory;
-  if (!validator.isNull(data.telephone) && !validator.isPhoneNumber(data.telephone)) errors.telephone = msgTelephone;
+  if (!validator.isEmail(data.email)) errors.email = msgMandatory;
+  if (!validator.isPhoneNumber(data.telephone)) errors.telephone = msgTelephone;
   if (validator.isNull(data.city)) errors.city = msgMandatory;
   return errors;
 }
@@ -27,5 +28,13 @@ export function validateBank(data) {
 export function validateExtra(data) {
   const errors = {};
   if (validator.isNull(data.members)) errors.members = msgMandatory;
+  return errors;
+}
+
+export function validatePI(data) {
+  const errors = {};
+  if (validator.isNull(data.initials)) errors.initials = msgMandatory;
+  if (validator.isNull(data.firstname)) errors.firstname = msgMandatory;
+  if (validator.isNull(data.lastname)) errors.lastname = msgMandatory;
   return errors;
 }
