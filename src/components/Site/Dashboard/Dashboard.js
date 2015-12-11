@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {mapDispatchToProps} from 'utils/functions';
+import Accounts from './Accounts';
 
 @connect(state=> {
   const obj = {
@@ -73,9 +74,14 @@ class Dashboard extends React.Component {
       return this.noAccounts();
     }
 
+    const accounts = (_.map(_.get(this.props, ['authorization', 'user', 'accounts']), (account) => {
+      return (<Accounts account={account} />);
+    }));
+
     return (
       <div className="container">
         {this.counters()}
+        {accounts}
       </div>
     );
   }
@@ -106,6 +112,7 @@ class Dashboard extends React.Component {
 
         <div className="container">
           {this.dashboard()}
+
         </div>
       </div>
 
