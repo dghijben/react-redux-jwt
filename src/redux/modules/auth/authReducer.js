@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import * as actions from './authConstants';
 
 const initialState = {
@@ -13,12 +14,19 @@ export default function reducer(state = initialState, action = {}) {
     case actions.LOGIN:
       return Object.assign({}, state, {token: null, loggedIn: false, pending: true, failed: false, success: false});
     case actions.LOGIN_SUCCESS:
-      return Object.assign({}, state, {token: action.result.token, loggedIn: true, pending: false, failed: false, success: true});
+      return Object.assign({}, state, {
+        token: action.result.token,
+        loggedIn: true,
+        pending: false,
+        failed: false,
+        success: true
+      });
     case actions.LOGIN_FAIL:
       return Object.assign({}, state, {token: null, loggedIn: false, pending: false, failed: true});
     case actions.USERINFO:
       return Object.assign({}, state, {user: {pending: true}});
     case actions.USERINFO_SUCCSS: {
+
       const result = action.result.user;
       return Object.assign({}, state, {user: {...result, pending: false, success: true}});
     }
@@ -40,8 +48,13 @@ export default function reducer(state = initialState, action = {}) {
       return Object.assign({}, state, {passwordChange: {pending: false, success: true}});
     case actions.PASSWORD_CHANGE_FAIL:
       return Object.assign({}, state, {passwordChange: {msg: action.result, pending: false, failed: true}});
-
-
+    case actions.SET_ACCOUNT_AFFILIATES_SUCCESS: {
+      const accountIndex = _.findIndex(state.user.accounts, 'id', parseInt(action.accountId, 10));
+      let affiliateIds = _.get(state, ['user', 'accounts', accountIndex, 'affiliate_ids']);
+      affiliateIds = _.union(affiliateIds, action.affiliates);
+      _.set(state, ['user', 'accounts', accountIndex, 'affiliate_ids'], affiliateIds);
+      return Object.assign({}, state);
+    }
     default:
       return Object.assign({}, state);
   }

@@ -4,26 +4,32 @@ import {reducerIndex, reducerKey, reducerKeyCats, searchFields} from './settings
 import {load} from 'redux/modules/store/actions';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
 import { connect } from 'react-redux';
+import {setAccountAffiliates} from 'redux/modules/auth/authActions';
 const fieldNames = filterFields(searchFields);
 
 @connect(state=> {
   const obj = {
     'router': state.router,
-    'reduxRouterReducer': state.reduxRouterReducer
+    'reduxRouterReducer': state.reduxRouterReducer,
+    'accounts': state.authorization.user.accounts
   };
   obj[reducerIndex] = state[reducerIndex];
   return obj;
 }, mapDispatchToProps)
 class Affiliates extends React.Component {
   static propTypes = {
+    'accounts': PropTypes.object,
     'account': PropTypes.object,
+    'router': PropTypes.object,
     'store': PropTypes.object,
+    'dispatch': PropTypes.func
   };
 
   constructor() {
     super();
     this.categories = this.categories.bind(this);
     this.category = this.category.bind(this);
+    this.subscribe = this.subscribe.bind(this);
   }
 
   static fetchDataDeferred(getState, dispatch) {
@@ -36,40 +42,58 @@ class Affiliates extends React.Component {
     return Promise.all(promise);
   }
 
+  subscribe(e) {
+    console.log(e);
+    if (e.target.checked === true) {
+      //
+
+      this.props.dispatch(
+          setAccountAffiliates(
+              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/add-affiliate',
+              [e.target.value]
+          )
+      );
+    }
+  }
+
   site() {
-
     return (
-      <div className="col-sm-4">
-        <div className="product text-center">
-          <div className="product-top">
-            <span className="product-box new-box new-box-border">New</span>
-            <figure>
-              <a href="product.html" title="Product Name">
-                <img src="http://lorempixel.com/800/600/cats/" alt="Product image" className="product-image"/>
-                <img src="http://lorempixel.com/800/600/nature/" alt="Product image" className="product-image-hover"/>
-              </a>
-            </figure>
-            <div className="product-action-container each-btn-animate">
-              <a href="#" className="btn btn-dark add-to-favorite" title="Add to favorite"><i
-                className="fa fa-heart"></i></a>
+      <table className="table table-bordered table-hover table-condensed">
+        <thead>
+        <tr>
+          <th>Abonneer</th>
+          <th>Affiliate</th>
+          <th>cpm</th>
+          <th>cps</th>
+          <th>cpl</th>
+          <th>cpc</th>
+          <th>csr</th>
+          <th>ecpc</th>
+        </tr>
+        </thead>
+        <tbody>
 
-              <a href="#" className="btn btn-dark add-to-wishlist" title="Add to wishlist"><i
-                className="fa fa-gift"></i></a>
-
-              <a href="#" className="btn btn-dark quick-view" title="Quick View"><i
-                className="fa fa-search-plus"></i></a>
-            </div>
-          </div>
-          <h3 className="product-title"><a href="product.html" title="Product Title">Clear - New Season Shirt</a></h3>
-
-          <div className="product-price-container">
-            <span className="product-old-price">$125.99</span>
-            <span className="product-price">$49.99</span>
-          </div>
-
-          <a href="#" className="btn btn-custom add-to-cart">Add to Cart</a>
-        </div>
-      </div>
+        {_.map(_.get(this.props, [reducerIndex, reducerKey, 'list', 'data'], []), (item) => {
+          return (
+            <tr>
+              <td>
+                <label>
+                  <input type="checkbox" className="ios-switch tinyswitch" value={item.id} onChange={this.subscribe}/>
+                  <div><div /></div>
+                </label>
+              </td>
+              <td>{item.name}</td>
+              <td>{item.cpm}</td>
+              <td>{item.cps}</td>
+              <td>{item.cpl}</td>
+              <td>{item.cpc}</td>
+              <td>{item.csr}</td>
+              <td>{item.ecpc}</td>
+            </tr>
+          );
+        })}
+        </tbody>
+      </table>
     );
   }
 
