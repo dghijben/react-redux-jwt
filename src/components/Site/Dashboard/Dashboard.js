@@ -112,7 +112,6 @@ class Dashboard extends React.Component {
 
         <div className="container">
           {this.dashboard()}
-
         </div>
       </div>
 

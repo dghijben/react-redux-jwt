@@ -3,6 +3,8 @@ import * as actions from './constants';
 
 const reducerIndex = 'data';
 const reducerItem = 'item';
+let apiPath = null;
+
 
 const apiPaths = {
   'accounts': '/admin/accounts',
@@ -15,14 +17,20 @@ const apiPaths = {
   'offers': '/admin/affiliates/offers',
   'register': '/auth/register',
   'registerVerify': '/auth/register/verify',
-  'dashboardAccount': '/dashboard/accounts'
+  'dashboardAccount': '/dashboard/accounts',
+  'dashboardAffiliates': '/dashboard/settings/:id/affiliates'
 };
+
+
+export function setApiPath(path) {
+  apiPath = path;
+}
 
 export function load(key, params) {
   return {
     types: [actions.DATA_LIST, actions.DATA_LIST_SUCCESS, actions.DATA_LIST_FAIL],
     key,
-    promise: (client) => client.get(_.get(apiPaths, key), {
+    promise: (client) => client.get(_.get(apiPaths, key, apiPath), {
       params: {
         ...params
       }

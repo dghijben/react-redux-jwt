@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import storeReducer from './store/reducer';
 import dataReducer from './data/reducer';
 import authReducer from './auth/authReducer';
 import usersReducer from './admin/users/reducer';
@@ -15,6 +16,7 @@ export default combineReducers({
   authorization: authReducer,
   users: usersReducer,
   data: dataReducer,
+  store: storeReducer,
   affiliatesSites: affiliatesSitesReducer,
   affiliatesCategories: affiliatesCategoriesReducer,
   form: formReducer.plugin(reduxFormReducer),
