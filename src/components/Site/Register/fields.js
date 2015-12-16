@@ -204,10 +204,8 @@ export default function fields() {
 export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const promises = [];
-  console.log('hier');
   if (_.has(state, 'router.params.code')) {
     if (!actions.isLoadedItemByString(reducerKeyVerify, state, state.router.params.code)) {
-      console.log('LOAD');
       promises.push(dispatch(actions.loadItem(reducerKeyVerify, state.router.params.code)));
     }
   }

@@ -80,7 +80,6 @@ export function create(key, params) {
 }
 
 export function loadItem(key, id) {
-  console.log('load', key, id, _.get(apiPaths, key) + '/' + id);
   return {
     types: [actions.DATA_ITEM_LOAD, actions.DATA_ITEM_LOAD_SUCCESS, actions.DATA_ITEM_LOAD_FAIL],
     key,

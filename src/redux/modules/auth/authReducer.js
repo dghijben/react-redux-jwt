@@ -49,9 +49,8 @@ export default function reducer(state = initialState, action = {}) {
     case actions.PASSWORD_CHANGE_FAIL:
       return Object.assign({}, state, {passwordChange: {msg: action.result, pending: false, failed: true}});
     case actions.SET_ACCOUNT_AFFILIATES_SUCCESS: {
-      const accountIndex = _.findIndex(state.user.accounts, 'id', parseInt(action.accountId, 10));
-      let affiliateIds = _.get(state, ['user', 'accounts', accountIndex, 'affiliate_ids']);
-      affiliateIds = _.union(affiliateIds, action.affiliates);
+      const accountIndex = _.findIndex(state.user.accounts, 'id', _.get(action, ['result', 'id']));
+      const affiliateIds = _.get(action, ['result', 'affiliate_ids'], []);
       _.set(state, ['user', 'accounts', accountIndex, 'affiliate_ids'], affiliateIds);
       return Object.assign({}, state);
     }

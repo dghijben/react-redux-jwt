@@ -58,7 +58,6 @@ export function create(key, path, params) {
 }
 
 export function loadItem(key, path, id) {
-  console.log('load', key, id, path + '/' + id);
   return {
     types: [actions.STORE_ITEM_LOAD, actions.STORE_ITEM_LOAD_SUCCESS, actions.STORE_ITEM_LOAD_FAIL],
     key,

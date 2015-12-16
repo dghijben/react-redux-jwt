@@ -46,7 +46,6 @@ class Register extends Component {
   }
 
   componentWillUnmount() {
-    console.log('jibbi');
     this.props.clearItem();
   }
 

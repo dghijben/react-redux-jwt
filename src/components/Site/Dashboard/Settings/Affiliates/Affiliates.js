@@ -30,7 +30,31 @@ class Affiliates extends React.Component {
     this.categories = this.categories.bind(this);
     this.category = this.category.bind(this);
     this.subscribe = this.subscribe.bind(this);
+    this.subscribeAll = this.subscribeAll.bind(this);
+    this.updateState = this.updateState.bind(this);
+    this.state = {
+      affiliateIds: []
+    };
   }
+
+  componentWillMount() {
+    this.updateState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.updateState(nextProps);
+  }
+
+  updateState(props) {
+    const accountId = props.router.params.id;
+    const accountIndex = _.findIndex(_.get(props, 'accounts', []), 'id', parseInt(accountId, 10));
+    const affiliateIds = _.pluck(_.get(this.props.accounts, [accountIndex, 'affiliate_ids']), 'affiliate_id');
+
+    if (this.state.affiliateIds !== affiliateIds) {
+      this.setState({affiliateIds: affiliateIds});
+    }
+  }
+
 
   static fetchDataDeferred(getState, dispatch) {
     const state = getState();
@@ -42,14 +66,37 @@ class Affiliates extends React.Component {
     return Promise.all(promise);
   }
 
-  subscribe(e) {
-    console.log(e);
+  subscribeAll(e) {
     if (e.target.checked === true) {
-      //
-
       this.props.dispatch(
           setAccountAffiliates(
-              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/add-affiliate',
+              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-all-affiliate',
+              [e.target.value]
+          )
+      );
+    } else {
+      this.props.dispatch(
+          setAccountAffiliates(
+              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-all-affiliate',
+              [e.target.value]
+          )
+      );
+    }
+  }
+
+
+  subscribe(e) {
+    if (e.target.checked === true) {
+      this.props.dispatch(
+          setAccountAffiliates(
+              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-affiliate',
+              [e.target.value]
+          )
+      );
+    } else {
+      this.props.dispatch(
+          setAccountAffiliates(
+              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-affiliate',
               [e.target.value]
           )
       );
@@ -61,7 +108,13 @@ class Affiliates extends React.Component {
       <table className="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
-          <th>Abonneer</th>
+          <th>
+            <input type="checkbox"
+                   className="ios-switch tinyswitch"
+                   onChange={this.subscribeAll}
+            />
+            <div><div /></div>
+          </th>
           <th>Affiliate</th>
           <th>cpm</th>
           <th>cps</th>
@@ -78,7 +131,13 @@ class Affiliates extends React.Component {
             <tr>
               <td>
                 <label>
-                  <input type="checkbox" className="ios-switch tinyswitch" value={item.id} onChange={this.subscribe}/>
+                  <input type="checkbox"
+                         className="ios-switch tinyswitch"
+                         value={item.id}
+                         onChange={this.subscribe}
+                         checked={(this.state.affiliateIds.indexOf(item.id) > -1)}
+
+                  />
                   <div><div /></div>
                 </label>
               </td>
@@ -99,9 +158,7 @@ class Affiliates extends React.Component {
 
   categories() {
     const {store: {categories: {list}}} = this.props;
-    console.log('MANGO', list);
-
-    if (list.length > 0) {
+    if (!!list && list.length > 0) {
       return (
         <ul>
           {_.map(list, (category, key) => {

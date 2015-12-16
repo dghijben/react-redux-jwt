@@ -203,8 +203,6 @@ class Register extends Component {
 
 
   render() {
-    console.log(this.props);
-
     return (
       <div>
         <div className="page-header dark larger larger-desc">
