@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
+import Paginator from 'react-laravel-paginator';
 import {reducerIndex, reducerKey, reducerKeyCats, searchFields} from './settings';
 import {load} from 'redux/modules/store/actions';
 import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
@@ -18,7 +19,7 @@ const fieldNames = filterFields(searchFields);
 }, mapDispatchToProps)
 class Affiliates extends React.Component {
   static propTypes = {
-    'accounts': PropTypes.object,
+    'accounts': PropTypes.array,
     'account': PropTypes.object,
     'router': PropTypes.object,
     'store': PropTypes.object,
@@ -103,17 +104,19 @@ class Affiliates extends React.Component {
     }
   }
 
-  site() {
+  sites() {
     return (
       <table className="table table-bordered table-hover table-condensed">
         <thead>
         <tr>
           <th>
-            <input type="checkbox"
-                   className="ios-switch tinyswitch"
-                   onChange={this.subscribeAll}
-            />
-            <div><div /></div>
+            <label>
+              <input type="checkbox"
+                     className="ios-switch tinyswitch"
+                     onChange={this.subscribeAll}
+              />
+              <div><div /></div>
+            </label>
           </th>
           <th>Affiliate</th>
           <th>cpm</th>
@@ -180,13 +183,32 @@ class Affiliates extends React.Component {
     );
   }
 
+  handleClick() {
+    console.log('clicked');
+  }
+
   render() {
+    console.log(this.props);
+    const paged = () => {
+      const list = _.get(this.props, [reducerIndex, reducerKey, 'list']);
+      if (list) {
+        const currentPage = list.current_page;
+        const lastPage = list.last_page;
+        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.handleClick}/>;
+      }
+    };
+
+    const pagedCalled = paged();
 
     return (
       <div className="container">
         <div className="row">
           <div className="col-md-9 col-md-push-3">
-            {this.site()}
+            {pagedCalled}
+
+            {this.sites()}
+
+            {pagedCalled}
           </div>
 
           <aside className="col-md-3 col-md-pull-9 sidebar">
