@@ -105,6 +105,13 @@ export function isLoaded(key, globalState, params) {
   );
 }
 
+export function isLoadedSimple(key, globalState) {
+  return (
+    _.get(globalState, [reducerIndex, key, 'success'], false) === true
+  );
+}
+
+
 export function isLoadedItem(key, globalState, id) {
   return globalState[reducerIndex] && globalState[reducerIndex][key] && globalState[reducerIndex][key][reducerItem] &&
     ((parseInt(globalState[reducerIndex][key][reducerItem].id, 10) === parseInt(id, 10)

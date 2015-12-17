@@ -1,13 +1,16 @@
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
 import Paginator from 'react-laravel-paginator';
-import {reducerIndex, reducerKey, reducerKeyCats, searchFields} from './settings';
-import {load} from 'redux/modules/store/actions';
-import {mapDispatchToProps, filterFields, createParamsForFetch} from 'utils/functions';
+import {reducerIndex, reducerKey} from './settings';
+import {mapDispatchToProps} from 'utils/functions';
 import { connect } from 'react-redux';
 import {setAccountAffiliates} from 'redux/modules/auth/authActions';
-const fieldNames = filterFields(searchFields);
+import connectData from 'helpers/connectData';
+import connectToFilter from 'helpers/connectToFilter';
+import fetchDataDeferred from './fetchDataDeferred';
 
+@connectData(null, fetchDataDeferred)
+@connectToFilter()
 @connect(state=> {
   const obj = {
     'router': state.router,
@@ -23,7 +26,11 @@ class Affiliates extends React.Component {
     'account': PropTypes.object,
     'router': PropTypes.object,
     'store': PropTypes.object,
-    'dispatch': PropTypes.func
+    'dispatch': PropTypes.func,
+    'switchPage': PropTypes.func,
+    'getParams': PropTypes.func,
+    'toggleOnStack': PropTypes.func,
+    'onStack': PropTypes.func
   };
 
   constructor() {
@@ -33,6 +40,7 @@ class Affiliates extends React.Component {
     this.subscribe = this.subscribe.bind(this);
     this.subscribeAll = this.subscribeAll.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.pushCategoryToState = this.pushCategoryToState.bind(this);
     this.state = {
       affiliateIds: []
     };
@@ -56,49 +64,39 @@ class Affiliates extends React.Component {
     }
   }
 
-
-  static fetchDataDeferred(getState, dispatch) {
-    const state = getState();
-    const apiPath = '/dashboard/settings/' + state.router.params.id + '/affiliates';
-    const apiPathCats = '/dashboard/settings/' + state.router.params.id + '/affiliates/categories';
-    const promise = [];
-    promise.push(dispatch(load(reducerKey, apiPath, createParamsForFetch(getState(), reducerIndex, fieldNames))));
-    promise.push(dispatch(load(reducerKeyCats, apiPathCats)));
-    return Promise.all(promise);
-  }
-
   subscribeAll(e) {
+
+    const params = this.props.getParams();
     if (e.target.checked === true) {
       this.props.dispatch(
           setAccountAffiliates(
-              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-all-affiliate',
-              [e.target.value]
+            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-all-affiliate',
+            params
           )
       );
     } else {
       this.props.dispatch(
           setAccountAffiliates(
-              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-all-affiliate',
-              [e.target.value]
+            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-all-affiliate',
+            params
           )
       );
     }
   }
 
-
   subscribe(e) {
     if (e.target.checked === true) {
       this.props.dispatch(
           setAccountAffiliates(
-              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-affiliate',
-              [e.target.value]
+            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-affiliate',
+            {affiliates: [e.target.value] }
           )
       );
     } else {
       this.props.dispatch(
           setAccountAffiliates(
-              '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-affiliate',
-              [e.target.value]
+            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-affiliate',
+            { affiliates: [e.target.value] }
           )
       );
     }
@@ -129,9 +127,9 @@ class Affiliates extends React.Component {
         </thead>
         <tbody>
 
-        {_.map(_.get(this.props, [reducerIndex, reducerKey, 'list', 'data'], []), (item) => {
+        {_.map(_.get(this.props, [reducerIndex, reducerKey, 'list', 'data'], []), (item, key) => {
           return (
-            <tr>
+            <tr key={key}>
               <td>
                 <label>
                   <input type="checkbox"
@@ -159,6 +157,12 @@ class Affiliates extends React.Component {
     );
   }
 
+
+  pushCategoryToState(category) {
+    this.props.toggleOnStack('category', category);
+
+  }
+
   categories() {
     const {store: {categories: {list}}} = this.props;
     if (!!list && list.length > 0) {
@@ -173,9 +177,19 @@ class Affiliates extends React.Component {
   }
 
   category(key, category) {
+
+    const checkBox = () => {
+      if (this.props.onStack('category', category.id)) {
+        return (<i className="fa fa-check-square-o pull-right"></i>);
+      }
+
+      return (<i className="fa fa-square-o pull-right"></i>);
+    };
+
+
     return (
-      <li key={key}>
-        <i className="fa fa-square-o pull-right"></i>
+      <li key={key} onClick={() => { this.pushCategoryToState(category.id); }}>
+        {checkBox()}
         <i className="fa fa-angle-right"></i>
         {' '}
         {category.name}
@@ -183,18 +197,14 @@ class Affiliates extends React.Component {
     );
   }
 
-  handleClick() {
-    console.log('clicked');
-  }
-
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const paged = () => {
       const list = _.get(this.props, [reducerIndex, reducerKey, 'list']);
       if (list) {
         const currentPage = list.current_page;
         const lastPage = list.last_page;
-        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.handleClick}/>;
+        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.props.switchPage}/>;
       }
     };
 

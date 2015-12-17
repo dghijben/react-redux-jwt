@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import { bindActionCreators } from 'redux';
 import { pushState } from 'redux-router';
-const queryString = require('query-string');
+import Qs from 'qs';
+
 
 export function stateMapper(state, pathname, name, obj, deep = 0) {
   const params = {};
@@ -101,15 +102,35 @@ export function createParamsForFetch(state, form, fields) {
   });
 }
 
+export function createAllParamsForFetch(state) {
+  const pathname = state.router.location.pathname;
+  const params = _.assign(
+    _.get(state, ['reduxRouterReducer', 'routes', pathname], {}),
+    _.get(state, ['router', 'location', 'query'], {})
+  );
+
+  return _.omit(params, (value)=> {
+    return !value;
+  });
+}
+
+
 export function stringifyState(state, formName, fields) {
   const obj = {};
   _.map(fields, (fieldName) => {
     obj[fieldName] = _.get(state, fieldName) || _.get(state, [formName, fieldName]);
   });
-  return queryString.stringify(_.omit(obj, (value)=> {
+  return Qs.stringify(_.omit(obj, (value)=> {
     return !value;
   }));
 }
+
+export function stringifyFullState(state) {
+  return Qs.stringify(_.omit(state, (value)=> {
+    return !value;
+  }));
+}
+
 
 export function filterState(state, formName, fields) {
   const obj = {};

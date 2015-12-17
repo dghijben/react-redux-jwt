@@ -12,17 +12,13 @@ export function logout() {
   };
 }
 
-export function setAccountAffiliates(path, affiliates) {
+export function setAccountAffiliates(path, params) {
   return {
     types: [actions.SET_ACCOUNT_AFFILIATES, actions.SET_ACCOUNT_AFFILIATES_SUCCESS, actions.SET_ACCOUNT_AFFILIATES_FAILED],
     promise: () => client.put(path, {
-      data: {
-        affiliates: affiliates
-      }
+      data: params
     })
   };
-
-
 }
 
 export function getUserAttempt() {
