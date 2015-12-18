@@ -4,7 +4,6 @@ import {createAllParamsForFetch} from 'utils/functions';
 
 export default function fetchDataDeferred(getState, dispatch) {
   const state = getState();
-
   const apiPath = '/dashboard/settings/' + state.router.params.id + '/affiliates';
   const apiPathCats = '/dashboard/settings/' + state.router.params.id + '/affiliates/categories';
   const promise = [];

@@ -101,7 +101,7 @@ export function isAllLoaded(key, globalState) {
 export function isLoaded(key, globalState, params) {
   return (
     _.get(globalState, [reducerIndex, key, 'success'], false) === true &&
-    parseInt(_.get(globalState, [reducerIndex, key, 'list', 'current_page'], 1), 10) === parseInt(_.get(params, 'page', 1), 10)
+    parseInt(_.get(globalState, [reducerIndex, key, 'list', 'current_page'], 1), 10) === parseInt(_.get(params, 'page', null), 10)
   );
 }
 

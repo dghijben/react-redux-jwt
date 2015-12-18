@@ -91,7 +91,6 @@ class Dashboard extends React.Component {
         <Helmet
           title="Dashboard"
         />
-
         <div className="page-header dark larger larger-desc">
           <div className="container">
             <div className="row">

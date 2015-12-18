@@ -8,6 +8,7 @@ import {setAccountAffiliates} from 'redux/modules/auth/authActions';
 import connectData from 'helpers/connectData';
 import connectToFilter from 'helpers/connectToFilter';
 import fetchDataDeferred from './fetchDataDeferred';
+import PageHeader from '../../../Includes/PageHeader';
 
 @connectData(null, fetchDataDeferred)
 @connectToFilter()
@@ -19,8 +20,7 @@ import fetchDataDeferred from './fetchDataDeferred';
   };
   obj[reducerIndex] = state[reducerIndex];
   return obj;
-}, mapDispatchToProps)
-class Affiliates extends React.Component {
+}, mapDispatchToProps) class Affiliates extends React.Component {
   static propTypes = {
     'accounts': PropTypes.array,
     'account': PropTypes.object,
@@ -36,11 +36,12 @@ class Affiliates extends React.Component {
   constructor() {
     super();
     this.categories = this.categories.bind(this);
-    this.category = this.category.bind(this);
+    this.filter = this.filter.bind(this);
     this.subscribe = this.subscribe.bind(this);
     this.subscribeAll = this.subscribeAll.bind(this);
     this.updateState = this.updateState.bind(this);
-    this.pushCategoryToState = this.pushCategoryToState.bind(this);
+    this.pushFilterToState = this.pushFilterToState.bind(this);
+    this.affiliateState = this.affiliateState.bind(this);
     this.state = {
       affiliateIds: []
     };
@@ -65,21 +66,20 @@ class Affiliates extends React.Component {
   }
 
   subscribeAll(e) {
-
     const params = this.props.getParams();
     if (e.target.checked === true) {
       this.props.dispatch(
-          setAccountAffiliates(
-            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-all-affiliate',
-            params
-          )
+        setAccountAffiliates(
+          '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-all-affiliate',
+          params
+        )
       );
     } else {
       this.props.dispatch(
-          setAccountAffiliates(
-            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-all-affiliate',
-            params
-          )
+        setAccountAffiliates(
+          '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-all-affiliate',
+          params
+        )
       );
     }
   }
@@ -87,17 +87,17 @@ class Affiliates extends React.Component {
   subscribe(e) {
     if (e.target.checked === true) {
       this.props.dispatch(
-          setAccountAffiliates(
-            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-affiliate',
-            {affiliates: [e.target.value] }
-          )
+        setAccountAffiliates(
+          '/dashboard/settings/' + this.props.router.params.id + '/affiliates/attach-affiliate',
+          {affiliates: [e.target.value]}
+        )
       );
     } else {
       this.props.dispatch(
-          setAccountAffiliates(
-            '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-affiliate',
-            { affiliates: [e.target.value] }
-          )
+        setAccountAffiliates(
+          '/dashboard/settings/' + this.props.router.params.id + '/affiliates/detach-affiliate',
+          {affiliates: [e.target.value]}
+        )
       );
     }
   }
@@ -112,8 +112,11 @@ class Affiliates extends React.Component {
               <input type="checkbox"
                      className="ios-switch tinyswitch"
                      onChange={this.subscribeAll}
-              />
-              <div><div /></div>
+                />
+
+              <div>
+                <div />
+              </div>
             </label>
           </th>
           <th>Affiliate</th>
@@ -138,8 +141,11 @@ class Affiliates extends React.Component {
                          onChange={this.subscribe}
                          checked={(this.state.affiliateIds.indexOf(item.id) > -1)}
 
-                  />
-                  <div><div /></div>
+                    />
+
+                  <div>
+                    <div />
+                  </div>
                 </label>
               </td>
               <td>{item.name}</td>
@@ -157,9 +163,8 @@ class Affiliates extends React.Component {
     );
   }
 
-
-  pushCategoryToState(category) {
-    this.props.toggleOnStack('c', category);
+  pushFilterToState(name, id) {
+    this.props.toggleOnStack(name, id);
   }
 
   categories() {
@@ -168,29 +173,43 @@ class Affiliates extends React.Component {
       return (
         <ul>
           {_.map(list, (category, key) => {
-            return this.category(key, category);
+            return this.filter('c', key, category);
           })}
         </ul>
       );
     }
   }
 
-  category(key, category) {
+  filter(name, key, item) {
     const checkBox = () => {
-      if (this.props.onStack('c', category.id)) {
+      if (this.props.onStack(name, item.id)) {
         return (<i className="fa fa-check-square-o pull-right"></i>);
       }
-
       return (<i className="fa fa-square-o pull-right"></i>);
     };
 
     return (
-      <li key={key} onClick={() => { this.pushCategoryToState(category.id); }}>
+      <li key={key} onClick={() => { this.pushFilterToState(name, item.id); }}>
         {checkBox()}
         <i className="fa fa-angle-right"></i>
         {' '}
-        {category.name}
+        {item.name}
       </li>
+    );
+  }
+
+  affiliateState() {
+    const state = [
+      {'name': 'Wel abonnee', id: 1},
+      {'name': 'Niet abonnee', id: 2}
+    ];
+
+    return (
+      <ul>
+        {_.map(state, (item, key) => {
+          return this.filter('status', key, item);
+        })}
+      </ul>
     );
   }
 
@@ -208,28 +227,41 @@ class Affiliates extends React.Component {
     const pagedCalled = paged();
 
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-9 col-md-push-3">
-            {pagedCalled}
+      <div>
+        <PageHeader
+          title="Affiliates koppelen"
+          desc="Kies hier de affiliates die u op uw persoonlijke pagina wilt weergeven"
+          links={[
+            {name: 'Home', to: '/'},
+            {name: 'Dashboard', to: '/dashboard'},
+            {name: 'Affiliates'}
+          ]}
+          />
 
-            {this.sites()}
+        <div className="container">
+          <div className="row">
+            <div className="col-md-9 col-md-push-3">
+              {pagedCalled}
 
-            {pagedCalled}
-          </div>
+              {this.sites()}
 
-          <aside className="col-md-3 col-md-pull-9 sidebar">
-            <div className="widget">
-              <h3>Categories</h3>
-              <ul id="category-widget">
-                <li className="open"><a href="#">Categorieen <span className="category-widget-btn"></span></a>
-                  {this.categories()}
-                </li>
-                <li className="open"><a href="#">Abonnee <span className="category-widget-btn"></span></a>
-                </li>
-              </ul>
+              {pagedCalled}
             </div>
-          </aside>
+
+            <aside className="col-md-3 col-md-pull-9 sidebar">
+              <div className="widget">
+                <h3>Categories</h3>
+                <ul id="category-widget">
+                  <li className="open"><a href="#">Categorieen <span className="category-widget-btn"></span></a>
+                    {this.categories()}
+                  </li>
+                  <li className="open"><a href="#">Abonnee <span className="category-widget-btn"></span></a>
+                    {this.affiliateState()}
+                  </li>
+                </ul>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
     );
@@ -237,3 +269,4 @@ class Affiliates extends React.Component {
 }
 
 export default Affiliates;
+

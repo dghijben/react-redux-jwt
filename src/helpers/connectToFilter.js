@@ -37,7 +37,7 @@ export default function connectToFilter() {
       }
 
       onStack(key: string, value) {
-        return (!!this.state[key] && this.state[key].indexOf(value) > -1);
+        return (!!this.state[key] && this.state[key].indexOf(String(value)) > -1);
       }
 
       getParams() {
@@ -50,31 +50,33 @@ export default function connectToFilter() {
         if (!state[key]) {
           state[key] = [value];
         } else {
-          const index = state[key].indexOf(value);
+          const index = state[key].indexOf(String(value));
           if (index < 0) {
             state[key].push(value);
           } else {
             delete state[key][index];
           }
         }
-        state.page = -1;
+        if (!!state.page) {
+          state.page = null;
+        }
         this.setState(state, this.pushStateAttempt);
       }
 
       pushState(key: string, value) {
         const state = Object.assign({}, this.state);
         state[key] = value;
-        state.page = -1;
+        if (!!state.page) {
+          state.page = null;
+        }
+        console.log('STATE 1', this.state);
         this.setState(state, this.pushStateAttempt);
       }
 
       pushStateAttempt() {
-
-        console.log(this.state);
+        console.log('STATE 2', this.state);
         this.props.dispatch(storeState(this.props.router.location.pathname, this.state));
-
         const q = stringifyFullState(this.state);
-        console.log('Q', q);
         this.props.history.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
       }
 
