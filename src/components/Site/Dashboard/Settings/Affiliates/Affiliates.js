@@ -160,12 +160,11 @@ class Affiliates extends React.Component {
 
   pushCategoryToState(category) {
     this.props.toggleOnStack('c', category);
-
   }
 
   categories() {
-    const {store: {categories: {list}}} = this.props;
-    if (!!list && list.length > 0) {
+    const list = _.get(this.props, ['store', 'categories', 'list'], []);
+    if (list.length > 0) {
       return (
         <ul>
           {_.map(list, (category, key) => {
@@ -177,7 +176,6 @@ class Affiliates extends React.Component {
   }
 
   category(key, category) {
-
     const checkBox = () => {
       if (this.props.onStack('c', category.id)) {
         return (<i className="fa fa-check-square-o pull-right"></i>);
@@ -185,7 +183,6 @@ class Affiliates extends React.Component {
 
       return (<i className="fa fa-square-o pull-right"></i>);
     };
-
 
     return (
       <li key={key} onClick={() => { this.pushCategoryToState(category.id); }}>
