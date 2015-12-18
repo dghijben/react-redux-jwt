@@ -24,24 +24,17 @@ export default function connectToFilter() {
       constructor() {
         super();
         this.switchPage = this.switchPage.bind(this);
-        // this.handleSearch = this.handleSearch.bind(this);
         this.pushState = this.pushState.bind(this);
-        // this.loadState = this.loadState.bind(this);
         this.pushStateAttempt = this.pushStateAttempt.bind(this);
         this.getParams = this.getParams.bind(this);
         this.toggleOnStack = this.toggleOnStack.bind(this);
         this.onStack = this.onStack.bind(this);
-        // this.form = this.form.bind(this);
         this.state = {};
       }
 
-/*
-      loadState(fieldNames: Array) {
-        const obj = Object.assign({}, this.state);
-        obj[this.props.name] = createAllParamsForFetch(this.props, this.props.name, fieldNames);
-        this.setState(obj);
+      componentWillMount() {
+        this.setState(createAllParamsForFetch(this.props));
       }
-*/
 
       onStack(key: string, value) {
         return (!!this.state[key] && this.state[key].indexOf(value) > -1);
@@ -64,15 +57,14 @@ export default function connectToFilter() {
             delete state[key][index];
           }
         }
-
-        console.log(state);
-
+        state.page = -1;
         this.setState(state, this.pushStateAttempt);
       }
 
       pushState(key: string, value) {
         const state = Object.assign({}, this.state);
         state[key] = value;
+        state.page = -1;
         this.setState(state, this.pushStateAttempt);
       }
 

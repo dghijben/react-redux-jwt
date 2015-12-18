@@ -122,13 +122,13 @@ export function stringifyState(state, formName, fields) {
   });
   return Qs.stringify(_.omit(obj, (value)=> {
     return !value;
-  }));
+  }), { encode: false });
 }
 
 export function stringifyFullState(state) {
   return Qs.stringify(_.omit(state, (value)=> {
     return !value;
-  }));
+  }), { encode: false });
 }
 
 

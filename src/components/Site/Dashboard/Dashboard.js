@@ -66,7 +66,6 @@ class Dashboard extends React.Component {
         </div>
       </div>
     );
-
   }
 
   dashboard() {
@@ -74,8 +73,8 @@ class Dashboard extends React.Component {
       return this.noAccounts();
     }
 
-    const accounts = (_.map(_.get(this.props, ['authorization', 'user', 'accounts']), (account) => {
-      return (<Accounts account={account} />);
+    const accounts = (_.map(_.get(this.props, ['authorization', 'user', 'accounts']), (account, key) => {
+      return (<Accounts account={account} key={key}/>);
     }));
 
     return (

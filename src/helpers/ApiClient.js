@@ -2,6 +2,7 @@ import _ from 'lodash';
 import superagent from 'superagent';
 import config from '../config';
 import cookie from 'react-cookie';
+import qs from 'qs';
 
 const methods = ['get', 'post', 'put', 'patch', 'del'];
 
@@ -56,8 +57,10 @@ class _ApiClient {
         }
 
         if (params) {
+          // console.log('PARAMS BINNEN API', params);
+
           params.time = Date.now().toString();
-          request.query(params);
+          request.query(qs.stringify(params, {encode: false}));
         } else {
           request.query([Date.now().toString()]);
         }

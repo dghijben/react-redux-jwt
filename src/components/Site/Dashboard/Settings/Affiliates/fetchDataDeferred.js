@@ -10,8 +10,6 @@ export default function fetchDataDeferred(getState, dispatch) {
   const promise = [];
   const params = createAllParamsForFetch(getState());
 
-  console.log(params);
-
   if (!isLoaded(reducerKey, state, params)) {
     promise.push(dispatch(load(reducerKey, apiPath, params)));
   }
