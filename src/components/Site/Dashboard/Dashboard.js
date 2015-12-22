@@ -29,6 +29,7 @@ class Dashboard extends React.Component {
       <div className="callout callout-vertical">
         <h2 className="callout-title">Welkom binnen uw dashboard! </h2>
         <p className="callout-desc">U moet uw aanmelding nog verder afronden. Wij hebben nog de gegevens van uw club nodig.</p>
+
         <div className="callout-action">
           <Link to="/dashboard/register" className="btn btn-custom no-radius min-width">Gegevens invoeren</Link>
         </div>

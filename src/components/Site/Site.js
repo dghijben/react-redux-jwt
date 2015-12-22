@@ -84,7 +84,8 @@ class App extends Component {
             {src: '//cdn.tinymce.com/4/tinymce.min.js'},
             {src: '/boss/js/jquery.hoverIntent.min.js'},
             {src: '/boss/js/bootstrap.min.js'},
-            {src: '/boss/js/main.js'}
+            {src: '/boss/js/main.js'},
+            {src: '/plupload-2.1.8/js/plupload.full.min.js'}
 
           ]}
           />
@@ -160,11 +161,7 @@ class App extends Component {
                       <hr />
                       <div className="product clearfix">
                         <a href="#" className="remove-btn" title="Remove"><i className="fa fa-close"></i></a>
-                        <figure>
-                          <a href="product.html" title="Product Name"><img className="img-responsive"
-                                                                           src="images/products/thumbs/product1.jpg"
-                                                                           alt="Product image"/></a>
-                        </figure>
+
                         <div className="product-meta">
                           <h4 className="product-name"><a href="product.html">Seamsun 3d Smart Tv</a></h4>
 
@@ -177,11 +174,7 @@ class App extends Component {
                       </div>
                       <div className="product clearfix">
                         <a href="#" className="remove-btn" title="Remove"><i className="fa fa-close"></i></a>
-                        <figure>
-                          <a href="product.html" title="Product Name"><img className="img-responsive"
-                                                                           src="images/products/thumbs/product1.jpg"
-                                                                           alt="Product image"/></a>
-                        </figure>
+
                         <div className="product-meta">
                           <h4 className="product-name"><a href="product.html">Banana Smart Watch</a></h4>
 
@@ -639,11 +632,7 @@ class App extends Component {
                       <hr />
                       <div className="product clearfix">
                         <a href="#" className="remove-btn" title="Remove"><i className="fa fa-close"></i></a>
-                        <figure>
-                          <a href="product.html" title="Product Name"><img className="img-responsive"
-                                                                           src="images/products/thumbs/product1.jpg"
-                                                                           alt="Product image"/></a>
-                        </figure>
+
                         <div className="product-meta">
                           <h4 className="product-name"><a href="product.html">Seamsun 3d Smart Tv</a></h4>
 
@@ -656,11 +645,7 @@ class App extends Component {
                       </div>
                       <div className="product clearfix">
                         <a href="#" className="remove-btn" title="Remove"><i className="fa fa-close"></i></a>
-                        <figure>
-                          <a href="product.html" title="Product Name"><img className="img-responsive"
-                                                                           src="images/products/thumbs/product1.jpg"
-                                                                           alt="Product image"/></a>
-                        </figure>
+
                         <div className="product-meta">
                           <h4 className="product-name"><a href="product.html">Banana Smart Watch</a></h4>
 

@@ -30,7 +30,8 @@ import PageHeader from '../../../Includes/PageHeader';
     'switchPage': PropTypes.func,
     'getParams': PropTypes.func,
     'toggleOnStack': PropTypes.func,
-    'onStack': PropTypes.func
+    'onStack': PropTypes.func,
+    'sortOnStack': PropTypes.func
   };
 
   constructor() {
@@ -113,19 +114,18 @@ import PageHeader from '../../../Includes/PageHeader';
                      className="ios-switch tinyswitch"
                      onChange={this.subscribeAll}
                 />
-
               <div>
                 <div />
               </div>
             </label>
           </th>
-          <th>Affiliate</th>
-          <th>cpm</th>
-          <th>cps</th>
-          <th>cpl</th>
-          <th>cpc</th>
-          <th>csr</th>
-          <th>ecpc</th>
+          <th className="hover" onClick={() => { this.pushSortToState('name'); }}>Affiliate</th>
+          <th className="hover" onClick={() => { this.pushSortToState('cpm'); }}>cpm</th>
+          <th className="hover" onClick={() => { this.pushSortToState('cps'); }}>cps</th>
+          <th className="hover" onClick={() => { this.pushSortToState('cpl'); }}>cpl</th>
+          <th className="hover" onClick={() => { this.pushSortToState('cpc'); }}>cpc</th>
+          <th className="hover" onClick={() => { this.pushSortToState('csr');} }>csr</th>
+          <th className="hover" onClick={() => { this.pushSortToState('ecpc'); }}>ecpc</th>
         </tr>
         </thead>
         <tbody>
@@ -142,7 +142,6 @@ import PageHeader from '../../../Includes/PageHeader';
                          checked={(this.state.affiliateIds.indexOf(item.id) > -1)}
 
                     />
-
                   <div>
                     <div />
                   </div>
@@ -161,6 +160,10 @@ import PageHeader from '../../../Includes/PageHeader';
         </tbody>
       </table>
     );
+  }
+
+  pushSortToState(field) {
+    this.props.sortOnStack(field);
   }
 
   pushFilterToState(name, id) {
@@ -214,7 +217,6 @@ import PageHeader from '../../../Includes/PageHeader';
   }
 
   render() {
-    // console.log(this.props);
     const paged = () => {
       const list = _.get(this.props, [reducerIndex, reducerKey, 'list']);
       if (list) {
@@ -225,7 +227,6 @@ import PageHeader from '../../../Includes/PageHeader';
     };
 
     const pagedCalled = paged();
-
     return (
       <div>
         <PageHeader
@@ -242,9 +243,7 @@ import PageHeader from '../../../Includes/PageHeader';
           <div className="row">
             <div className="col-md-9 col-md-push-3">
               {pagedCalled}
-
               {this.sites()}
-
               {pagedCalled}
             </div>
 

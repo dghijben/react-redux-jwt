@@ -29,7 +29,9 @@ export default function connectToFilter() {
         this.getParams = this.getParams.bind(this);
         this.toggleOnStack = this.toggleOnStack.bind(this);
         this.onStack = this.onStack.bind(this);
-        this.state = {};
+        this.sortOnStack = this.sortOnStack.bind(this);
+        this.state = {
+        };
       }
 
       componentWillMount() {
@@ -42,6 +44,30 @@ export default function connectToFilter() {
 
       getParams() {
         return createAllParamsForFetch(this.props);
+      }
+
+      sortOnStack(field) {
+        const state = Object.assign({}, this.state);
+
+        if (_.has(state, 'sort')) {
+          if (_.get(state, 'sort.field') === field && _.get(state, 'sort.order') === 'asc') {
+            state.sort = {
+              'field': field,
+              'order': 'desc'
+            };
+          } else {
+            state.sort = {
+              'field': field,
+              'order': 'asc'
+            };
+          }
+        } else {
+          state.sort = {
+            'field': field,
+            'order': 'asc'
+          };
+        }
+        this.setState(state, this.pushStateAttempt);
       }
 
       toggleOnStack(key: string, value) {
@@ -69,12 +95,10 @@ export default function connectToFilter() {
         if (!!state.page) {
           state.page = null;
         }
-        console.log('STATE 1', this.state);
         this.setState(state, this.pushStateAttempt);
       }
 
       pushStateAttempt() {
-        console.log('STATE 2', this.state);
         this.props.dispatch(storeState(this.props.router.location.pathname, this.state));
         const q = stringifyFullState(this.state);
         this.props.history.pushState(null, _.get(this.props.router, 'location.pathname') + '?' + q);
@@ -92,6 +116,7 @@ export default function connectToFilter() {
           getParams={this.getParams}
           toggleOnStack={this.toggleOnStack}
           onStack={this.onStack}
+          sortOnStack={this.sortOnStack}
           />);
       }
     }

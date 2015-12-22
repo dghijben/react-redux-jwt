@@ -57,6 +57,8 @@ import IndexDashboard from './Site/Dashboard/Dashboard';
 Dashboard.Index = IndexDashboard;
 import DashboardRegister from './Site/Dashboard/Register/Register';
 Dashboard.Register = DashboardRegister;
+import DashboardSettings from './Site/Dashboard/Settings/Settings';
+Dashboard.Settings = DashboardSettings;
 import DashboardAffiliates from './Site/Dashboard/Settings/Affiliates/Affiliates';
 Dashboard.Affiliates = DashboardAffiliates;
 

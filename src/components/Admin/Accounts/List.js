@@ -56,7 +56,6 @@ class List extends Component {
     return dispatch(load(reducerKey, createParamsForFetch(getState(), reducerIndex, fieldNames)));
   }
 
-
   fetchDataCallBack(state) {
     this.props.dispatch(load(reducerKey, state));
   }

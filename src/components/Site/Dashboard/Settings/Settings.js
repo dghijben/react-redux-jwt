@@ -1,40 +1,48 @@
 import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
-import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {mapDispatchToProps} from 'utils/functions';
 import { Tabs, Tab, Row, Col } from 'react-bootstrap';
-import validator, {validateBank, validateExtra, validatePI} from './validate';
+import validator, {validateBank, validateExtra} from './validate';
 import DynamicForm from 'redux-form-generator';
-import {fields1, fieldsBank, fieldsExtra, fieldsPI, reducerIndex, reducerKey, reducerItem} from './fields';
-import connectToState from 'helpers/connectToState';
-import * as actions from 'redux/modules/data/actions';
+import {fields1, fieldsBank, fieldsExtra, reducerIndex, reducerKey, reducerItem, initialValues} from './fields';
+import connectData from 'helpers/connectData';
+import connectToStore from 'helpers/connectToStore';
+import * as actions from 'redux/modules/store/actions';
+import fetchDataDeferred from './fetchDataDeferred';
+import PageHeader from 'components/Site/Includes/PageHeader';
 import {getUser} from 'redux/modules/auth/authActions';
 import {getValues} from 'redux-form';
+import Pending from 'components/includes/Pending';
 
-@connectToState(reducerIndex, reducerKey, reducerItem)
+@connectData(null, fetchDataDeferred)
+@connectToStore(reducerIndex, reducerKey, reducerItem)
 @connect(state=> {
   const obj = {
     'token': state.authorization.token,
+    'router': state.router,
+    'form': state.form,
     'getValues': _.merge(
       getValues(_.get(state.form, [reducerKey, 'tab1'])),
       getValues(_.get(state.form, [reducerKey, 'tab2'])),
-      getValues(_.get(state.form, [reducerKey, 'tab3'])),
-      getValues(_.get(state.form, [reducerKey, 'tab4']))
+      getValues(_.get(state.form, [reducerKey, 'tab3']))
     )
   };
-  obj[reducerKey] = state.form[reducerKey];
+  obj[reducerKey] = state.store[reducerKey];
   return obj;
 }, mapDispatchToProps)
-class Register extends Component {
+class Settings extends Component {
 
   static propTypes = {
     'handleSubmit': PropTypes.func,
     'getActionState': PropTypes.func,
+    'clearActionState': PropTypes.func,
     'dispatch': PropTypes.func,
     'dashboardAccount': PropTypes.object,
-    'token': PropTypes.string,
+    'router': PropTypes.object,
+    'form': PropTypes.object,
     'getValues': PropTypes.object,
+    'token': PropTypes.string
   }
 
   constructor() {
@@ -42,7 +50,6 @@ class Register extends Component {
     this.handleSubmitTab1 = this.handleSubmitTab1.bind(this);
     this.handleSubmitTab2 = this.handleSubmitTab2.bind(this);
     this.handleSubmitTab3 = this.handleSubmitTab3.bind(this);
-    this.handleSubmitTab4 = this.handleSubmitTab4.bind(this);
     this.setActiveKey = this.setActiveKey.bind(this);
     this.form = this.form.bind(this);
     this.success = this.success.bind(this);
@@ -50,18 +57,23 @@ class Register extends Component {
     this.state = {
       disabled: {
         tab1: false,
-        tab2: true,
-        tab3: true,
-        tab4: true
+        tab2: false,
+        tab3: false
       },
       activeKey: 1
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'success'], false) === true) {
+    if (
+      this.props.getActionState().pending === true &&
+      _.get(nextProps, [reducerKey, reducerItem, 'actionStatus', 'success'], false) === true) {
       this.props.dispatch(getUser(this.props.token));
     }
+  }
+
+  componentWillUnmount() {
+    this.props.clearActionState(reducerKey);
   }
 
   setActiveKey(key) {
@@ -103,28 +115,10 @@ class Register extends Component {
     this.setState(state);
   }
 
-  handleSubmitTab3() {
-    // Unlock tab 4
-    const state = Object.assign(
-      {},
-      this.state,
-      {
-        disabled: Object.assign(
-          {},
-          this.state.disabled,
-          {
-            tab4: false
-          }),
-        activeKey: 4
-      }
-    );
-    this.setState(state);
-  }
-
-  handleSubmitTab4(valuesTab, dispatch) {
+  handleSubmitTab3(valuesTab, dispatch) {
     const values = _.omit(this.props.getValues, _.isNull);
     return new Promise((resolve, reject) => {
-      dispatch(actions.create(reducerKey, values))
+      dispatch(actions.update(reducerKey, '/dashboard/accounts', this.props.router.params.id, values))
         .then((ret)=> {
           if (ret.hasOwnProperty('error')) {
             reject(ret.error);
@@ -137,7 +131,7 @@ class Register extends Component {
 
   success() {
     return (
-        <div className="alert alert-md alert-success">De gegevens zijn opgeslagen.</div>
+      <div className="alert alert-md alert-success">De gegevens zijn opgeslagen.</div>
     );
   }
 
@@ -145,94 +139,81 @@ class Register extends Component {
     if (this.props.getActionState().success === true) {
       return this.success();
     }
-
     const checkKey = () => {
-      return reducerIndex;
+      return _.get(this.props, [reducerKey, reducerItem, 'id'], null);
     };
+    const item = _.get(this.props, [reducerKey, reducerItem], {});
 
     return (
       <Tabs bsStyle="pills" activeKey={this.state.activeKey} onSelect={this.setActiveKey}>
-        <Tab eventKey={1} title="1. PERSOONLIJKE GEGEVENS">
+
+        <Tab eventKey={1} title="1. CLUB GEGEVENS" disabled={this.state.disabled.tab2}>
           <DynamicForm
             checkKey={reducerKey + checkKey() + 'tab1'}
             formName={reducerKey}
             formKey="tab1"
             formClass="dummy"
-            fieldsNeeded={fieldsPI()}
-            initialValues={{}}
-            validate={validatePI}
+            fieldsNeeded={fields1(this.props.router.params.id, this.props.token)}
+            initialValues={initialValues(item)}
+            validate={validator}
             onSubmit={this.handleSubmitTab1}
             getActionState={this.props.getActionState}
+            clearActionState={this.props.clearActionState}
           />
         </Tab>
-        <Tab eventKey={2} title="2. CLUB GEGEVENS" disabled={this.state.disabled.tab2}>
+        <Tab eventKey={2} title="2. BANK GEGEVENS" disabled={this.state.disabled.tab3}>
           <DynamicForm
-            checkKey={reducerKey + checkKey() + 'tab1'}
+            checkKey={reducerKey + checkKey() + 'tab2'}
             formName={reducerKey}
             formKey="tab2"
-            formClass="dummy"
-            fieldsNeeded={fields1()}
-            initialValues={{}}
-            validate={validator}
+            fieldsNeeded={fieldsBank()}
+            initialValues={initialValues(item)}
+            validate={validateBank}
             onSubmit={this.handleSubmitTab2}
             getActionState={this.props.getActionState}
+            clearActionState={this.props.clearActionState}
           />
         </Tab>
-        <Tab eventKey={3} title="3. BANK GEGEVENS" disabled={this.state.disabled.tab3}>
+        <Tab eventKey={3} title="3. EXTRA GEGEVENS" disabled={this.state.disabled.tab3}>
           <DynamicForm
-            checkKey={reducerKey + checkKey() + 'tab2'}
+            checkKey={reducerKey + checkKey() + 'tab3'}
             formName={reducerKey}
             formKey="tab3"
-            fieldsNeeded={fieldsBank()}
-            initialValues={{}}
-            validate={validateBank}
+            fieldsNeeded={fieldsExtra()}
+            initialValues={initialValues(item)}
+            validate={validateExtra}
             onSubmit={this.handleSubmitTab3}
             getActionState={this.props.getActionState}
-          />
-        </Tab>
-        <Tab eventKey={4} title="4. CLUB GEGEVENS" disabled={this.state.disabled.tab4}>
-          <DynamicForm
-            checkKey={reducerKey + checkKey() + 'tab2'}
-            formName={reducerKey}
-            formKey="tab4"
-            fieldsNeeded={fieldsExtra()}
-            initialValues={{}}
-            validate={validateExtra}
-            onSubmit={this.handleSubmitTab4}
-            getActionState={this.props.getActionState}
+            clearActionState={this.props.clearActionState}
           />
         </Tab>
       </Tabs>
     );
   }
 
-
   render() {
     return (
       <div>
-        <div className="page-header dark larger larger-desc">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-6">
-                <h1>Registeren</h1>
-                <p className="page-header-desc">Club aanmelden in 3 stappen.</p>
-              </div>
-              <div className="col-md-6">
-                <ol className="breadcrumb">
-                  <li><Link to="/">Home</Link></li>
-                  <li className="active">Login</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
+        <PageHeader
+          title="Gegevens wijzigen"
+          desc="Hier kunt u de gegevens van uw clubs wijzigen."
+          links={[
+            {to: '/', name: 'Home'},
+            {to: '/dashboard', name: 'Dashboard'},
+            {name: 'Gegevens wijzigen'}
+          ]}
+        />
 
         <div className="container">
           <Row>
             <Col md={12}>
               <div className="form-wrapper">
-                <h2 className="title-underblock custom mb40">Registreer uw club</h2>
-                {this.form()}
+                <h2 className="title-underblock custom mb40">Club gegevens</h2>
+                <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false) ||
+                _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'actionStatus', 'pending'], false)
+                }>
+                  {this.form()}
+                </Pending>
               </div>
             </Col>
           </Row>
@@ -242,4 +223,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default Settings;
