@@ -3,6 +3,7 @@ const msgMandatory = 'Dit veld is verplicht.';
 import iban from 'iban';
 const msgIban = 'Iban is niet geldig';
 const msgTelephone = 'Dit is geen geldig telefoonnummer formaat.';
+const msgNumeric = 'Alleen een cijfers';
 
 export default function validate(data) {
 
@@ -29,6 +30,8 @@ export function validateBank(data) {
 export function validateExtra(data) {
   const errors = {};
   if (validator.isNull(data.members)) errors.members = msgMandatory;
+  if (!validator.isNull(data.goal1) && !validator.isNumeric(data.goal1)) errors.goal1 = msgNumeric;
+  if (!validator.isNull(data.goal2) && !validator.isNumeric(data.goal2)) errors.goal2 = msgNumeric;
   return errors;
 }
 

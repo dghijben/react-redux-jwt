@@ -212,14 +212,14 @@ export default function fields(id, token, resource, resourceList) {
     {
       name: 'goal1',
       label: 'Doel 1',
-      type: 'rte',
+      type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
     {
       name: 'goal2',
       label: 'Doel 2',
-      type: 'rte',
+      type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },

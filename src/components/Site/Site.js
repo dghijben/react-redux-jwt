@@ -35,7 +35,7 @@ class App extends Component {
           <i className="fa fa-dashboard "></i> Dashboard
         </MenuItem>
         <MenuItem eventKey="4.2" {...bootstrapSelectLink(this.context.history, null, '/admin')}><i className="fa fa-database"></i>Admin</MenuItem>
-        <MenuItem eventKey="4.3" onSelect={()=>{ console.log('clicked'); }}><i className="fa fa-wrench"></i> Settings</MenuItem>
+        <MenuItem eventKey="4.3" {...bootstrapSelectLink(this.context.history, null, '/dashboard/user')}><i className="fa fa-wrench"></i> Account</MenuItem>
         <MenuItem divider/>
         <MenuItem eventKey="4.4" {...bootstrapSelectLink(this.context.history, null, '/logout')}><i className="fa fa-lock"></i> Uitloggen</MenuItem>
       </NavDropdown>

@@ -16,7 +16,7 @@ class Accounts extends React.Component {
       <div className="callout callout-vertical">
         <Picture responsive thumbnail pictures={_.get(account, ['picture'], [])} />
         <h2 className="callout-title">{account.name}</h2>
-        <p className="callout-desc" dangerouslySetInnerHTML={createMarkup(account.goal1)}></p>
+        <p className="callout-desc" dangerouslySetInnerHTML={createMarkup(account.description)}></p>
         <div className="callout-action">
           <Link to={`/dashboard/settings/${account.id}`} className="btn btn-custom no-radius min-width">Gegevens wijzigen</Link>
           <Link to={`/dashboard/settings/${account.id}/affiliates`} className="btn btn-custom no-radius min-width">Affiliates koppelen</Link>

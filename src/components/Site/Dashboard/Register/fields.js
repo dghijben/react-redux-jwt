@@ -1,3 +1,4 @@
+
 export const reducerIndex = 'data';
 export const reducerKey = 'dashboardAccount';
 export const reducerItem = 'item';
@@ -37,6 +38,7 @@ export function fieldsPI() {
       row: {
         hideOnStatic: true,
         col: [
+
           {
             md: 12,
             children: [
@@ -125,8 +127,7 @@ export function fieldsBank() {
   ]);
 }
 
-export function fieldsExtra() {
-
+export function fieldsExtra(voorwaarden) {
   return ([
 
     {
@@ -140,23 +141,33 @@ export function fieldsExtra() {
     {
       name: 'goal1',
       label: 'Doel 1',
-      type: 'rte',
+      type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
     },
     {
       name: 'goal2',
       label: 'Doel 2',
-      type: 'rte',
+      type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
-    }, {
+    },
+    {
+      name: 'voorwaarden',
+      label: 'Ik accepteer de voorwaarden.',
+      type: 'checkbox',
+      labelClassName: 'col-md-12',
+      wrapperClassName: 'col-md-10 col-md-offset-2'
+    },
+
+    {
       row: {
         hideOnStatic: true,
         col: [
           {
             md: 12,
             children: [
+              {type: 'react', component: voorwaarden},
               {type: 'success', message: 'Het formulier is opgeslagen'},
               {type: 'error', message: 'Er zijn fouten opgetreden, controleer het formulier.'}
             ]
@@ -168,7 +179,7 @@ export function fieldsExtra() {
   ]);
 }
 
-export function fields1() {
+export function fields1(token) {
 
   return ([
 
@@ -262,7 +273,20 @@ export function fields1() {
         ]
       }
     },
-
+    {
+      name: 'picture',
+      label: 'Logo',
+      type: 'plupload',
+      placeholder: 'Bestand',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      url: '/api/dashboard/accounts/upload',
+      headers: {
+        Authorization: 'Bearer ' + token
+      },
+      multi_selection: false,
+      hideOnStatic: true
+    },
     {
       row: {
         hideOnStatic: true,

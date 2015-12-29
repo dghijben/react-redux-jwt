@@ -24,10 +24,11 @@ export default function connectToFilter() {
       constructor() {
         super();
         this.switchPage = this.switchPage.bind(this);
-        this.pushState = this.pushState.bind(this);
+        this.pushOnState = this.pushOnState.bind(this);
         this.pushStateAttempt = this.pushStateAttempt.bind(this);
         this.getParams = this.getParams.bind(this);
         this.toggleOnStack = this.toggleOnStack.bind(this);
+        this.inputOnStack = this.inputOnStack.bind(this);
         this.onStack = this.onStack.bind(this);
         this.sortOnStack = this.sortOnStack.bind(this);
         this.state = {
@@ -44,6 +45,10 @@ export default function connectToFilter() {
 
       getParams() {
         return createAllParamsForFetch(this.props);
+      }
+
+      inputOnStack(key: string) {
+        return (!!this.state[key] ? this.state[key] : null );
       }
 
       sortOnStack(field) {
@@ -89,12 +94,14 @@ export default function connectToFilter() {
         this.setState(state, this.pushStateAttempt);
       }
 
-      pushState(key: string, value) {
+      pushOnState(key: string, value) {
         const state = Object.assign({}, this.state);
         state[key] = value;
         if (!!state.page) {
           state.page = null;
         }
+        console.log(state);
+
         this.setState(state, this.pushStateAttempt);
       }
 
@@ -112,9 +119,10 @@ export default function connectToFilter() {
         return (<WrappedComponent
           {...this.props}
           switchPage={this.switchPage}
-          pushState={this.pushState}
+          pushOnState={this.pushOnState}
           getParams={this.getParams}
           toggleOnStack={this.toggleOnStack}
+          inputOnStack={this.inputOnStack}
           onStack={this.onStack}
           sortOnStack={this.sortOnStack}
           />);

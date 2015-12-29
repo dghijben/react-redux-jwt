@@ -20,6 +20,7 @@ export default () => {
 
         <Route component={cmpnnt.RequireLogin}>
           <Route path="/dashboard" component={cmpnnt.Dashboard.Index}/>
+          <Route path="/dashboard/user" component={cmpnnt.Dashboard.User}/>
           <Route path="/dashboard/register" component={cmpnnt.Dashboard.Register}/>
           <Route path="/dashboard/settings/:id" component={cmpnnt.Dashboard.Settings}/>
           <Route path="/dashboard/settings/:id/affiliates" component={cmpnnt.Dashboard.Affiliates}/>

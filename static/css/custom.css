@@ -41,7 +41,7 @@
     padding: 10px 15px;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"].ios-switch {
     position: absolute;
     opacity: 0;
 }

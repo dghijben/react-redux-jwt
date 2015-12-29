@@ -150,6 +150,13 @@ class Register extends Component {
       return reducerIndex;
     };
 
+    const voorwaarden = (props) => {
+      return (
+        <div {...props} className="col-md-offset-2">
+          Onze voorwaarden kunt u <Link to="/voorwaarden">hier</Link> bekijken.
+        </div>);
+    };
+
     return (
       <Tabs bsStyle="pills" activeKey={this.state.activeKey} onSelect={this.setActiveKey}>
         <Tab eventKey={1} title="1. PERSOONLIJKE GEGEVENS">
@@ -171,7 +178,7 @@ class Register extends Component {
             formName={reducerKey}
             formKey="tab2"
             formClass="dummy"
-            fieldsNeeded={fields1()}
+            fieldsNeeded={fields1(this.props.token)}
             initialValues={{}}
             validate={validator}
             onSubmit={this.handleSubmitTab2}
@@ -195,7 +202,7 @@ class Register extends Component {
             checkKey={reducerKey + checkKey() + 'tab2'}
             formName={reducerKey}
             formKey="tab4"
-            fieldsNeeded={fieldsExtra()}
+            fieldsNeeded={fieldsExtra(voorwaarden)}
             initialValues={{}}
             validate={validateExtra}
             onSubmit={this.handleSubmitTab4}

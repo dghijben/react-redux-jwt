@@ -59,6 +59,8 @@ import DashboardRegister from './Site/Dashboard/Register/Register';
 Dashboard.Register = DashboardRegister;
 import DashboardSettings from './Site/Dashboard/Settings/Settings';
 Dashboard.Settings = DashboardSettings;
+import DashboardUser from './Site/Dashboard/User/User';
+Dashboard.User = DashboardUser;
 import DashboardAffiliates from './Site/Dashboard/Settings/Affiliates/Affiliates';
 Dashboard.Affiliates = DashboardAffiliates;
 

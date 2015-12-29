@@ -9,6 +9,9 @@ import connectData from 'helpers/connectData';
 import connectToFilter from 'helpers/connectToFilter';
 import fetchDataDeferred from './fetchDataDeferred';
 import PageHeader from '../../../Includes/PageHeader';
+import {Input} from 'react-bootstrap';
+
+let myTimeout = null;
 
 @connectData(null, fetchDataDeferred)
 @connectToFilter()
@@ -31,7 +34,9 @@ import PageHeader from '../../../Includes/PageHeader';
     'getParams': PropTypes.func,
     'toggleOnStack': PropTypes.func,
     'onStack': PropTypes.func,
-    'sortOnStack': PropTypes.func
+    'sortOnStack': PropTypes.func,
+    'pushOnState': PropTypes.func,
+    'inputOnStack': PropTypes.func
   };
 
   constructor() {
@@ -43,6 +48,9 @@ import PageHeader from '../../../Includes/PageHeader';
     this.updateState = this.updateState.bind(this);
     this.pushFilterToState = this.pushFilterToState.bind(this);
     this.affiliateState = this.affiliateState.bind(this);
+    this.searchBar = this.searchBar.bind(this);
+    this.pushSearch = this.pushSearch.bind(this);
+    this.clearTimer = this.clearTimer.bind(this);
     this.state = {
       affiliateIds: []
     };
@@ -216,6 +224,27 @@ import PageHeader from '../../../Includes/PageHeader';
     );
   }
 
+  pushSearch(e) {
+    const value = e.target.value;
+    this.setState({
+      q: value
+    });
+
+    myTimeout = setTimeout(() => {
+      this.props.pushOnState('q', value);
+    }, 150);
+  }
+
+  clearTimer() {
+    if (myTimeout) {
+      clearTimeout(myTimeout);
+    }
+  }
+
+  searchBar() {
+    return ( <Input type="text" placeholder="zoeken" onKeyUp={this.pushSearch} onKeyDown={this.clearTimer} defaultValue={this.props.inputOnStack('q')}/> );
+  }
+
   render() {
     const paged = () => {
       const list = _.get(this.props, [reducerIndex, reducerKey, 'list']);
@@ -235,7 +264,7 @@ import PageHeader from '../../../Includes/PageHeader';
           links={[
             {name: 'Home', to: '/'},
             {name: 'Dashboard', to: '/dashboard'},
-            {name: 'Affiliates'}
+            {name: 'Affiliates koppelen'}
           ]}
           />
 
@@ -251,6 +280,9 @@ import PageHeader from '../../../Includes/PageHeader';
               <div className="widget">
                 <h3>Categories</h3>
                 <ul id="category-widget">
+                  <li className="open"><a href="#">Zoeken <span className="category-widget-btn"></span></a>
+                    {this.searchBar()}
+                  </li>
                   <li className="open"><a href="#">Categorieen <span className="category-widget-btn"></span></a>
                     {this.categories()}
                   </li>
