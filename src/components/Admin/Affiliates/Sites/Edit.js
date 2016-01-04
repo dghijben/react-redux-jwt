@@ -10,7 +10,7 @@ import DynamicForm from 'redux-form-generator';
 import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import * as actions from 'redux/modules/data/actions';
-import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeyCats, reducerItem, initialValues, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -111,7 +111,7 @@ class Edit extends Component {
               </Col>
               <Col md={10}>
                 <DynamicForm
-                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
+                  checkKey={'userEdit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']) + _.get(this.props, [reducerIndex, reducerKeyCats, 'allStatus', 'success'])}
                   formName="userEdit"
                   formClass="form-horizontal"
                   fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']), this.props.token, _.get(this.props, 'data.categories.all', []))}

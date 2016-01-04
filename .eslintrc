@@ -45,5 +45,6 @@
     "jsx": true,
     "spread": true,
     "experimentalObjectRestSpread": true
+
   }
 }

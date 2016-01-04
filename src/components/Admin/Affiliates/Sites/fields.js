@@ -51,6 +51,19 @@ export const searchFields = [
       {desc: <span>Affiliate url<i className="fa fa-angle-up"></i></span>, field: 'url_affiliateAsc'},
       {desc: <span>Affiliate url<i className="fa fa-angle-down"></i></span>, field: 'url_AffiliateDesc'},
     ]
+  },
+  {
+    name: 'active',
+    submit: true,
+    type: 'dropdown',
+    bsStyle: 'default',
+    items: [
+      {default: 'Status'},
+      {desc: <span>Gedeactiveerd</span>, field: '1'},
+      {desc: <span>Actief</span>, field: '2'},
+      {desc: <span>Nieuw</span>, field: '3'},
+
+    ]
   }
 ];
 
@@ -188,10 +201,18 @@ export default function fields(id, token, categories) {
     },
     {
       name: 'active',
-      label: 'Actief',
-      type: 'checkbox',
-      wrapperClassName: 'col-md-offset-2 col-md-10'
+      type: 'select',
+      label: 'Status',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      options: [
+        {default: 'Status'},
+        {desc: 'Gedeactiveerd', value: 0},
+        {desc: 'Actief', value: 1},
+        {desc: 'Nieuw', value: 2}
+      ]
     },
+
     {
       name: 'categories',
       label: 'Categorieen',

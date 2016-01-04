@@ -95,7 +95,7 @@ class Show extends Component {
               <Col md={10}>
                 <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>
                   <DynamicForm
-                    checkKey={reducerIndex + '_' + reducerItem + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
+                    checkKey={reducerIndex + '_' + reducerItem + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']) + _.get(this.props, [reducerIndex, reducerKeyCats, 'allStatus', 'success'])}
                     formName={reducerIndex + '_' + reducerItem}
                     formClass="form-horizontal"
                     fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']), null, _.get(this.props, [reducerIndex, reducerKeyCats, 'all'], []))}

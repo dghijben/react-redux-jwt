@@ -77,7 +77,7 @@ class Create extends Component {
               <Col md={2} />
               <Col md={10}>
                 <DynamicForm
-                  checkKey={reducerIndex + '-new'}
+                  checkKey={reducerIndex + '-new' + _.get(this.props, [reducerIndex, reducerKeySites, 'allStatus', 'success'])}
                   formName={reducerIndex}
                   formClass="form-horizontal"
                   fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
