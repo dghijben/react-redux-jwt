@@ -118,7 +118,8 @@ class List extends Component {
                 fields: searchFields
               }}
               cols={[
-                {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
+                {name: 'Status', show: 'active', translate: {0: <i className="fa fa-circle text-danger" ></i>, 1: <i className="fa fa-circle text-success" ></i>, 2: <i className="fa fa-circle text-info" ></i>}},
+                {name: 'Logo', image: ['picture', 0, 'file_name'], width: '80px'},
                 {name: 'Name', show: 'name'},
                 {name: 'CPM', show: 'cpm'},
                 {name: 'CPL', show: 'cpl'},

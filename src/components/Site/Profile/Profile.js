@@ -30,7 +30,7 @@ export default class About extends React.Component {
             <div className="col-md-5">
 
               <div className="portfolio-details">
-                <h2 className="title-underblock custom">One big Buggy family</h2>
+                <h2 className="title-underblock custom">Steun gratis WNF</h2>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam in est justo. Sed sollicitudin augue ut massa fermentum, sit amet condimentum nulla volutpat. Vestibulum non dui condimentum, pulvinar lectus quis, molestie erat. Cras dapibus eros urna.</p>
                 <p>Etiam et risus vehicula, pulvinar velit quis, sagittis nisi. Aliquam eu augue id mauris porttitor tempor et eget quam. Mauris elementum enim.</p>
                 <ul className="portfolio-details-list">
