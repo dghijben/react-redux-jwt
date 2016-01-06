@@ -106,7 +106,7 @@ export function createAllParamsForFetch(state) {
   const pathname = state.router.location.pathname;
   const params = _.assign(
     _.get(state, ['reduxRouterReducer', 'routes', pathname], {}),
-    _.get(state, ['router', 'location', 'query'], {})
+    Qs.parse(_.get(state, ['router', 'location', 'search'], {}).substr(1))
   );
 
   return _.omit(params, (value)=> {

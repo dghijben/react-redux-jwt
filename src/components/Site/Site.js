@@ -84,12 +84,14 @@ class App extends Component {
             {src: '//cdn.tinymce.com/4/tinymce.min.js'},
             {src: '/boss/js/jquery.hoverIntent.min.js'},
             {src: '/boss/js/bootstrap.min.js'},
+            {src: '/boss/js/waypoints.min.js'},
+            {src: '/boss/js/waypoints-sticky.min.js'},
             {src: '/boss/js/main.js'},
+
             {src: '/plupload-2.1.8/js/plupload.full.min.js'}
 
           ]}
           />
-
         <header id="header" role="banner">
           <div className="collapse navbar-white special-for-mobile" id="header-search-form">
             <div className="container">

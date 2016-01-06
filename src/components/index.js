@@ -75,4 +75,8 @@ import IndexCms from './Cms/Cms';
 Cms.Index = IndexCms;
 modules.Cms = Cms;
 
+
+import Profile from './Site/Profile/Profile';
+modules.Profile = Profile;
+
 export default modules;

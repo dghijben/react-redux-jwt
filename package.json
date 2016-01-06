@@ -125,7 +125,7 @@
     "redux": "3.0.5",
     "redux-form": "^4.0.6",
     "redux-form-generator": "file:/var/www/redux-form-generator",
-    "redux-router": "1.0.0-beta5",
+    "redux-router": "1.0.0-beta7",
     "scroll-behavior": "^0.3.0",
     "serialize-javascript": "1.1.2",
     "serve-favicon": "2.3.0",

@@ -13,6 +13,7 @@ export default () => {
         </Route>
         <Route path="/logout" component={cmpnnt.Logout} />
         <Route path="/about" component={cmpnnt.About}/>
+        <Route path="/profile/:id/:name" component={cmpnnt.Profile}/>
 
 
         <Route path="/register" component={cmpnnt.Register} />

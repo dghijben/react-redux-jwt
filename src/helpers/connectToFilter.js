@@ -100,8 +100,6 @@ export default function connectToFilter() {
         if (!!state.page) {
           state.page = null;
         }
-        console.log(state);
-
         this.setState(state, this.pushStateAttempt);
       }
 
