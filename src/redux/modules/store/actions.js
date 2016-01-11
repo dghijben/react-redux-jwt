@@ -111,11 +111,12 @@ export function isLoadedSimple(key, globalState) {
   );
 }
 
-
 export function isLoadedItem(key, globalState, id) {
   return globalState[reducerIndex] && globalState[reducerIndex][key] && globalState[reducerIndex][key][reducerItem] &&
     ((parseInt(globalState[reducerIndex][key][reducerItem].id, 10) === parseInt(id, 10)
+      || parseInt(globalState[reducerIndex][key][reducerItem].data.id, 10) === parseInt(id, 10)
     ) || globalState[reducerIndex][key][reducerItem].failed === true)
+
     ;
 }
 

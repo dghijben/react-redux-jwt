@@ -300,4 +300,3 @@ let myTimeout = null;
 }
 
 export default Affiliates;
-

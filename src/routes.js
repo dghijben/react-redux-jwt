@@ -13,7 +13,7 @@ export default () => {
         </Route>
         <Route path="/logout" component={cmpnnt.Logout} />
         <Route path="/about" component={cmpnnt.About}/>
-        <Route path="/profile/:id/:name" component={cmpnnt.Profile}/>
+        <Route path="/profile/:id/:name" component={cmpnnt.Profile} ignoreScrollBehavior/>
 
 
         <Route path="/register" component={cmpnnt.Register} />
@@ -57,7 +57,6 @@ export default () => {
             </Route>
           </Route>
 
-          <Redirect from="affiliates" to="affiliates/sites" />
           <Route path="affiliates" component={cmpnnt.AdminAffiliates}>
             <Route path="sites" component={cmpnnt.AdminAffiliatesSites.Wrap}>
               <IndexRoute component={cmpnnt.AdminAffiliatesSites.List} />

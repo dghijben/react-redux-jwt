@@ -3,8 +3,10 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { storeState } from 'redux/modules/reduxRouter/actions';
 import {stringifyFullState, createAllParamsForFetch} from 'utils/functions';
+let scrollTop = null;
 
 export default function connectToFilter() {
+
   return (WrappedComponent) => {
     @connect(state => ({
       'router': state.router,
@@ -37,6 +39,14 @@ export default function connectToFilter() {
 
       componentWillMount() {
         this.setState(createAllParamsForFetch(this.props));
+      }
+
+      componentWillUpdate() {
+        scrollTop = window.pageYOffset || document.documentElement.scrollTop || scrollTop;
+      }
+
+      componentDidUpdate() {
+        window.scroll(0, scrollTop);
       }
 
       onStack(key: string, value) {

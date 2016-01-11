@@ -34,16 +34,25 @@ const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/api',
 });
+proxy.on('error', function(e) {
+  console.error(e) // this is where the error is thrown
+});
 
 const proxyBin = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/bin',
+});
+proxyBin.on('error', function(e) {
+  console.error(e) // this is where the error is thrown
 });
 
 const proxyImg = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/image',
 });
+proxyImg.on('error', function(e) {
+  console.error(e) // this is where the error is thrown
+});
 
-const translations = globSync('./src/langs/*.json')
+  const translations = globSync('./src/langs/*.json')
   .map((filename) => [
     path.basename(filename, '.json'),
     readFileSync(filename, 'utf8'),

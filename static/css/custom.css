@@ -152,3 +152,11 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 .hover {
     cursor: pointer;
 }
+
+.sidebar .filter-group-widget .panel-body {
+    padding-top: 0px;
+}
+
+.extLink {
+    cursor: pointer;
+}
