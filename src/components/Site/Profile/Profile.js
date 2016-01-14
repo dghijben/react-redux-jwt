@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, {PropTypes} from 'react';
-import Paginator from 'react-laravel-paginator';
 import Helmet from 'react-helmet';
 import PageHeader from '../Includes/PageHeader';
 import {mapDispatchToProps, createMarkup} from 'utils/functions';
@@ -9,6 +8,8 @@ import connectData from 'helpers/connectData';
 import connectToFilter from 'helpers/connectToFilter';
 import fetchDataDeferred from './fetchDataDeferred';
 import {Input} from 'react-bootstrap';
+import ImageList from './ImageList';
+import Pending from 'components/includes/Pending';
 let myTimeout = null;
 
 @connectData(null, fetchDataDeferred)
@@ -42,8 +43,6 @@ class Profile extends React.Component {
 
   constructor() {
     super();
-    this.sites = this.sites.bind(this);
-    this.site = this.site.bind(this);
     this.searchBar = this.searchBar.bind(this);
     this.pushSearch = this.pushSearch.bind(this);
     this.clearTimer = this.clearTimer.bind(this);
@@ -73,6 +72,8 @@ class Profile extends React.Component {
   }
 
   searchBar() {
+    // TODO Reset value on POP state
+    console.log('Value' + this.props.inputOnStack('q'));
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
@@ -80,7 +81,7 @@ class Profile extends React.Component {
         </div>
         <div className="panel-body">
           <Input type="text" placeholder="zoeken" onKeyUp={this.pushSearch} onKeyDown={this.clearTimer}
-                 defaultValue={this.props.inputOnStack('q')}/>
+                 value={this.props.inputOnStack('q')}/>
         </div>
       </div>);
   }
@@ -130,104 +131,6 @@ class Profile extends React.Component {
     );
   }
 
-  sites() {
-
-    const paged = () => {
-      const list = _.get(this.props, ['affiliates', 'list', 'meta', 'pagination']);
-      if (list) {
-        const currentPage = list.current_page;
-        const lastPage = list.total_pages;
-        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.props.switchPage}/>;
-      }
-    };
-
-    const chunks = _.chunk(_.get(this.props, ['affiliates', 'list', 'data'], []), 4);
-    return (
-      <div>
-        {paged()}
-        {_.map(chunks, (chunk, key) => {
-          return (
-            <div className="row" key={key}>
-              {_.map(chunk, (site, siteKey) => {
-                return this.site(site, siteKey);
-              })}
-            </div>
-          );
-        })}
-
-        {_.map(_.get(this.props, ['affiliates', 'list', 'data'], []), (item, key) => {
-          const picture = () => {
-            if (_.has(item, 'picture.data[0].file_name')) {
-              const img = _.get(item, 'picture.data[0]');
-              return <img src={'/image/small/' + img.file_name} alt={item.name} className="img-responsive"/>;
-            }
-          };
-
-          const link = () => {
-            if (_.get(item, 'url_affiliate') === '') {
-              alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-            } else {
-
-              const affiliateUrl = _.get(item, 'url_affiliate');
-              const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
-              window.open(res);
-            }
-          };
-
-          return (
-            <div className="row extLink" key={key} onClick={link}>
-              <div className="col-md-3">{picture()}</div>
-              <div className="col-md-7">{item.name}</div>
-              <div className="col-md-2">
-                <button className="btn btn-primary pull-right">kies winkel</button>
-              </div>
-            </div>
-          );
-        })}
-        {paged()}
-      </div>
-    );
-  }
-
-  site(site, key) {
-    const picture = () => {
-      if (_.has(site, 'picture.data[0].file_name')) {
-        const img = _.get(site, 'picture.data[0]');
-        return <img src={'/image/268x332/' + img.file_name} alt={site.name} className="product-image"/>;
-      }
-
-      return <img src={'https://placehold.it/262x262&text=' + encodeURIComponent(site.name)} className="product-image" />;
-
-    };
-
-    const link = () => {
-      if (_.get(site, 'url_affiliate') === '') {
-        alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-      } else {
-
-        const affiliateUrl = _.get(site, 'url_affiliate');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
-        window.open(res);
-      }
-    };
-
-    return (
-      <div className="col-sm-3">
-
-        <div className="product text-center" key={key}>
-          <div className="product-top">
-            <figure>
-              <a href="product.html" title={site.name}>
-                {picture()}
-              </a>
-            </figure>
-          </div>
-          <h2 className="title mb30">{site.name}</h2>
-          <a href="#" onClick={link} className="btn btn-custom add-to-cart">Winkelen</a>
-        </div>
-      </div>
-    );
-  }
 
   render() {
     const {profile} = this.props;
@@ -242,6 +145,12 @@ class Profile extends React.Component {
       <div id="content" role="main">
         <Helmet
           title={_.get(profile, 'name')}
+          link={[
+            {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
+          ]}
+          script={[
+            {'src': '/boss/js/jquery.selectbox.min.js'}
+          ]}
         />
         <PageHeader
           title={_.get(profile, 'name')}
@@ -304,9 +213,15 @@ class Profile extends React.Component {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-9 col-md-push-3">
-              {this.sites()}
+          <div className="row pos-relative">
+            <div className="col-md-9 col-md-push-3 ">
+              <Pending state={_.get(this.props, ['affiliates', 'pending'])}>
+                <ImageList
+                  list={_.get(this.props, ['affiliates', 'list'])}
+                  switchPage={this.props.switchPage}
+                  profile={_.get(this.props, ['profile'])}
+                />
+              </Pending>
             </div>
             <aside className="col-md-3 col-md-pull-9 sidebar">
               <div className="widget">

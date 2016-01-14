@@ -160,3 +160,11 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 .extLink {
     cursor: pointer;
 }
+
+.pos-relative {
+    position: relative;
+}
+
+.pos-absolute {
+    position: absolute;
+}

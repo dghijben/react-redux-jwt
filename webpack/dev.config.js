@@ -49,7 +49,8 @@ babelLoaderQuery.cacheDirectory = true;
 // console.log(JSON.stringify(babelLoaderQuery));
 
 module.exports = {
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
+  devtool: 'inline-eval',
   context: path.resolve(__dirname, '..'),
   entry: {
     'main': [

@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 
 export default class Pending extends Component {
-
   static propTypes = {
     state: PropTypes.bool.isRequired,
     children: React.PropTypes.oneOfType([

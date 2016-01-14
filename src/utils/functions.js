@@ -104,10 +104,18 @@ export function createParamsForFetch(state, form, fields) {
 
 export function createAllParamsForFetch(state) {
   const pathname = state.router.location.pathname;
-  const params = _.assign(
-    _.get(state, ['reduxRouterReducer', 'routes', pathname], {}),
-    Qs.parse(_.get(state, ['router', 'location', 'search'], {}).substr(1))
-  );
+  const action = state.router.location.action;
+  let params;
+  if (action === 'POP') {
+    params = _.assign(
+      Qs.parse(_.get(state, ['router', 'location', 'search'], {}).substr(1))
+    );
+  } else {
+    params = _.assign(
+      _.get(state, ['reduxRouterReducer', 'routes', pathname], {}),
+      Qs.parse(_.get(state, ['router', 'location', 'search'], {}).substr(1))
+    );
+  }
 
   return _.omit(params, (value)=> {
     return !value;

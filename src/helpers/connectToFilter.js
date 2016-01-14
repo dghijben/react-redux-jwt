@@ -3,6 +3,8 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { storeState } from 'redux/modules/reduxRouter/actions';
 import {stringifyFullState, createAllParamsForFetch} from 'utils/functions';
+import Qs from 'qs';
+
 let scrollTop = null;
 
 export default function connectToFilter() {
@@ -37,6 +39,17 @@ export default function connectToFilter() {
 
       componentWillMount() {
         this.setState(createAllParamsForFetch(this.props));
+      }
+
+      componentWillReceiveProps(nextProps) {
+        const action = nextProps.router.location.action;
+        if (action === 'POP') {
+          const params = _.assign(
+            Qs.parse(_.get(nextProps, ['router', 'location', 'search'], {}).substr(1))
+          );
+          console.log(params);
+          this.setState(params);
+        }
       }
 
       componentWillUpdate() {
