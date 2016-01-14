@@ -43,6 +43,7 @@ class Profile extends React.Component {
   constructor() {
     super();
     this.sites = this.sites.bind(this);
+    this.site = this.site.bind(this);
     this.searchBar = this.searchBar.bind(this);
     this.pushSearch = this.pushSearch.bind(this);
     this.clearTimer = this.clearTimer.bind(this);
@@ -140,19 +141,20 @@ class Profile extends React.Component {
       }
     };
 
+    const chunks = _.chunk(_.get(this.props, ['affiliates', 'list', 'data'], []), 4);
     return (
       <div>
         {paged()}
-        <table className="table table-bordered table-hover table-condensed">
-          <thead>
-          <tr>
-            <th colSpan="2" className="hover" onClick={() => { this.props.sortOnStack('name'); }}>Affiliate</th>
-            <th></th>
-          </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+        {_.map(chunks, (chunk, key) => {
+          return (
+            <div className="row" key={key}>
+              {_.map(chunk, (site, siteKey) => {
+                return this.site(site, siteKey);
+              })}
+            </div>
+          );
+        })}
+
         {_.map(_.get(this.props, ['affiliates', 'list', 'data'], []), (item, key) => {
           const picture = () => {
             if (_.has(item, 'picture.data[0].file_name')) {
@@ -183,6 +185,46 @@ class Profile extends React.Component {
           );
         })}
         {paged()}
+      </div>
+    );
+  }
+
+  site(site, key) {
+    const picture = () => {
+      if (_.has(site, 'picture.data[0].file_name')) {
+        const img = _.get(site, 'picture.data[0]');
+        return <img src={'/image/268x332/' + img.file_name} alt={site.name} className="product-image"/>;
+      }
+
+      return <img src={'https://placehold.it/262x262&text=' + encodeURIComponent(site.name)} className="product-image" />;
+
+    };
+
+    const link = () => {
+      if (_.get(site, 'url_affiliate') === '') {
+        alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
+      } else {
+
+        const affiliateUrl = _.get(site, 'url_affiliate');
+        const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
+        window.open(res);
+      }
+    };
+
+    return (
+      <div className="col-sm-3">
+
+        <div className="product text-center" key={key}>
+          <div className="product-top">
+            <figure>
+              <a href="product.html" title={site.name}>
+                {picture()}
+              </a>
+            </figure>
+          </div>
+          <h2 className="title mb30">{site.name}</h2>
+          <a href="#" onClick={link} className="btn btn-custom add-to-cart">Winkelen</a>
+        </div>
       </div>
     );
   }
