@@ -3,7 +3,6 @@ import React, {Component, PropTypes} from 'react';
 import {Modal, Button, Alert} from 'react-bootstrap';
 
 export default class Confirm extends Component {
-
   static propTypes = {
     showModal: PropTypes.bool,
     close: PropTypes.func.isRequired,
@@ -16,7 +15,6 @@ export default class Confirm extends Component {
     super();
     this.body = this.body.bind(this);
     this.footer = this.footer.bind(this);
-
   }
 
   body() {
@@ -40,7 +38,6 @@ export default class Confirm extends Component {
         {_.get(this.props, 'children', 'Bevestig uw actie.')}
       </Modal.Body>
     );
-
   }
 
   footer() {

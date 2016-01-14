@@ -73,7 +73,6 @@ export default class DataTable extends Component {
 
     if (_.has(col, 'show')) {
       if (_.isString(col.show)) {
-
         if (_.has(col, 'translate')) {
           return _.get(col, ['translate', _.get(record, col.show, '')], '');
         }
@@ -108,7 +107,6 @@ export default class DataTable extends Component {
 
   _renderDropDownItems(buttons, record) {
     return _.map(buttons, (button, key) => {
-
       const click = () => {
         if (_.has(button, 'onClick')) {
           button.onClick(record);
@@ -129,7 +127,6 @@ export default class DataTable extends Component {
   }
 
   render() {
-
     if (this.props.records.length === 0) {
       return (<Alert bsStyle="warning">No records found.</Alert>);
     }

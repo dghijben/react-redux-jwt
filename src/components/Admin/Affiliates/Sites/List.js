@@ -42,7 +42,6 @@ class List extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
     // Set status state of deleted item and reload list
     if (_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === false && _.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
       this.setState({status: {success: true}});

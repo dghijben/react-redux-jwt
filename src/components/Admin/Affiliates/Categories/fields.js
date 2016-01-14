@@ -37,7 +37,6 @@ export function initialValues(values) {
 }
 
 export default function fields(affiliates) {
-
   const allOptions = () => {
     const options = [];
     if (typeof affiliates === 'object') {

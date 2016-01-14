@@ -70,7 +70,8 @@ class Create extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>Nieuwe site
+            <h1>
+              Nieuwe site
             </h1>
             <Row>
               <Col md={2} />

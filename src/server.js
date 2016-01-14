@@ -11,7 +11,7 @@ import ApiClient from './helpers/ApiClient';
 import Html from './helpers/Html';
 import PrettyError from 'pretty-error';
 import http from 'http';
-import SocketIo from 'socket.io';
+// import SocketIo from 'socket.io';
 import cookie from 'react-cookie';
 import listener from 'redux/listener';
 import {ReduxRouter} from 'redux-router';
@@ -28,6 +28,7 @@ import {readFileSync} from 'fs';
 require('intl');
 import {IntlProvider} from 'react-intl';
 
+const targetUrl = 'http://' + config.apiHost + ':' + config.apiPort;
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
@@ -70,7 +71,15 @@ app.use(Express.static(path.join(__dirname, '..', 'static')));
 
 // Proxy to API server
 app.use('/api', (req, res) => {
-  proxy.web(req, res);
+  proxy.web(req, res, {target: targetUrl});
+});
+
+app.use('/ws', (req, res) => {
+  proxy.web(req, res, {target: targetUrl + '/ws'});
+});
+
+server.on('upgrade', (req, socket, head) => {
+  proxy.ws(req, socket, head);
 });
 
 // Proxy to BINARY server
@@ -190,11 +199,6 @@ app.use((req, res) => {
 });
 
 if (config.port) {
-  if (config.isProduction) {
-    const io = new SocketIo(server);
-    io.path('/api/ws');
-  }
-
   server.listen(config.port, (err) => {
     if (err) {
       console.error(err);

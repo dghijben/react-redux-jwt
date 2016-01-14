@@ -29,7 +29,6 @@ export default class Ribbon extends Component {
       return (
         <li key={key}>{itemVisible}</li>
       );
-
     });
   }
 

@@ -50,7 +50,6 @@ export function initialValues(values) {
 }
 
 export default function fields(userId, token, roles) {
-
   const roleOptions = () => {
     const options = [];
     if (typeof roles === 'object') {

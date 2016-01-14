@@ -32,7 +32,6 @@ export function initialValues(values) {
 }
 
 export default function fields(routes) {
-
   const routeOptions = () => {
     const options = [];
     if (typeof routes === 'object') {

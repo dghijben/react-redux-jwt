@@ -40,7 +40,6 @@ export function initialValues(values) {
 }
 
 export default function fields(userId, token, affiliates) {
-
   const allOptions = () => {
     const options = [];
     if (typeof affiliates === 'object') {

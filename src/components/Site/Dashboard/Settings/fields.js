@@ -4,12 +4,11 @@ export const reducerItem = 'item';
 
 export function initialValues(values) {
   return Object.assign({},
-    values
+      values
   );
 }
 
 export function fieldsBank() {
-
   return ([
 
     {
@@ -81,7 +80,6 @@ export function fieldsBank() {
 }
 
 export function fieldsExtra() {
-
   return ([
 
     {
@@ -124,7 +122,6 @@ export function fieldsExtra() {
 }
 
 export function fields1(id, token) {
-
   return ([
     {
       name: 'name',
@@ -147,7 +144,6 @@ export function fields1(id, token) {
       placeholder: 'Adres + huisnummer',
       labelClassName: 'input-desc'
     },
-
 
     {
       row: {

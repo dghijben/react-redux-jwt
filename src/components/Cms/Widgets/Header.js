@@ -4,7 +4,6 @@ import TinyMCE from 'react-tinymce';
 const tags = ['h1', 'h2', 'h3', 'h4', 'h5'];
 
 export default class Header extends Component {
-
   static propTypes = {
     settings: PropTypes.object,
     keyPath: PropTypes.array,
@@ -41,16 +40,15 @@ export default class Header extends Component {
     }
 
     return (
-      <TinyMCE
-        content={'<' + tag + '>' + _.get(this.props, 'content') + '</' + tag + '>'}
-        onChange={this.emitChange}
-        config={{
-          inline: true,
-          toolbar: 'undo redo',
-          menubar: false
-        }}
-      />
+        <TinyMCE
+            content={'<' + tag + '>' + _.get(this.props, 'content') + '</' + tag + '>'}
+            onChange={this.emitChange}
+            config={{
+              inline: true,
+              toolbar: 'undo redo',
+              menubar: false
+            }}
+        />
     );
-
   }
 }

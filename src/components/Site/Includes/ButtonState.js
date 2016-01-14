@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 
 export default class ButtonState extends Component {
   render() {
-
     const {fa} = this.props;
     let faNode = '';
 

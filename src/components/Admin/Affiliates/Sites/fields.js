@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import React from 'react';
-
-
 import * as actions from 'redux/modules/data/actions';
 
 export const reducerIndex = 'data';
@@ -75,7 +73,6 @@ export function initialValues(values) {
 }
 
 export default function fields(id, token, categories) {
-
   const catOptions = () => {
     const options = [];
     if (typeof categories === 'object') {
@@ -241,9 +238,7 @@ export default function fields(id, token, categories) {
   ]);
 }
 
-
 export function fieldsUpload(token) {
-
   return ([
     {
       name: 'csv',

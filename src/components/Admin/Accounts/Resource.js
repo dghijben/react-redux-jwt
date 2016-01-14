@@ -116,7 +116,6 @@ const reducerKey = 'users';
         </div>
       </Modal.Body>
     );
-
   }
 
   footer() {
@@ -133,7 +132,6 @@ const reducerKey = 'users';
   }
 
   render() {
-
     return (
       <Modal show={this.props.show} onHide={this.props.close} bsSize="large">
         <Modal.Header>

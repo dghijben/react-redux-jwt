@@ -6,14 +6,12 @@ import {stringifyFullState, createAllParamsForFetch} from 'utils/functions';
 let scrollTop = null;
 
 export default function connectToFilter() {
-
   return (WrappedComponent) => {
     @connect(state => ({
       'router': state.router,
       'reduxRouterReducer': state.reduxRouterReducer
     }))
     class StateConnection extends Component {
-
       static propTypes = {
         'name': PropTypes.string,
         'router': PropTypes.object,
