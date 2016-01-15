@@ -45,7 +45,7 @@ export default function connectToFilter() {
 
       componentWillReceiveProps(nextProps) {
         const state = {};
-        const action = nextProps.router.location.action;
+        // const action = nextProps.router.location.action;
 
         // if (action === 'POP' && this.state.skip === false) {
         const params = _.assign({},
