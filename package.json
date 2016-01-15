@@ -113,7 +113,7 @@
     "react-cookie": "0.4.3",
     "react-document-meta": "2.0.1",
     "react-dom": "0.14.6",
-    "react-helmet": "^2.2.0",
+    "react-helmet": "^2.3.1",
     "react-inline-css": "2.0.1",
     "react-intl": "^2.0.0-pr-3",
     "react-laravel-paginator": "git://github.com/lemonCMS/react-paginator.git#master",

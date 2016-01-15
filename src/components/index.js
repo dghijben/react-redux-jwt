@@ -78,5 +78,7 @@ modules.Cms = Cms;
 
 import Profile from './Site/Profile/Profile';
 modules.Profile = Profile;
+import ProfileAffiliates from './Site/Profile/Affiliates';
+modules.ProfileAffiliates = ProfileAffiliates;
 
 export default modules;

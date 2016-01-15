@@ -27,6 +27,7 @@ let myTimeout = null;
 class Profile extends React.Component {
 
   static propTypes = {
+    'children': PropTypes.object.isRequired,
     'profile': PropTypes.object,
     'affiliates': PropTypes.object,
     'router': PropTypes.object,
@@ -43,6 +44,8 @@ class Profile extends React.Component {
 
   constructor() {
     super();
+    this.componentWillMount = this.componentWillMount.bind(this);
+    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
     this.searchBar = this.searchBar.bind(this);
     this.pushSearch = this.pushSearch.bind(this);
     this.clearTimer = this.clearTimer.bind(this);
@@ -50,19 +53,43 @@ class Profile extends React.Component {
     this.categories = this.categories.bind(this);
     this.categoryList = this.categoryList.bind(this);
     this.state = {
-      affiliateIds: []
+      affiliateIds: [],
+      q: '',
+      skip: false
     };
+  }
+
+  componentWillMount() {
+    this.setState({q: this.props.inputOnStack('q')});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const action = nextProps.router.location.action;
+    if (action === 'POP' && this.state.skip === false) {
+      this.setState({q: nextProps.inputOnStack('q'), skip: false});
+    }
+
+    if (this.state.skip === true) {
+      this.setState({skip: false});
+    }
   }
 
   pushSearch(e) {
     const value = e.target.value;
     this.setState({
-      q: value
+      q: value,
+      skip: true
+    }, () => {
+
+      if (myTimeout) {
+        clearTimeout(myTimeout);
+      }
+
+      myTimeout = setTimeout(() => {
+        this.props.pushOnState('q', value);
+      }, 500);
     });
 
-    myTimeout = setTimeout(() => {
-      this.props.pushOnState('q', value);
-    }, 150);
   }
 
   clearTimer() {
@@ -73,15 +100,15 @@ class Profile extends React.Component {
 
   searchBar() {
     // TODO Reset value on POP state
-    console.log('Value' + this.props.inputOnStack('q'));
+    // console.log('Value' + this.props.inputOnStack('q'));
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
           <h4 className="pnael-title">Zoeken</h4>
         </div>
         <div className="panel-body">
-          <Input type="text" placeholder="zoeken" onKeyUp={this.pushSearch} onKeyDown={this.clearTimer}
-                 value={this.props.inputOnStack('q')}/>
+          <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
+                 value={this.state.q}/>
         </div>
       </div>);
   }
@@ -222,6 +249,10 @@ class Profile extends React.Component {
                   profile={_.get(this.props, ['profile'])}
                 />
               </Pending>
+
+              {this.props.children}
+
+
             </div>
             <aside className="col-md-3 col-md-pull-9 sidebar">
               <div className="widget">
