@@ -55,7 +55,7 @@ class Profile extends React.Component {
     this.state = {
       affiliateIds: [],
       q: '',
-      skip: false
+      skip: 0
     };
   }
 
@@ -65,12 +65,12 @@ class Profile extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const action = nextProps.router.location.action;
-    if (action === 'POP' && this.state.skip === false) {
+    if (action === 'POP' && this.state.skip === 0) {
       this.setState({q: nextProps.inputOnStack('q'), skip: false});
     }
 
-    if (this.state.skip === true) {
-      this.setState({skip: false});
+    if (this.state.skip > 0) {
+      this.setState({skip: this.state.skip - 1});
     }
   }
 
@@ -78,7 +78,7 @@ class Profile extends React.Component {
     const value = e.target.value;
     this.setState({
       q: value,
-      skip: true
+      skip: 2
     }, () => {
 
       if (myTimeout) {
