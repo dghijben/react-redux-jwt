@@ -168,3 +168,7 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 .pos-absolute {
     position: absolute;
 }
+
+.filter-row .small-selectbox {
+    min-width: 150px;
+}

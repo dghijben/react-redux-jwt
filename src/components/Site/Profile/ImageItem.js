@@ -8,7 +8,7 @@ class ImageItem extends React.Component {
         const img = _.get(this.props.item, 'picture.data[0]');
         return <img src={'/image/268x332/' + img.file_name} alt={this.props.item.name} className="img-responsive"/>;
       }
-      return <img src={'https://placehold.it/262x262&text=' + encodeURIComponent(this.props.item.name)} className="img-responsive" />;
+      return <img src={'https://placehold.it/400x200&text=' + encodeURIComponent(this.props.item.name)} className="img-responsive" />;
     };
 
     const link = () => {
@@ -22,6 +22,17 @@ class ImageItem extends React.Component {
       }
     };
 
+
+    if (this.props.display === 'list') {
+      return (
+        <div className="col-sm-12 col-xs-12">
+          <div className="product text-center">
+            <h3><a href="#" onClick={link} >{this.props.item.name}</a></h3>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="col-sm-3 col-xs-6">
         <div className="product text-center">
@@ -30,8 +41,6 @@ class ImageItem extends React.Component {
               {picture()}
             </a>
           </div>
-          <h2 className="title mb30">{this.props.item.name}</h2>
-          <a href="#" onClick={link} className="btn btn-custom add-to-cart">Winkelen</a>
         </div>
       </div>
     );
@@ -40,7 +49,8 @@ class ImageItem extends React.Component {
 
 ImageItem.propTypes = {
   item: React.PropTypes.object,
-  profile: React.PropTypes.object
+  profile: React.PropTypes.object,
+  display: React.PropTypes.string
 };
 ImageItem.defaultProps = {};
 

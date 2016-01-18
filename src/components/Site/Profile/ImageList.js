@@ -33,14 +33,18 @@ class ImageList extends React.Component {
     };
 
     const chunks = _.chunk(_.get(this.props, ['list', 'data'], []), 4);
+    const display = this.props.inputOnStack('display') === 'list' ? 'list' : 'grid';
     return (
       <div ref="imagelist">
-        <Filter />
+        <Filter
+          pushOnState={this.props.pushOnState}
+          inputOnStack={this.props.inputOnStack}
+        />
         {_.map(chunks, (chunk, key) => {
           return (
             <div className="row" key={key}>
               {_.map(chunk, (item, siteKey) => {
-                return <ImageItem item={item} key={siteKey} profile={this.props.profile}/>;
+                return <ImageItem item={item} key={siteKey} profile={this.props.profile} display={display} />;
               })}
             </div>
           );
@@ -54,9 +58,10 @@ class ImageList extends React.Component {
 ImageList.propTypes = {
   list: React.PropTypes.object,
   profile: React.PropTypes.object,
-  switchPage: React.PropTypes.func
+  switchPage: React.PropTypes.func,
+  pushOnState: React.PropTypes.func,
+  inputOnStack: React.PropTypes.func
 };
 ImageList.defaultProps = {};
 
 export default ImageList;
-

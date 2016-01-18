@@ -5,15 +5,10 @@ import PageHeader from '../Includes/PageHeader';
 import {mapDispatchToProps, createMarkup} from 'utils/functions';
 import { connect } from 'react-redux';
 import connectData from 'helpers/connectData';
-import connectToFilter from 'helpers/connectToFilter';
 import fetchDataDeferred from './fetchDataDeferred';
-import {Input} from 'react-bootstrap';
-import ImageList from './ImageList';
-import Pending from 'components/includes/Pending';
-let myTimeout = null;
+import {Nav, NavItem} from 'react-bootstrap';
 
 @connectData(null, fetchDataDeferred)
-@connectToFilter()
 @connect(state=> {
   const obj = {
     'router': state.router,
@@ -39,125 +34,19 @@ class Profile extends React.Component {
     'onStack': PropTypes.func,
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
-    'inputOnStack': PropTypes.func
+    'inputOnStack': PropTypes.func,
+    'history': PropTypes.object
   };
 
   constructor() {
     super();
-    this.componentWillMount = this.componentWillMount.bind(this);
-    this.componentWillReceiveProps = this.componentWillReceiveProps.bind(this);
-    this.searchBar = this.searchBar.bind(this);
-    this.pushSearch = this.pushSearch.bind(this);
-    this.clearTimer = this.clearTimer.bind(this);
-    this.filter = this.filter.bind(this);
-    this.categories = this.categories.bind(this);
-    this.categoryList = this.categoryList.bind(this);
-    this.state = {
-      affiliateIds: [],
-      q: '',
-      skip: 0
-    };
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
-  componentWillMount() {
-    this.setState({q: this.props.inputOnStack('q')});
+  handleSelect(selectedKey, href, target) {
+    console.log('selected ' + selectedKey, href, target);
+    this.props.history.pushState(null, href);
   }
-
-  componentWillReceiveProps(nextProps) {
-    const action = nextProps.router.location.action;
-    if (action === 'POP' && this.state.skip === 0) {
-      this.setState({q: nextProps.inputOnStack('q'), skip: false});
-    }
-
-    if (this.state.skip > 0) {
-      this.setState({skip: this.state.skip - 1});
-    }
-  }
-
-  pushSearch(e) {
-    const value = e.target.value;
-    this.setState({
-      q: value,
-      skip: 2
-    }, () => {
-
-      if (myTimeout) {
-        clearTimeout(myTimeout);
-      }
-
-      myTimeout = setTimeout(() => {
-        this.props.pushOnState('q', value);
-      }, 500);
-    });
-
-  }
-
-  clearTimer() {
-    if (myTimeout) {
-      clearTimeout(myTimeout);
-    }
-  }
-
-  searchBar() {
-    // TODO Reset value on POP state
-    // console.log('Value' + this.props.inputOnStack('q'));
-    return (
-      <div className="panel panel-border-tb">
-        <div className="panel-heading">
-          <h4 className="pnael-title">Zoeken</h4>
-        </div>
-        <div className="panel-body">
-          <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
-                 value={this.state.q}/>
-        </div>
-      </div>);
-  }
-
-  categoryList() {
-    const list = _.get(this.props, ['categories', 'list'], []);
-    if (list.length > 0) {
-      return (
-        <ul>
-          {_.map(list, (category, key) => {
-            return this.filter('c', key, category);
-          })}
-        </ul>
-      );
-    }
-  }
-
-  categories() {
-    return (
-      <div className="panel panel-border-tb">
-        <div className="panel-heading">
-          <h4 className="pnael-title">Categorieen</h4>
-        </div>
-        <div className="panel-body">
-          <ul>
-            {this.categoryList()}
-          </ul>
-        </div>
-      </div>);
-  }
-
-  filter(name, key, item) {
-    const checkBox = () => {
-      if (this.props.onStack(name, item.id)) {
-        return (<i className="fa fa-check-square-o pull-right"></i>);
-      }
-      return (<i className="fa fa-square-o pull-right"></i>);
-    };
-
-    return (
-      <li key={key} onClick={() => { this.props.toggleOnStack(name, item.id); }}>
-        {checkBox()}
-        <i className="fa fa-angle-right"></i>
-        {' '}
-        {item.name}
-      </li>
-    );
-  }
-
 
   render() {
     const {profile} = this.props;
@@ -240,31 +129,13 @@ class Profile extends React.Component {
             </div>
           </div>
 
-          <div className="row pos-relative">
-            <div className="col-md-9 col-md-push-3 ">
-              <Pending state={_.get(this.props, ['affiliates', 'pending'])}>
-                <ImageList
-                  list={_.get(this.props, ['affiliates', 'list'])}
-                  switchPage={this.props.switchPage}
-                  profile={_.get(this.props, ['profile'])}
-                />
-              </Pending>
+          <Nav bsStyle="tabs" justified activeKey={1} onSelect={this.handleSelect}>
+            <NavItem eventKey={1} href={`/p/${profile.id}/${profile.name}`}>Winkes</NavItem>
+            <NavItem eventKey={2} href={`/p/${profile.id}/${profile.name}/aanbiedingen`}>Aanbiedingen</NavItem>
+            <NavItem eventKey={3} href={`/p/${profile.id}/${profile.name}/kortingscodes`}>Kortingscodes</NavItem>
+          </Nav>
 
-              {this.props.children}
-
-
-            </div>
-            <aside className="col-md-3 col-md-pull-9 sidebar">
-              <div className="widget">
-                <div className="filter-group-widget">
-                  <div className="panel-group">
-                    {this.searchBar()}
-                    {this.categories()}
-                  </div>
-                </div>
-              </div>
-            </aside>
-          </div>
+          {this.props.children}
         </div>
       </div>
     );
