@@ -5,7 +5,7 @@ import PageHeader from '../Includes/PageHeader';
 import {mapDispatchToProps, createMarkup} from 'utils/functions';
 import { connect } from 'react-redux';
 import connectData from 'helpers/connectData';
-import fetchDataDeferred from './fetchDataDeferred';
+import {fetchDataDeferred} from './fetchDataDeferred';
 import {Nav, NavItem} from 'react-bootstrap';
 
 @connectData(null, fetchDataDeferred)
@@ -13,9 +13,7 @@ import {Nav, NavItem} from 'react-bootstrap';
   const obj = {
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
-    'profile': state.store.profile.item.data,
-    'affiliates': state.store.affiliates,
-    'categories': state.store.categories
+    'profile': state.store.profile.item.data
   };
   return obj;
 }, mapDispatchToProps)

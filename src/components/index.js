@@ -80,5 +80,7 @@ import Profile from './Site/Profile/Profile';
 modules.Profile = Profile;
 import ProfileAffiliates from './Site/Profile/Affiliates';
 modules.ProfileAffiliates = ProfileAffiliates;
+import ProfileDiscountCodes from './Site/Profile/DiscountCodes';
+modules.ProfileDiscountCodes = ProfileDiscountCodes;
 
 export default modules;

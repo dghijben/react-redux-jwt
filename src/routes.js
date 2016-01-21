@@ -26,7 +26,7 @@ export default () => {
         <Route path="/p/:id/:name" component={cmpnnt.Profile} ignoreScrollBehavior>
           <IndexRoute component={cmpnnt.ProfileAffiliates} />
           <Route path="aanbiedingen" component={cmpnnt.ProfileAffiliates}/>
-          <Route path="kortingscodes" component={cmpnnt.ProfileAffiliates}/>
+          <Route path="kortingscodes" component={cmpnnt.ProfileDiscountCodes}/>
         </Route>
       </Route>
       <Route path="cms" component={cmpnnt.Cms.Index} />

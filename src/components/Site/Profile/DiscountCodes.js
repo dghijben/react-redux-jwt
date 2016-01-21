@@ -6,23 +6,23 @@ import { connect } from 'react-redux';
 import connectData from 'helpers/connectData';
 import connectToFilter from 'helpers/connectToFilter';
 import {Input} from 'react-bootstrap';
-import ImageList from './ImageList';
+import List from './Codes/List';
 import Pending from 'components/includes/Pending';
-import {fetchDataDeferred1} from './fetchDataDeferred';
+import {fetchDataDeferred2} from './fetchDataDeferred';
 let myTimeout = null;
 
-@connectData(null, fetchDataDeferred1)
+@connectData(null, fetchDataDeferred2)
 @connectToFilter()
 @connect(state=> {
   const obj = {
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
-    'affiliates': state.store.affiliates,
-    'categories': state.store.categories
+    'categories': state.store.categories,
+    'kortingscodes': state.store.kortingscodes
   };
   return obj;
 }, mapDispatchToProps)
-class Affiliates extends React.Component {
+class DiscountCodes extends React.Component {
 
   static propTypes = {
     'profile': PropTypes.object,
@@ -172,9 +172,9 @@ class Affiliates extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['affiliates', 'pending'])}>
-              <ImageList
-                list={_.get(this.props, ['affiliates', 'list'])}
+            <Pending state={_.get(this.props, ['kortingscodes', 'pending'])}>
+              <List
+                list={_.get(this.props, ['kortingscodes', 'list'])}
                 switchPage={this.props.switchPage}
                 pushOnState={this.props.pushOnState}
                 inputOnStack={this.props.inputOnStack}
@@ -198,4 +198,4 @@ class Affiliates extends React.Component {
     );
   }
 }
-export default Affiliates;
+export default DiscountCodes;
