@@ -1,10 +1,13 @@
+import _ from 'lodash';
 export const reducerIndex = 'store';
 export const reducerKey = 'dashboardAccount';
+export const reducerKeyCats = 'dashboardAccountCategories';
 export const reducerItem = 'item';
 
 export function initialValues(values) {
   return Object.assign({},
-      values
+    values,
+    {categories: _.pluck(_.get(values, 'categories'), 'id')}
   );
 }
 
@@ -121,7 +124,19 @@ export function fieldsExtra() {
   ]);
 }
 
-export function fields1(id, token) {
+export function fields1(id, token, categories) {
+
+  const catOptions = () => {
+    const options = [];
+    if (typeof categories === 'object') {
+      _.sortBy(categories, 'name').map((item) => {
+        options.push({value: item.id, desc: item.name});
+      });
+    }
+    return options;
+  };
+
+
   return ([
     {
       name: 'name',
@@ -197,7 +212,8 @@ export function fields1(id, token) {
           }
         ]
       }
-    }, {
+    },
+    {
       row: {
         col: [
           {
@@ -209,6 +225,24 @@ export function fields1(id, token) {
               placeholder: 'Website',
               labelClassName: 'input-desc'
             }]
+          }
+        ]
+      }
+    },
+    {
+      row: {
+        col: [
+          {
+            md: 6,
+            children: [{
+              name: 'categories',
+              label: 'Categorieën',
+              type: 'checkboxList',
+              labelClassName: 'labelClassName',
+              chunks: 3,
+              options: catOptions()
+            }
+            ]
           }
         ]
       }

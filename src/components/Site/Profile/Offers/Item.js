@@ -2,15 +2,12 @@ import _ from 'lodash';
 import React from 'react';
 import {createMarkup} from 'utils/functions';
 import moment from 'utils/moment';
-import CopyToClipboard from 'react-copy-to-clipboard';
 moment.locale('nl');
 class Item extends React.Component {
   constructor() {
     super();
     this.defaultView = this.defaultView.bind(this);
-    this.hoverView = this.hoverView.bind(this);
     this.discount = this.discount.bind(this);
-    this.discountCode = this.discountCode.bind(this);
     this.link = this.link.bind(this);
     this.state = {view: 'x'};
   }
@@ -23,41 +20,11 @@ class Item extends React.Component {
     this.setState({view: this.discount()});
   }
 
-  hoverView() {
-    this.setState({view: this.discountCode()});
-  }
-
   discount() {
-    const getDiscount = () => {
-      const {item: {discountType, discount}} = this.props;
-      let value = '';
-      if (discountType === 1) {
-        value = '€';
-      }
-      value += discount;
-      if (discountType === 2) {
-        value += '%';
-      }
-      return value + ' KORTING';
-    };
-
     return (
       <div>
-        <button className="btn btn-custom2 btn-block">{getDiscount()}</button>
-        <em className="center-block text-center">Toon de kortingscode</em>
+        <button className="btn btn-custom2 btn-block">Winkelen</button>
       </div>
-    );
-  }
-
-  discountCode() {
-    return (
-      <CopyToClipboard text={this.props.item.discountCode}
-                       onCopy={this.link}>
-        <div>
-          <button className="btn btn-primary btn-block">{this.props.item.discountCode}</button>
-          <em className="center-block text-center">Klik om de code te kopiëren.</em>
-        </div>
-      </CopyToClipboard>
     );
   }
 
@@ -144,9 +111,7 @@ class Item extends React.Component {
             </div>
           </div>
           <div className="col-sm-3">
-            <div onMouseOver={this.hoverView} onMouseOut={this.defaultView}>
-              {this.state.view}
-            </div>
+            {this.state.view}
           </div>
         </div>
       </div>

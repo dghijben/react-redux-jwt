@@ -6,24 +6,25 @@ import { connect } from 'react-redux';
 import connectData from 'helpers/connectData';
 import connectToFilter from 'helpers/connectToFilter';
 import {Input} from 'react-bootstrap';
-import List from './Codes/List';
+import List from './List';
 import Pending from 'components/includes/Pending';
-import {fetchDataDeferred2} from './fetchDataDeferred';
+import {fetchDataDeferred} from './fetchDataDeferred';
+import PageHeader from '../Includes/PageHeader';
 let myTimeout = null;
 
-@connectData(null, fetchDataDeferred2)
+@connectData(null, fetchDataDeferred)
 @connectToFilter()
 @connect(state=> {
   const obj = {
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
     'categories': state.store.categories,
-    'kortingscodes': state.store.kortingscodes,
+    'accounts': state.store.accounts,
     'params': state.params
   };
   return obj;
 }, mapDispatchToProps)
-class DiscountCodes extends React.Component {
+class Search extends React.Component {
 
   static propTypes = {
     'profile': PropTypes.object,
@@ -94,7 +95,6 @@ class DiscountCodes extends React.Component {
         this.props.pushOnState('q', value);
       }, 500);
     });
-
   }
 
   clearTimer() {
@@ -168,7 +168,7 @@ class DiscountCodes extends React.Component {
     const {profile} = this.props;
 
     return (
-      <div ref="main">
+      <div id="content" role="main" ref="main">
         <Helmet
           title={_.get(profile, 'name')}
           link={[
@@ -178,32 +178,41 @@ class DiscountCodes extends React.Component {
             {'src': '/boss/js/jquery.selectbox.min.js'}
           ]}
         />
-        <div className="row pos-relative">
-          <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['kortingscodes', 'pending'])}>
-              <List
-                list={_.get(this.props, ['kortingscodes', 'list'])}
-                switchPage={this.props.switchPage}
-                pushOnState={this.props.pushOnState}
-                inputOnStack={this.props.inputOnStack}
-                profile={_.get(this.props, ['profile'])}
-              />
-            </Pending>
-          </div>
-          <aside className="col-md-3 col-md-pull-9 sidebar">
-            <div className="widget">
-              <div className="filter-group-widget">
-                <div className="panel-group">
-                  {this.searchBar()}
-                  {this.categories()}
+        <PageHeader
+          title={_.get(profile, 'name')}
+          links={[
+            {to: '/', name: 'Home'},
+            {to: '/dashboard', name: 'Dashboard'},
+            {name: 'Account'}
+          ]}
+        />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-9 col-md-push-3 ">
+              <Pending state={_.get(this.props, ['accounts', 'pending'], false)}>
+                <List
+                  list={_.get(this.props, ['accounts', 'list'])}
+                  switchPage={this.props.switchPage}
+                  pushOnState={this.props.pushOnState}
+                  inputOnStack={this.props.inputOnStack}
+                />
+              </Pending>
+            </div>
+            <aside className="col-md-3 col-md-pull-9 sidebar">
+              <div className="widget">
+                <div className="filter-group-widget">
+                  <div className="panel-group">
+                    {this.searchBar()}
+                    {this.categories()}
+                  </div>
                 </div>
               </div>
-            </div>
-          </aside>
+            </aside>
+          </div>
         </div>
       </div>
 
     );
   }
 }
-export default DiscountCodes;
+export default Search;

@@ -10,7 +10,6 @@ export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const apiPath = '/accounts';
   const promise = [];
-  console.log('MANGO');
 
   if (!isLoadedItem(reducerKey, state, state.router.params.id)) {
     promise.push(dispatch(loadItem(reducerKey, apiPath, state.router.params.id)));

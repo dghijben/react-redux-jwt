@@ -2,19 +2,19 @@ import _ from 'lodash';
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import connectData from 'helpers/connectData';
-import {destroyItem, clearItem} from 'redux/modules/data/actions';
 import {Well, Row, Col, Button} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm, Pending} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
-import UserPic from 'components/Admin/includes/UserPic';
+import * as actions from 'redux/modules/admin/affiliates/categories/actions';
 import {mapDispatchToProps} from 'utils/functions';
-import fields, {path, title, reducerIndex, reducerKey, reducerItem, reducerKeyCats, reducerKeyUsers, initialValues, fetchDataDeferred} from './fields';
+import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, initialValues, path, fetchDataDeferred} from './fields';
+
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
-    'token': state.authorization.token,
+    'affiliatesSites': state.affiliatesSites,
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer
   };
@@ -25,8 +25,6 @@ class Show extends Component {
 
   static propTypes = {
     'router': PropTypes.object.isRequired,
-    'aclRoles': PropTypes.object,
-    'data': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
   }
@@ -45,7 +43,6 @@ class Show extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (_.get(nextProps, [reducerIndex, reducerKey, reducerItem, 'deleted'], false) === true) {
-      this.props.dispatch(clearItem(reducerKey));
       this.props.history.pushState({}, '/admin/' + path);
     }
   }
@@ -60,7 +57,7 @@ class Show extends Component {
 
   confirmed() {
     this.setState({showModal: false});
-    this.props.dispatch(destroyItem(reducerKey, this.props.router.params.id));
+    this.props.dispatch(actions.destroyItem(reducerKey, this.props.router.params.id));
   }
 
   renderModal() {
@@ -68,24 +65,15 @@ class Show extends Component {
   }
 
   render() {
-    const item = _.get(this.props, [reducerIndex, reducerKey, reducerItem], {});
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: title, to: '/admin/' + path},
-      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'])}
+      {name: 'Accounts', to: '/admin/accounts'},
+      {name: 'Categorieen', to: '/admin/accounts/categories'},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown')},
     ];
 
     const editLink = () => {
       this.props.history.pushState({}, '/admin/' + path + '/' + _.get(this.props, 'router.params.id') + '/edit');
-    };
-
-    const checkKey = () => {
-      return [
-        _.has(this.props, [reducerIndex, reducerKeyUsers, 'allStatus', 'success']),
-        _.has(this.props, [reducerIndex, reducerKeyCats, 'allStatus', 'success']),
-        _.get(item, ['name'])
-      ];
     };
 
     return (
@@ -93,24 +81,24 @@ class Show extends Component {
         <Ribbon breadCrumbs={breadCrumbs}/>
         <div id="content">
           <Well>
-            <h1>{title}
+            <h1>Rol
               <span>
-                 {' '} {_.get(item, ['name'], '')}
+                {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
             </h1>
 
             <Row>
               <Col md={2}>
-                <UserPic responsive thumbnail pictures={_.get(item, ['picture'], [])} />
+                Extra info?
               </Col>
               <Col md={10}>
-                <Pending state={_.get(this.props, [reducerKey, reducerIndex, 'pending'], false)}>
+                <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>
                   <DynamicForm
-                    checkKey={'show-' + checkKey()}
-                    formName={reducerKey}
+                    checkKey={reducerIndex + reducerKey + reducerItem + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id']) + _.has(this.props, [reducerIndex, reducerKeySites, 'all'])}
+                    formName={reducerIndex + reducerKey + reducerItem}
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(item, ['id']), null, null, _.get(item, 'users', []), _.get(this.props, 'data.accountCategories.all', []))}
-                    initialValues={initialValues(item)}
+                    fieldsNeeded={fields(_.get(this.props, [reducerIndex, reducerKeySites, 'all'], []))}
+                    initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
                     static
                   />
                   <Row>

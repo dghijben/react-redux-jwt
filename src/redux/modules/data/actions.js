@@ -8,6 +8,7 @@ let apiPath = null;
 
 const apiPaths = {
   'accounts': '/admin/accounts',
+  'accountCategories': '/admin/accounts/categories',
   'users': '/admin/users',
   'aclRoles': '/admin/acl/roles',
   'sites': '/admin/affiliates/sites',

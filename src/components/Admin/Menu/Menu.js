@@ -4,7 +4,10 @@ import MenuWrap from './MenuWrap';
 const tree = [
   {'desc': 'Admin', 'to': '/admin', icon: 'fa-home'},
   {'desc': 'Accounts', 'to': '/admin/accounts', icon: 'fa-building-o', children: [
-    {desc: 'Nieuw account', to: '/admin/accounts/new'}
+    {desc: 'Nieuw account', to: '/admin/accounts/new'},
+    {desc: 'Categorieën', to: '/admin/accounts/categories', children: [
+      {desc: 'Nieuwe categorie', to: '/admin/accounts/categories/new'}
+    ]}
   ]},
   {'desc': 'Users', 'to': '/admin/users', icon: 'fa-users', children: [
     {desc: 'Nieuwe gebruiker', to: '/admin/users/new'}
@@ -14,7 +17,7 @@ const tree = [
       {desc: 'Nieuwe site', to: '/admin/affiliates/sites/new'},
       {desc: 'Upload CSV', to: '/admin/affiliates/sites/upload-csv'}
     ]},
-    {desc: 'Categorieen', to: '/admin/affiliates/categories', children: [
+    {desc: 'Categorieën', to: '/admin/affiliates/categories', children: [
       {desc: 'Nieuwe categorie', to: '/admin/affiliates/categories/new'}
     ]},
     {desc: 'Kortingscodes', to: '/admin/affiliates/discount-codes', children: [

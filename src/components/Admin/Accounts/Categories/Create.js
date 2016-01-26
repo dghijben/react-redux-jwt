@@ -13,7 +13,6 @@ import fields, {reducerIndex, reducerKey, reducerKeySites, reducerItem, path, fe
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
   const obj = {
-    'affiliatesSites': state.affiliatesSites,
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer
   };
@@ -25,8 +24,7 @@ class Create extends Component {
   static propTypes = {
     'router': PropTypes.object.isRequired,
     'dispatch': PropTypes.func,
-    'history': PropTypes.object.isRequired,
-    'affiliatesSites': PropTypes.object.isRequired,
+    'history': PropTypes.object.isRequired
   }
 
   constructor(props, context) {
@@ -46,6 +44,8 @@ class Create extends Component {
   }
 
   handleSubmit(values, dispatch) {
+    console.log('VALUES', values);
+
     return new Promise((resolve, reject) => {
       dispatch(actions.create(reducerKey, values))
         .then((ret)=> {
@@ -61,8 +61,8 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Categorieen', to: '/admin/affiliates/categories'},
+      {name: 'Accounts', to: '/admin/accounts'},
+      {name: 'Categorieën', to: '/admin/accounts/categories'},
       {name: 'Nieuw'}
     ];
 

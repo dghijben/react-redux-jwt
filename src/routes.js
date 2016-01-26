@@ -13,6 +13,7 @@ export default () => {
         </Route>
         <Route path="/logout" component={cmpnnt.Logout} />
         <Route path="/about" component={cmpnnt.About}/>
+        <Route path="/zoeken" component={cmpnnt.Search}/>
         <Route path="/register" component={cmpnnt.Register} />
         <Route path="/register/verify/:code" component={cmpnnt.RegisterVerify} />
 
@@ -25,7 +26,7 @@ export default () => {
         </Route>
         <Route path="/p/:id/:name" component={cmpnnt.Profile} ignoreScrollBehavior>
           <IndexRoute component={cmpnnt.ProfileAffiliates} />
-          <Route path="aanbiedingen" component={cmpnnt.ProfileAffiliates}/>
+          <Route path="aanbiedingen" component={cmpnnt.ProfileOffers}/>
           <Route path="kortingscodes" component={cmpnnt.ProfileDiscountCodes}/>
         </Route>
       </Route>
@@ -37,6 +38,12 @@ export default () => {
 
           <Route path="accounts" component={cmpnnt.AdminAccounts.Wrap}>
             <IndexRoute component={cmpnnt.AdminAccounts.List} />
+            <Route path="categories" component={cmpnnt.AdminAccountCategories.Wrap}>
+              <IndexRoute component={cmpnnt.AdminAccountCategories.List} />
+              <Route path="new" component={cmpnnt.AdminAccountCategories.Create} />
+              <Route path=":id" component={cmpnnt.AdminAccountCategories.Show} />
+              <Route path=":id/edit" component={cmpnnt.AdminAccountCategories.Edit} />
+            </Route>
             <Route path="new" component={cmpnnt.AdminAccounts.Create} />
             <Route path=":id" component={cmpnnt.AdminAccounts.Show} />
             <Route path=":id/edit" component={cmpnnt.AdminAccounts.Edit} />

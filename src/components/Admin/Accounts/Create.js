@@ -8,7 +8,7 @@ import Ribbon from 'components/Admin/includes/Ribbon';
 import DynamicForm from 'redux-form-generator';
 import validator from './ValidateEdit';
 import {create} from 'redux/modules/data/actions';
-import fields, {path, title, reducerIndex, reducerKey, reducerKeyUsers, reducerItem, fetchDataDeferred} from './fields';
+import fields, {path, title, reducerIndex, reducerKey, reducerKeyUsers, reducerKeyCats, reducerItem, fetchDataDeferred} from './fields';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=>{
@@ -67,7 +67,10 @@ class Create extends Component {
     ];
 
     const checkKey = () => {
-      return _.has(this.props, [reducerIndex, reducerKeyUsers, 'allStatus', 'success']);
+      return (
+        _.has(this.props, [reducerIndex, reducerKeyUsers, 'allStatus', 'success']) +
+        _.has(this.props, [reducerIndex, reducerKeyCats, 'allStatus', 'success'])
+      );
     };
 
     return (
@@ -84,7 +87,7 @@ class Create extends Component {
                   checkKey={reducerKey + checkKey()}
                   formName={reducerKey}
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, [reducerIndex, reducerKeyUsers, 'all'], []))}
+                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, [reducerIndex, reducerKeyUsers, 'all'], []), null, null, _.get(this.props, 'data.accountCategories.all', []))}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

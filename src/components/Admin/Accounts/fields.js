@@ -5,6 +5,7 @@ import * as actions from 'redux/modules/data/actions';
 export const reducerIndex = 'data';
 export const reducerKey = 'accounts';
 export const reducerKeyUsers = 'users';
+export const reducerKeyCats = 'accountCategories';
 export const reducerItem = 'item';
 export const path = 'accounts';
 export const title = 'Accounts';
@@ -39,20 +40,24 @@ export function initialValues(values) {
     values,
     {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
     {users: _.pluck(_.get(values, 'users'), 'id')},
+    {categories: _.pluck(_.get(values, 'categories'), 'id')},
     {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
   );
 }
 
-export default function fields(id, token, resource, resourceList) {
-  /*  const allOptions = () => {
-   const options = [];
-   if (typeof affiliates === 'object') {
-   _.sortBy(affiliates, 'name').map((item) => {
-   options.push({value: item.id, desc: item.name});
-   });
-   }
-   return options;
-   };*/
+export default function fields(id, token, resource, resourceList, categories) {
+
+  console.log(categories);
+
+  const catOptions = () => {
+    const options = [];
+    if (typeof categories === 'object') {
+      _.sortBy(categories, 'name').map((item) => {
+        options.push({value: item.id, desc: item.name});
+      });
+    }
+    return options;
+  };
 
   const list = () => {
     const options = [];
@@ -237,6 +242,16 @@ export default function fields(id, token, resource, resourceList) {
       list: list()
     },
     {
+      name: 'categories',
+      label: 'Categorieën',
+      type: 'checkboxList',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      chunks: 3,
+      searchable: true,
+      options: catOptions()
+    },
+    {
       row: {
         hideOnStatic: true,
         col: [
@@ -256,6 +271,10 @@ export default function fields(id, token, resource, resourceList) {
 export function fetchDataDeferred(getState, dispatch) {
   const state = getState();
   const promises = [];
+
+  if (!actions.isAllLoaded(reducerKeyCats, state)) {
+    promises.push(dispatch(actions.loadAll(reducerKeyCats)));
+  }
 
   if (!actions.isAllLoaded(reducerKeyUsers, state)) {
     promises.push(dispatch(actions.loadAll(reducerKeyUsers)));

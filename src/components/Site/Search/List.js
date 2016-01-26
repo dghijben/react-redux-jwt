@@ -18,6 +18,9 @@ class List extends React.Component {
   }
 
   render() {
+    console.log(this.props.list);
+
+
     const paged = () => {
       const list = _.get(this.props, ['list', 'meta', 'pagination']);
       if (list && list.total > 0) {
@@ -48,7 +51,7 @@ class List extends React.Component {
           return (
             <div className="row" key={key}>
               {_.map(chunk, (item, siteKey) => {
-                return <Item key={siteKey} item={item} key={siteKey} profile={this.props.profile} display={display} />;
+                return <Item item={item} key={siteKey} display={display} />;
               })}
             </div>
           );
@@ -61,7 +64,6 @@ class List extends React.Component {
 
 List.propTypes = {
   list: React.PropTypes.object,
-  profile: React.PropTypes.object,
   switchPage: React.PropTypes.func,
   pushOnState: React.PropTypes.func,
   inputOnStack: React.PropTypes.func

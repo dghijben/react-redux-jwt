@@ -7,13 +7,15 @@ import { connect } from 'react-redux';
 import connectData from 'helpers/connectData';
 import {fetchDataDeferred} from './fetchDataDeferred';
 import {Nav, NavItem} from 'react-bootstrap';
+import * as paramActions from 'redux/modules/params/actions';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=> {
   const obj = {
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
-    'profile': state.store.profile.item.data
+    'profile': _.get(state, 'store.profile.item.data'),
+    'loaded': _.get(state, 'store.profile.item.success', false)
   };
   return obj;
 }, mapDispatchToProps)
@@ -22,6 +24,7 @@ class Profile extends React.Component {
   static propTypes = {
     'children': PropTypes.object.isRequired,
     'profile': PropTypes.object,
+    'loaded': PropTypes.bool,
     'affiliates': PropTypes.object,
     'router': PropTypes.object,
     'store': PropTypes.object,
@@ -41,8 +44,8 @@ class Profile extends React.Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
-  handleSelect(selectedKey, href, target) {
-    console.log('selected ' + selectedKey, href, target);
+  handleSelect(selectedKey, href) {
+    this.props.dispatch(paramActions.store('scroll', window.pageYOffset));
     this.props.history.pushState(null, href);
   }
 
@@ -55,8 +58,15 @@ class Profile extends React.Component {
       }
     };
 
+    const eventKey = () => {
+      const last = _.last(this.props.router.routes);
+      if (last.path === 'kortingscodes') return 3;
+      if (last.path === 'aanbiedingen') return 2;
+      return 1;
+    };
+
     return (
-      <div id="content" role="main">
+      <div id="content" role="main" ref="main">
         <Helmet
           title={_.get(profile, 'name')}
           link={[
@@ -127,10 +137,10 @@ class Profile extends React.Component {
             </div>
           </div>
 
-          <Nav bsStyle="tabs" justified activeKey={1} onSelect={this.handleSelect}>
-            <NavItem eventKey={1} href={`/p/${profile.id}/${profile.name}`}>Winkes</NavItem>
-            <NavItem eventKey={2} href={`/p/${profile.id}/${profile.name}/aanbiedingen`}>Aanbiedingen</NavItem>
-            <NavItem eventKey={3} href={`/p/${profile.id}/${profile.name}/kortingscodes`}>Kortingscodes</NavItem>
+          <Nav bsStyle="tabs" justified activeKey={eventKey()} onSelect={this.handleSelect}>
+            <NavItem eventKey={1} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}`}>Winkels</NavItem>
+            <NavItem eventKey={2} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}/aanbiedingen`}>Aanbiedingen</NavItem>
+            <NavItem eventKey={3} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}/kortingscodes`}>Kortingscodes</NavItem>
           </Nav>
 
           {this.props.children}

@@ -10,6 +10,7 @@ import { reducer as formReducer } from 'redux-form';
 import { routerStateReducer } from 'redux-router';
 import reduxFormReducer from './reduxForm/reducer';
 import reduxRouterReducer from './reduxRouter/reducer';
+import paramsReducer from './params/reducer';
 
 export default combineReducers({
   router: routerStateReducer,
@@ -17,6 +18,7 @@ export default combineReducers({
   users: usersReducer,
   data: dataReducer,
   store: storeReducer,
+  params: paramsReducer,
   affiliatesSites: affiliatesSitesReducer,
   affiliatesCategories: affiliatesCategoriesReducer,
   form: formReducer.plugin(reduxFormReducer),

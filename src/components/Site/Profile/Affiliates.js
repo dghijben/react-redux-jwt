@@ -18,7 +18,8 @@ let myTimeout = null;
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
     'affiliates': state.store.affiliates,
-    'categories': state.store.categories
+    'categories': state.store.categories,
+    'params': state.params
   };
   return obj;
 }, mapDispatchToProps)
@@ -29,6 +30,7 @@ class Affiliates extends React.Component {
     'affiliates': PropTypes.object,
     'router': PropTypes.object,
     'store': PropTypes.object,
+    'params': PropTypes.object,
     'dispatch': PropTypes.func,
     'switchPage': PropTypes.func,
     'getParams': PropTypes.func,
@@ -58,6 +60,12 @@ class Affiliates extends React.Component {
 
   componentWillMount() {
     this.setState({q: this.props.inputOnStack('q')});
+  }
+
+  componentDidMount() {
+    if (_.has(this.props.params, 'scroll')) {
+      window.scroll(0, _.get(this.props.params, 'scroll'));
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,7 +180,7 @@ class Affiliates extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['affiliates', 'pending'])}>
+            <Pending state={_.get(this.props, ['affiliates', 'pending'], false)}>
               <ImageList
                 list={_.get(this.props, ['affiliates', 'list'])}
                 switchPage={this.props.switchPage}

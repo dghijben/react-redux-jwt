@@ -23,11 +23,15 @@ class ImageList extends React.Component {
       if (list && list.total > 0) {
         const currentPage = list.current_page;
         const lastPage = list.total_pages;
-        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.switchPage}/>;
+        return (
+          <nav className="pagination-container">
+            <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.switchPage}/>
+          </nav>
+        );
       }
 
       return (
-        <div className="alert alert-warning pos-absolute" >
+        <div className="alert alert-warning" >
           <strong>Geen resultaten!</strong> Helaas heeft uw zoekopdracht geen resultaten opgeleverd.
         </div>);
     };

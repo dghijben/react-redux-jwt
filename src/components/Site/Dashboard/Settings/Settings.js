@@ -5,7 +5,7 @@ import {mapDispatchToProps} from 'utils/functions';
 import { Tabs, Tab, Row, Col } from 'react-bootstrap';
 import validator, {validateBank, validateExtra} from './validate';
 import DynamicForm from 'redux-form-generator';
-import {fields1, fieldsBank, fieldsExtra, reducerIndex, reducerKey, reducerItem, initialValues} from './fields';
+import {fields1, fieldsBank, fieldsExtra, reducerIndex, reducerKey, reducerKeyCats, reducerItem, initialValues} from './fields';
 import connectData from 'helpers/connectData';
 import connectToStore from 'helpers/connectToStore';
 import * as actions from 'redux/modules/store/actions';
@@ -22,6 +22,7 @@ import Pending from 'components/includes/Pending';
     'token': state.authorization.token,
     'router': state.router,
     'form': state.form,
+    'categories': _.get(state.store, reducerKeyCats, {}),
     'getValues': _.merge(
       getValues(_.get(state.form, [reducerKey, 'tab1'])),
       getValues(_.get(state.form, [reducerKey, 'tab2'])),
@@ -140,7 +141,7 @@ class Settings extends Component {
       return this.success();
     }
     const checkKey = () => {
-      return _.get(this.props, [reducerKey, reducerItem, 'id'], null);
+      return _.get(this.props, [reducerKey, reducerItem, 'id'], null) + _.get(this.props, 'categories.allStatus.success', null);
     };
     const item = _.get(this.props, [reducerKey, reducerItem], {});
 
@@ -153,7 +154,7 @@ class Settings extends Component {
             formName={reducerKey}
             formKey="tab1"
             formClass="dummy"
-            fieldsNeeded={fields1(this.props.router.params.id, this.props.token)}
+            fieldsNeeded={fields1(this.props.router.params.id, this.props.token, _.get(this.props, 'categories.all', []))}
             initialValues={initialValues(item)}
             validate={validator}
             onSubmit={this.handleSubmitTab1}
