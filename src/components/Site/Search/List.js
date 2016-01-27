@@ -18,25 +18,24 @@ class List extends React.Component {
   }
 
   render() {
-    console.log(this.props.list);
-
-
     const paged = () => {
       const list = _.get(this.props, ['list', 'meta', 'pagination']);
       if (list && list.total > 0) {
         const currentPage = list.current_page;
         const lastPage = list.total_pages;
+        if (lastPage > 1) {
+          return (
+            <nav className="pagination-container">
+              <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.switchPage}/>
+            </nav>
+          );
+        }
+      } else {
         return (
-          <nav className="pagination-container">
-            <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.switchPage}/>
-          </nav>
-        );
+          <div className="alert alert-warning" >
+            <strong>Geen resultaten!</strong> Helaas heeft uw zoekopdracht geen resultaten opgeleverd.
+          </div>);
       }
-
-      return (
-        <div className="alert alert-warning" >
-          <strong>Geen resultaten!</strong> Helaas heeft uw zoekopdracht geen resultaten opgeleverd.
-        </div>);
     };
 
     const chunks = _.chunk(_.get(this.props, ['list', 'data'], []), 4);

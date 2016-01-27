@@ -69,12 +69,6 @@ class Profile extends React.Component {
       <div id="content" role="main" ref="main">
         <Helmet
           title={_.get(profile, 'name')}
-          link={[
-            {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
-          ]}
-          script={[
-            {'src': '/boss/js/jquery.selectbox.min.js'}
-          ]}
         />
         <PageHeader
           title={_.get(profile, 'name')}

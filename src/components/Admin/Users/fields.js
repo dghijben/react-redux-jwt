@@ -49,17 +49,7 @@ export function initialValues(values) {
   );
 }
 
-export default function fields(userId, token, roles) {
-  const roleOptions = () => {
-    const options = [];
-    if (typeof roles === 'object') {
-      _.sortBy(roles, 'desc').map((role) => {
-        options.push({value: role.id, desc: role.desc});
-      });
-    }
-    return options;
-  };
-
+export default function fields(userId, token) {
   return ([
     {
       name: 'picture',
@@ -116,12 +106,10 @@ export default function fields(userId, token, roles) {
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'roles',
-      label: 'Rollen',
-      type: 'checkboxListiOs',
-      labelClassName: 'col-md-2',
-      wrapperClassName: 'col-md-10',
-      options: roleOptions()
+      name: 'confirmed',
+      label: 'Actief',
+      type: 'checkbox',
+      wrapperClassName: 'col-md-offset-2 col-md-10'
     },
     {
       name: 'admin',

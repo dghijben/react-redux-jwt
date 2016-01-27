@@ -90,7 +90,7 @@ class Create extends Component {
                   checkKey={'userEdit-new-' + _.get(this.props, 'aclRoles.allStatus.success', false)}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields('new', this.props.token, _.get(this.props, 'aclRoles.all', []))}
+                  fieldsNeeded={fields('new', this.props.token)}
                   initialValues={{}}
                   validate={validator}
                   onSubmit={this.handleSubmit}

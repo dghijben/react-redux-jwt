@@ -86,11 +86,9 @@ class Search extends React.Component {
       q: value,
       skip: 2
     }, () => {
-
       if (myTimeout) {
         clearTimeout(myTimeout);
       }
-
       myTimeout = setTimeout(() => {
         this.props.pushOnState('q', value);
       }, 500);
@@ -99,7 +97,7 @@ class Search extends React.Component {
 
   clearTimer() {
     if (myTimeout) {
-      clearTimeout(myTimeout);
+      // clearTimeout(myTimeout);
     }
   }
 
@@ -179,7 +177,7 @@ class Search extends React.Component {
           ]}
         />
         <PageHeader
-          title={_.get(profile, 'name')}
+          title="Goededoelen zoeken"
           links={[
             {to: '/', name: 'Home'},
             {to: '/dashboard', name: 'Dashboard'},

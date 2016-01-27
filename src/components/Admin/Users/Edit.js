@@ -110,7 +110,7 @@ class Edit extends Component {
                   checkKey={'userEdit-' + _.get(item, ['id'])}
                   formName="userEdit"
                   formClass="form-horizontal"
-                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token, _.get(this.props, 'aclRoles.all', []))}
+                  fieldsNeeded={fields(_.get(item, ['id']), this.props.token)}
                   initialValues={initialValues(item)}
                   validate={validator}
                   onSubmit={this.handleSubmit}

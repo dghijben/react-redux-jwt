@@ -6,6 +6,8 @@ import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import bootstrapLink, {bootstrapSelectLink} from 'utils/bootstrapLink';
+import {stringifyFullState} from 'utils/functions';
+let myTimeout = null;
 
 class App extends Component {
 
@@ -15,6 +17,9 @@ class App extends Component {
     this.loginLink = this.loginLink.bind(this);
     this.logoutLink = this.logoutLink.bind(this);
     this.userDropDown = this.userDropDown.bind(this);
+    this.pushSearch = this.pushSearch.bind(this);
+    this.submit = this.submit.bind(this);
+    this.state = { form: {}};
   }
 
   authorized() {
@@ -63,6 +68,30 @@ class App extends Component {
     );
   }
 
+  pushSearch(e) {
+    const value = e.target.value;
+    this.setState({
+      form: {
+        q: value
+      },
+      skip: 2
+    }, () => {
+      if (myTimeout) {
+        clearTimeout(myTimeout);
+      }
+      myTimeout = setTimeout(() => {
+        const q = stringifyFullState(this.state.form);
+        this.props.history.pushState(null, '/zoeken' + '?' + q);
+      }, 500);
+    });
+  }
+
+  submit(e) {
+    e.preventDefault();
+    const q = stringifyFullState(this.state.form);
+    this.props.history.pushState(null, '/zoeken' + '?' + q);
+  }
+
   render() {
     return (
       <div id="wrapper">
@@ -76,27 +105,29 @@ class App extends Component {
             {'rel': 'stylesheet', 'href': '/boss/css/revslider/revslider-index.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/boss/css/colors/green.css', 'type': 'text/css', 'media': 'screen'},
             {'rel': 'stylesheet', 'href': '/css/animate.css', 'type': 'text/css', 'media': 'screen'},
-            {'rel': 'stylesheet', 'href': '/css/custom.css', 'type': 'text/css', 'media': 'screen'}
+            {'rel': 'stylesheet', 'href': '/css/custom.css', 'type': 'text/css', 'media': 'screen'},
+            {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
           ]}
           script={[
-            {src: '/boss/js/modernizr.js'},
-            {src: '/boss/js/jquery.min.js'},
-            {src: '//cdn.tinymce.com/4/tinymce.min.js'},
-            {src: '/boss/js/jquery.hoverIntent.min.js'},
-            {src: '/boss/js/bootstrap.min.js'},
-            {src: '/boss/js/waypoints.min.js'},
-            {src: '/boss/js/waypoints-sticky.min.js'},
-            {src: '/boss/js/main.js'},
-            {src: '/plupload-2.1.8/js/plupload.full.min.js'}
+            {src: '/boss/js/modernizr.js', 'type': 'text/javascript'},
+            {src: '/boss/js/jquery.min.js', 'type': 'text/javascript'},
+            {src: '//cdn.tinymce.com/4/tinymce.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/jquery.hoverIntent.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/bootstrap.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/waypoints.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/waypoints-sticky.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/jquery.selectbox.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/main.js', 'type': 'text/javascript'},
+            {src: '/plupload-2.1.8/js/plupload.full.min.js', 'type': 'text/javascript'},
 
           ]}
           />
         <header id="header" role="banner">
-          <div className="collapse navbar-white special-for-mobile" id="header-search-form">
+          <div className="collapse navbar-white" id="header-search-form">
             <div className="container">
               <form className="navbar-form animated fadeInDown" role="search">
-                <input type="search" id="s" name="s" className="form-control" placeholder="Search in here..."/>
-                <button type="submit" className="btn-circle" title="Search"><i className="fa fa-search"></i></button>
+                <input type="search" id="s" name="s" className="form-control" placeholder="Search in here..." onChange={this.pushSearch}/>
+                <button type="submit" className="btn-circle" title="Search" onClick={this.submit}><i className="fa fa-search"></i></button>
               </form>
             </div>
           </div>

@@ -115,7 +115,7 @@ class Show extends Component {
                     checkKey={'userEdit-' + _.get(item, ['id'])}
                     formName="userEdit"
                     formClass="form-horizontal"
-                    fieldsNeeded={fields(_.get(item, ['id']), null, _.get(this.props, 'aclRoles.all', []))}
+                    fieldsNeeded={fields(_.get(item, ['id']), null)}
                     initialValues={initialValues(item)}
                     static
                   />
