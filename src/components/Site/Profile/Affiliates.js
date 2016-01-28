@@ -171,12 +171,6 @@ class Affiliates extends React.Component {
       <div>
         <Helmet
           title={_.get(profile, 'name')}
-          link={[
-            {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
-          ]}
-          script={[
-            {'src': '/boss/js/jquery.selectbox.min.js'}
-          ]}
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">

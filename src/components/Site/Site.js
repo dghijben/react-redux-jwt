@@ -109,8 +109,8 @@ class App extends Component {
             {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
           ]}
           script={[
-            {src: '/boss/js/modernizr.js', 'type': 'text/javascript'},
             {src: '/boss/js/jquery.min.js', 'type': 'text/javascript'},
+            {src: '/boss/js/modernizr.js', 'type': 'text/javascript'},
             {src: '//cdn.tinymce.com/4/tinymce.min.js', 'type': 'text/javascript'},
             {src: '/boss/js/jquery.hoverIntent.min.js', 'type': 'text/javascript'},
             {src: '/boss/js/bootstrap.min.js', 'type': 'text/javascript'},

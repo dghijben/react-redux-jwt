@@ -70,9 +70,13 @@ class Search extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+/*
     const action = nextProps.router.location.action;
+    console.log('Action', action, this.state.skip, this.state.q, this.props.inputOnStack('q'), nextProps.inputOnStack('q'));
     if (action === 'POP' && this.state.skip === 0) {
-      this.setState({q: nextProps.inputOnStack('q'), skip: false});
+*/
+    if (this.state.skip === 0) {
+      this.setState({q: nextProps.inputOnStack('q'), skip: 2});
     }
 
     if (this.state.skip > 0) {
@@ -81,6 +85,7 @@ class Search extends React.Component {
   }
 
   pushSearch(e) {
+    console.log('pushSearch');
     const value = e.target.value;
     this.setState({
       q: value,
@@ -161,7 +166,6 @@ class Search extends React.Component {
     );
   }
 
-
   render() {
     const {profile} = this.props;
 
@@ -169,12 +173,6 @@ class Search extends React.Component {
       <div id="content" role="main" ref="main">
         <Helmet
           title={_.get(profile, 'name')}
-          link={[
-            {'rel': 'stylesheet', 'href': '/boss/css/jquery.selectbox.css', 'type': 'text/css', 'media': 'screen'}
-          ]}
-          script={[
-            {'src': '/boss/js/jquery.selectbox.min.js'}
-          ]}
         />
         <PageHeader
           title="Goededoelen zoeken"
