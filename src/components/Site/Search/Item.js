@@ -44,7 +44,7 @@ class Item extends React.Component {
       <div className="col-sm-3 col-xs-6">
         <div className="product text-center">
           <div className="product-top">
-            <Link to={`/accounts/${this.props.item.id}`} title={this.props.item.name}>
+            <Link to={`/p/${this.props.item.id}/${slug(this.props.item.name)}`} title={this.props.item.name}>
               {picture()}
             </Link>
           </div>
