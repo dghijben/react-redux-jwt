@@ -168,7 +168,7 @@
     "karma-mocha-reporter": "^1.1.1",
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
-    "mocha": "^2.3.4",
+    "mocha": "^2.4.5",
     "node-sass": "^3.4.1",
     "react-a11y": "^0.2.8",
     "react-addons-test-utils": "^0.14.6",
