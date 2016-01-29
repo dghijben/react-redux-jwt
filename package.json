@@ -171,7 +171,7 @@
     "karma-sourcemap-loader": "^0.3.6",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.3.4",
-    "node-sass": "^3.4.1",
+    "node-sass": "^v3.4.2",
     "react-a11y": "^0.2.8",
     "react-addons-test-utils": "^0.14.6",
     "react-transform-catch-errors": "^1.0.1",
