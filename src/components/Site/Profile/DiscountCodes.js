@@ -19,6 +19,7 @@ let myTimeout = null;
     'reduxRouterReducer': state.reduxRouterReducer,
     'categories': state.store.categories,
     'kortingscodes': state.store.kortingscodes,
+    'profile': _.get(state, 'store.profile.item.data', {}),
     'params': state.params
   };
   return obj;
@@ -163,7 +164,6 @@ class DiscountCodes extends React.Component {
     );
   }
 
-
   render() {
     const {profile} = this.props;
 
@@ -174,13 +174,13 @@ class DiscountCodes extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['kortingscodes', 'pending'])}>
+            <Pending state={_.get(this.props, ['kortingscodes', 'pending'], true)}>
               <List
                 list={_.get(this.props, ['kortingscodes', 'list'])}
                 switchPage={this.props.switchPage}
                 pushOnState={this.props.pushOnState}
                 inputOnStack={this.props.inputOnStack}
-                profile={_.get(this.props, ['profile'])}
+                profile={this.props.profile}
               />
             </Pending>
           </div>

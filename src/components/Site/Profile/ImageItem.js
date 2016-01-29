@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import {createMarkup} from 'utils/functions';
 
 class ImageItem extends React.Component {
   render() {
@@ -22,14 +23,31 @@ class ImageItem extends React.Component {
       }
     };
 
+    const href = () => {
+      const affiliateUrl = _.get(this.props.item, 'url_affiliate');
+      return affiliateUrl.replace('#ACCOUNT_ID#', this.props.profile.id);
+    };
 
     if (this.props.display === 'list') {
       return (
-        <div className="col-sm-12 col-xs-12">
-          <div className="product text-center">
-            <h3><a href="#" onClick={link} >{this.props.item.name}</a></h3>
+        <div className="product">
+          <div className="row" onClick={link} role="link">
+            <div className="col-sm-3">
+              <div className="product-top">
+                <figure>
+                  <a href="product.html" title="Product Name">
+                    {picture()}
+                  </a>
+                </figure>
+                </div>
+              </div>
+              <div className="mb20 visible-xs"></div>
+              <div className="col-sm-6">
+                <h3 className="product-title"><a href={href()} title={this.props.item.name} rel="nofollow">{this.props.item.name}</a></h3>
+                <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
+              </div>
+            </div>
           </div>
-        </div>
       );
     }
 
@@ -37,7 +55,7 @@ class ImageItem extends React.Component {
       <div className="col-sm-3 col-xs-6">
         <div className="product text-center">
           <div className="product-top">
-            <a href="product.html" title={this.props.item.name}>
+            <a href={href()} onClick={link} title={this.props.item.name} rel="nofollow">
               {picture()}
             </a>
           </div>

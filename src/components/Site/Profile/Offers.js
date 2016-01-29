@@ -19,6 +19,7 @@ let myTimeout = null;
     'reduxRouterReducer': state.reduxRouterReducer,
     'categories': state.store.categories,
     'aanbiedingen': state.store.aanbiedingen,
+    'profile': _.get(state, 'store.profile.item.data', {}),
     'params': state.params
   };
   return obj;
@@ -173,7 +174,7 @@ class DiscountCodes extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['aanbiedingen', 'pending'])}>
+            <Pending state={_.get(this.props, ['aanbiedingen', 'pending'], true)}>
               <List
                 list={_.get(this.props, ['aanbiedingen', 'list'])}
                 switchPage={this.props.switchPage}

@@ -96,6 +96,11 @@ class Item extends React.Component {
       }
     };
 
+    const href = () => {
+      const affiliateUrl = _.get(this.props.item, 'url_affiliate');
+      return affiliateUrl.replace('#ACCOUNT_ID#', this.props.profile.id);
+    };
+
     if (this.props.display === 'list') {
       return (
         <div className="col-sm-12 col-xs-12">
@@ -133,7 +138,7 @@ class Item extends React.Component {
           <div className="mb20 visible-xs"></div>
           <div className="col-sm-6">
 
-            <h3 className="product-title"><a href="product.html" title="Product Title">{this.props.item.affiliate.data.name}</a></h3>
+            <h3 className="product-title"><a href={href()} rel="nofollow" title="Product Title">{this.props.item.affiliate.data.name}</a></h3>
             <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
             <div>
               <strong>vanaf </strong>

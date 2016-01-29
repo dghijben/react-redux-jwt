@@ -15,7 +15,6 @@ class Item extends React.Component {
                   className="img-responsive"/>);
     };
 
-
     if (this.props.display === 'list') {
       return (
         <div className="product">
