@@ -8,6 +8,7 @@ import connectData from 'helpers/connectData';
 import {fetchDataDeferred} from './fetchDataDeferred';
 import {Nav, NavItem} from 'react-bootstrap';
 import * as paramActions from 'redux/modules/params/actions';
+import slug from 'slug';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=> {
@@ -65,6 +66,7 @@ class Profile extends React.Component {
       return 1;
     };
 
+    const slugName = slug(_.get(profile, 'name'));
     return (
       <div id="content" role="main" ref="main">
         <Helmet
@@ -132,9 +134,9 @@ class Profile extends React.Component {
           </div>
 
           <Nav bsStyle="tabs" justified activeKey={eventKey()} onSelect={this.handleSelect}>
-            <NavItem eventKey={1} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}`}>Winkels</NavItem>
-            <NavItem eventKey={2} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}/aanbiedingen`}>Aanbiedingen</NavItem>
-            <NavItem eventKey={3} href={`/p/${_.get(profile, 'id')}/${_.get(profile, 'name')}/kortingscodes`}>Kortingscodes</NavItem>
+            <NavItem eventKey={1} href={`/p/${_.get(profile, 'id')}/${slugName}`}>Winkels</NavItem>
+            <NavItem eventKey={2} href={`/p/${_.get(profile, 'id')}/${slugName}/aanbiedingen`}>Aanbiedingen</NavItem>
+            <NavItem eventKey={3} href={`/p/${_.get(profile, 'id')}/${slugName}/kortingscodes`}>Kortingscodes</NavItem>
           </Nav>
 
           {this.props.children}

@@ -85,7 +85,6 @@ class Search extends React.Component {
   }
 
   pushSearch(e) {
-    console.log('pushSearch');
     const value = e.target.value;
     this.setState({
       q: value,
@@ -107,8 +106,6 @@ class Search extends React.Component {
   }
 
   searchBar() {
-    // TODO Reset value on POP state
-    // console.log('Value' + this.props.inputOnStack('q'));
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
