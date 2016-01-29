@@ -109,7 +109,7 @@ class Search extends React.Component {
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
-          <h4 className="pnael-title">Zoeken</h4>
+          <h4 className="pnael-title">Verfijn</h4>
         </div>
         <div className="panel-body">
           <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
@@ -135,7 +135,7 @@ class Search extends React.Component {
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
-          <h4 className="pnael-title">Categorieen</h4>
+          <h4 className="pnael-title">Categorieën</h4>
         </div>
         <div className="panel-body">
           <ul>
@@ -172,11 +172,11 @@ class Search extends React.Component {
           title={_.get(profile, 'name')}
         />
         <PageHeader
-          title="Goededoelen zoeken"
+          title="Doel vinden"
+          desc="Zoek, vind en winkel, zo eenvoudig is het om een doel te helpen."
           links={[
             {to: '/', name: 'Home'},
-            {to: '/dashboard', name: 'Dashboard'},
-            {name: 'Account'}
+            {name: 'Doelen vinden'}
           ]}
         />
         <div className="container">

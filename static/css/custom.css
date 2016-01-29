@@ -172,3 +172,45 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 .filter-row .small-selectbox {
     min-width: 150px;
 }
+
+.navbar-brand {
+    height: 80px;
+    padding: 0px;
+    font-size: 42px;
+}
+
+.navbar-brand img {
+    height: 80px;
+}
+
+@media (min-width: 768px) {
+    .navbar-brand {
+        height: 90px;
+        padding: 0px;
+        font-size: 42px;
+    }
+
+    .navbar-brand img {
+        height: 90px;
+    }
+}
+
+@media (min-width: 992px) {
+    .navbar-brand {
+        height: 100px;
+        padding: 0px;
+        font-size: 42px;
+    }
+
+    .navbar-brand img {
+        height: 100px;
+    }
+}
+
+.sticky-menu.fixed .navbar-brand {
+    padding: 0px;
+}
+
+.sticky-menu.fixed .navbar-brand img {
+    height: 50px;
+}
