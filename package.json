@@ -94,7 +94,7 @@
     "immutable": "^3.7.6",
     "intl": "^1.0.1",
     "jsx-loader": "^0.13.2",
-    "less": "2.5.3",
+    "less": "2.6.0",
     "less-loader": "2.2.2",
     "lodash": "^3.10.1",
     "lru-memoize": "1.0.0",
