@@ -18,7 +18,7 @@ let myTimeout = null;
   const obj = {
     'router': state.router,
     'reduxRouterReducer': state.reduxRouterReducer,
-    'categories': state.store.categories,
+    'categoriesAccount': state.store.categoriesAccount,
     'accounts': state.store.accounts,
     'params': state.params
   };
@@ -29,6 +29,7 @@ class Search extends React.Component {
   static propTypes = {
     'profile': PropTypes.object,
     'affiliates': PropTypes.object,
+    'categoriesAccount': PropTypes.object,
     'router': PropTypes.object,
     'params': PropTypes.object,
     'store': PropTypes.object,
@@ -119,7 +120,7 @@ class Search extends React.Component {
   }
 
   categoryList() {
-    const list = _.get(this.props, ['categories', 'list'], []);
+    const list = _.get(this.props, ['categoriesAccount', 'list'], []);
     if (list.length > 0) {
       return (
         <ul>

@@ -48,6 +48,7 @@ class List extends React.Component {
         {_.map(_.get(this.props, ['list', 'data'], []), (item, siteKey) => {
           return <Item item={item} key={siteKey} display={display} />;
         })}
+        {paged()}
       </div>);
     }
 

@@ -1,6 +1,6 @@
 import {load, isLoaded, isLoadedSimple} from 'redux/modules/store/actions';
 const reducerKey = 'accounts';
-const reducerKeyCats = 'categories';
+const reducerKeyCats = 'categoriesAccount';
 import {createAllParamsForFetch} from 'utils/functions';
 
 export function fetchDataDeferred(getState, dispatch) {

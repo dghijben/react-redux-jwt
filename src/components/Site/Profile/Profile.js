@@ -66,7 +66,7 @@ class Profile extends React.Component {
       return 1;
     };
 
-    const slugName = slug(_.get(profile, 'name'));
+    const slugName = slug(_.get(profile, 'name', ''));
     return (
       <div id="content" role="main" ref="main">
         <Helmet

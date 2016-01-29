@@ -36,8 +36,21 @@ class List extends React.Component {
         </div>);
     };
 
-    const chunks = _.chunk(_.get(this.props, ['list', 'data'], []), 4);
     const display = this.props.inputOnStack('display') === 'list' ? 'list' : 'grid';
+    if (display === 'list') {
+      return (<div ref="imagelist">
+        <Filter
+            pushOnState={this.props.pushOnState}
+            inputOnStack={this.props.inputOnStack}
+        />
+        {_.map(_.get(this.props, ['list', 'data'], []), (item, siteKey) => {
+          return <Item item={item} key={siteKey} display={display} />;
+        })}
+        {paged()}
+      </div>);
+    }
+
+    const chunks = _.chunk(_.get(this.props, ['list', 'data'], []), 4);
     return (
       <div ref="imagelist">
         <Filter
