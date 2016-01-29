@@ -9,6 +9,7 @@ import {fetchDataDeferred} from './fetchDataDeferred';
 import {Nav, NavItem} from 'react-bootstrap';
 import * as paramActions from 'redux/modules/params/actions';
 import slug from 'slug';
+import Charts from './Charts';
 
 @connectData(null, fetchDataDeferred)
 @connect(state=> {
@@ -67,6 +68,7 @@ class Profile extends React.Component {
     };
 
     const slugName = slug(_.get(profile, 'name', ''));
+
     return (
       <div id="content" role="main" ref="main">
         <Helmet
@@ -129,6 +131,7 @@ class Profile extends React.Component {
                     </div>
                   </li>
                 </ul>
+                <Charts profile={profile} />
               </div>
             </div>
           </div>

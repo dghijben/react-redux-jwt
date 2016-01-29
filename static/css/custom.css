@@ -169,6 +169,10 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     position: absolute;
 }
 
+.center {
+    text-align: center;
+}
+
 .filter-row .small-selectbox {
     min-width: 150px;
 }
@@ -213,4 +217,14 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
 
 .sticky-menu.fixed .navbar-brand img {
     height: 50px;
+}
+
+canvas {
+    width: 100% !important;
+    max-width: 800px;
+    height: auto !important;
+}
+
+.row.charts {
+    margin-top: 20px;
 }
