@@ -95,7 +95,7 @@ export function fieldsExtra() {
     },
     {
       name: 'goal1',
-      label: 'Doel 1',
+      label: 'Doel',
       type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
