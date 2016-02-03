@@ -15,7 +15,7 @@ class Charts extends React.Component {
     return (
       <div className={options.className}>
         <Doughnut data={options.chartData} options={{responsive: true}}/>
-        <div className="center"><strong>{options.desc}</strong> {options.leads} / {options.goal}</div>
+        <div className="center"><strong>{options.desc}</strong> {options.goal}</div>
       </div>);
   }
 
@@ -85,7 +85,7 @@ class Charts extends React.Component {
         leads: leads,
         goal: goal1,
         className: 'col-md-12',
-        desc: 'Doel 1'
+        desc: 'Doel'
       };
 
       return this.chart(options);

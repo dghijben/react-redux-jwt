@@ -33,8 +33,8 @@ class Item extends React.Component {
       alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
     } else {
 
-      const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']);
-      const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
+      const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
+      const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
       window.open(res);
     }
   }
