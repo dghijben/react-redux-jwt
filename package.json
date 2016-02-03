@@ -138,7 +138,7 @@
     "socket.io-client": "1.4.3",
     "superagent": "1.6.1",
     "url-loader": "0.5.7",
-    "validator": "^4.5.0",
+    "validator": "^4.6.1",
     "webpack-isomorphic-tools": "2.2.24"
   },
   "devDependencies": {
