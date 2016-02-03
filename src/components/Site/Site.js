@@ -123,16 +123,7 @@ class App extends Component {
           ]}
           />
         <header id="header" role="banner">
-          <div className="collapse navbar-white" id="header-search-form">
-            <div className="container">
-              <form className="navbar-form animated fadeInDown" role="search">
-                <input type="search" id="s" name="s" className="form-control" placeholder="Goede doelen zoeken..." onChange={this.pushSearch}/>
-                <button type="submit" className="btn-circle" title="Search" onClick={this.submit}><i className="fa fa-search"></i></button>
-              </form>
-            </div>
-          </div>
           <nav className="navbar navbar-white animated-dropdown ttb-dropdown" role="navigation">
-
             <div className="navbar-top clearfix">
               <div className="container">
                 <div className="pull-left">
@@ -180,23 +171,23 @@ class App extends Component {
                   <Link to="/" className="navbar-brand text-uppercase"
                      title="Boss - Multipurpose Premium Html5 Template">
                     <img src="/logo.png" className="img-responsive"/>
-
                   </Link>
-
-                  <button type="button" className="navbar-btn btn-icon btn-circle pull-right last visible-sm visible-xs"
-                          data-toggle="collapse" data-target="#header-search-form"><i className="fa fa-search"></i>
-                  </button>
                 </div>
 
                 <div className="collapse navbar-collapse" id="main-navbar-container">
                   <ul className="nav navbar-nav">
-                    <li className="visible-lg"><Link to="/zoeken">Doel steunen</Link></li>
+                    <li ><Link to="/zoeken">Doel steunen</Link></li>
+                    <li ><Link to="/zoeken">Doel steunen</Link></li>
+                    <li ><Link to="/zoeken">Doel steunen</Link></li>
+                    <li ><Link to="/zoeken">Doel steunen</Link></li>
+                    <li ><Link to="/zoeken">Doel steunen</Link></li>
                   </ul>
-
-                  <button type="button"
-                          className="navbar-btn btn-icon btn-circle navbar-right last  hidden-sm hidden-xs"
-                          data-toggle="collapse" data-target="#header-search-form"><i className="fa fa-search"></i>
-                  </button>
+                  <div className="input-group search-pad">
+                    <input type="text" className="form-control" placeholder="Doel zoeken..." onChange={this.pushSearch}/>
+                    <span className="input-group-btn">
+                      <button className="btn btn-default" type="button" onClick={this.submit}><i className="fa fa-search"></i></button>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

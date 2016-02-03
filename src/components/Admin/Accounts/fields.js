@@ -221,8 +221,8 @@ export default function fields(id, token, resource, resourceList, categories) {
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'goal2',
-      label: 'Doel 2',
+      name: 'extern',
+      label: 'Extern opgehaald',
       type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
