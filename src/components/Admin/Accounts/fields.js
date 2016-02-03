@@ -47,8 +47,6 @@ export function initialValues(values) {
 
 export default function fields(id, token, resource, resourceList, categories) {
 
-  console.log(categories);
-
   const catOptions = () => {
     const options = [];
     if (typeof categories === 'object') {

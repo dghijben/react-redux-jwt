@@ -115,7 +115,7 @@ class List extends Component {
                 fields: searchFields
               }}
               cols={[
-                {name: '', checkbox: () => { console.log('clicked'); }},
+                {name: '', checkbox: () => { }},
                 {name: 'Avatar', image: ['picture', 0, 'file_name'], width: '80px'},
                 {name: 'Titel', show: ['name']},
                 {name: 'Email', show: ['email']},

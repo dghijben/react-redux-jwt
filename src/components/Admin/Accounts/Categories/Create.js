@@ -44,8 +44,6 @@ class Create extends Component {
   }
 
   handleSubmit(values, dispatch) {
-    console.log('VALUES', values);
-
     return new Promise((resolve, reject) => {
       dispatch(actions.create(reducerKey, values))
         .then((ret)=> {

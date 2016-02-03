@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import {Doughnut} from 'react-chartjs';
+import {DoughnutTextInside} from 'react-chartjs';
 
 class Charts extends React.Component {
 
@@ -14,7 +14,7 @@ class Charts extends React.Component {
   chart(options) {
     return (
       <div className={options.className}>
-        <Doughnut data={options.chartData} options={{responsive: true}}/>
+        <DoughnutTextInside data={options.chartData} options={{responsive: true}}/>
         <div className="center"><strong>{options.desc}</strong> {options.goal}</div>
       </div>);
   }
@@ -68,9 +68,6 @@ class Charts extends React.Component {
         label: (100 - proc - procExtern) + '% open'
       });
     }
-
-    console.log(chartData);
-
     return chartData;
   }
 

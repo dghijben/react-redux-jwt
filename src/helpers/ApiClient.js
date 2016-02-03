@@ -48,11 +48,6 @@ class _ApiClient {
               }
             });
             request.send(fD);
-          } else {
-            console.log('IE 9 FALLBACK', formData);
-            _.map(formData, (value, key)=> {
-              console.log(key, value);
-            });
           }
         }
 

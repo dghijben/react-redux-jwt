@@ -111,7 +111,7 @@
     "react-addons-css-transition-group": "^0.14.6",
     "react-bootstrap": "0.28.2",
     "react-bootstrap-datetimepicker": "0.0.22",
-    "react-chartjs": "^0.7.3",
+    "react-chartjs": "lemonCMS/react-chartjs",
     "react-cookie": "0.4.3",
     "react-copy-to-clipboard": "^3.0.4",
     "react-document-meta": "2.0.1",

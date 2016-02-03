@@ -3,6 +3,9 @@ import React from 'react';
 import {createMarkup} from 'utils/functions';
 import moment from 'utils/moment';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import ApiClient from 'helpers/ApiClient';
+const client = new ApiClient();
+
 moment.locale('nl');
 class Item extends React.Component {
   constructor() {
@@ -61,13 +64,17 @@ class Item extends React.Component {
     );
   }
 
-  link() {
+  link(e) {
+    e.preventDefault();
+    const profileId = _.get(this.props, ['profile', 'id'], '');
+    const affiliateId = _.get(this.props.item, ['id'], '');
+
     if (_.get(this.props.item, 'url_affiliate') === '') {
       alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
     } else {
-
-      const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']);
-      const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
+      client.get('/accounts/' + profileId + '/click/' + affiliateId);
+      const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
+      const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
       window.open(res);
     }
   }
@@ -98,7 +105,7 @@ class Item extends React.Component {
 
     const href = () => {
       const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
-      return affiliateUrl.replace('#ACCOUNT_ID#', this.props.profile.id);
+      return affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
     };
 
     if (this.props.display === 'list') {

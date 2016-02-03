@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import {createMarkup} from 'utils/functions';
+import ApiClient from 'helpers/ApiClient';
+const client = new ApiClient();
 
 class ImageItem extends React.Component {
   render() {
@@ -12,14 +14,18 @@ class ImageItem extends React.Component {
       return <img src={'https://placehold.it/400x200&text=' + encodeURIComponent(this.props.item.name)} className="img-responsive" />;
     };
 
-    const link = () => {
+    const link = (e) => {
+      e.preventDefault();
+      const profileId = _.get(this.props, ['profile', 'id'], '');
+      const affiliateId = _.get(this.props.item, ['id'], '');
+
       if (_.get(this.props.item, 'url_affiliate') === '') {
         alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
       } else {
-
+        client.get('/accounts/' + profileId + '/click/' + affiliateId);
         const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
-        window.open(res);
+        const res = affiliateUrl.replace('#ACCOUNT_ID#', profileId);
+        Window.open(res);
       }
     };
 

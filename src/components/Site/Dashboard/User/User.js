@@ -74,7 +74,6 @@ class Settings extends Component {
   }
 
   setStatic() {
-    console.log('mango');
     this.setState({static: false});
   }
 

@@ -2,13 +2,15 @@ import _ from 'lodash';
 import React from 'react';
 import {createMarkup} from 'utils/functions';
 import moment from 'utils/moment';
+import ApiClient from 'helpers/ApiClient';
+const client = new ApiClient();
+
 moment.locale('nl');
 class Item extends React.Component {
   constructor() {
     super();
     this.defaultView = this.defaultView.bind(this);
     this.discount = this.discount.bind(this);
-    this.link = this.link.bind(this);
     this.state = {view: 'x'};
   }
 
@@ -28,17 +30,6 @@ class Item extends React.Component {
     );
   }
 
-  link() {
-    if (_.get(this.props.item, 'url_affiliate') === '') {
-      alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-    } else {
-
-      const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
-      const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
-      window.open(res);
-    }
-  }
-
   render() {
     const picture = () => {
       if (_.has(this.props.item, 'picture.data[0].file_name')) {
@@ -52,20 +43,24 @@ class Item extends React.Component {
                   className="img-responsive"/>);
     };
 
-    const link = () => {
+    const link = (e) => {
+      e.preventDefault();
+      const profileId = _.get(this.props, ['profile', 'id'], '');
+      const affiliateId = _.get(this.props.item, ['id'], '');
+
       if (_.get(this.props.item, 'url_affiliate') === '') {
         alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
       } else {
-
-        const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']);
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id']));
+        client.get('/accounts/' + profileId + '/click/' + affiliateId);
+        const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
+        const res = affiliateUrl.replace('#ACCOUNT_ID#', profileId);
         window.open(res);
       }
     };
 
     const href = () => {
-      const affiliateUrl = _.get(this.props.item, 'url_affiliate');
-      return affiliateUrl.replace('#ACCOUNT_ID#', this.props.profile.id);
+      const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
+      return affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
     };
 
     if (this.props.display === 'list') {
@@ -89,9 +84,8 @@ class Item extends React.Component {
     };
 
     return (
-      <div className="product">
+      <div className="product" onClick={link} >
         <div className="row">
-
           <div className="col-sm-3">
             <div className="product-top">
               <figure>
