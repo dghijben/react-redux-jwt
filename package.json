@@ -87,7 +87,7 @@
     "express-session": "1.12.1",
     "file-loader": "0.8.5",
     "glob": "^5.0.14",
-    "history": "1.17.0",
+    "history": "2.0.0",
     "hoist-non-react-statics": "^1.0.3",
     "http-proxy": "1.12.0",
     "iban": "0.0.6",
