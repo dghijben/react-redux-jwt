@@ -153,7 +153,6 @@ class Settings extends Component {
             checkKey={reducerKey + checkKey() + 'tab1'}
             formName={reducerKey}
             formKey="tab1"
-            formClass="dummy"
             fieldsNeeded={fields1(this.props.router.params.id, this.props.token, _.get(this.props, 'categories.all', []))}
             initialValues={initialValues(item)}
             validate={validator}

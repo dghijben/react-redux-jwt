@@ -25,7 +25,7 @@ class ImageItem extends React.Component {
         client.get('/accounts/' + profileId + '/click/' + affiliateId);
         const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
         const res = affiliateUrl.replace('#ACCOUNT_ID#', profileId);
-        Window.open(res);
+        window.open(res);
       }
     };
 

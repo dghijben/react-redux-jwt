@@ -19,12 +19,11 @@ class Charts extends React.Component {
       </div>);
   }
 
-
   makeOptions(goal, leads, leadsExtern) {
     const chartData = [];
     if (leads === 0 && leadsExtern === 0) {
       chartData.push({
-        value: 0,
+        value: 1,
         color: '#eee',
         highlight: '#eee',
         label: '100% open'
@@ -72,42 +71,24 @@ class Charts extends React.Component {
   }
 
   charts() {
-    const leads = 100;
-    const goal1 = this.props.profile.goal1;
-    const goal2 = this.props.profile.goal2;
 
-    if (goal1 > 0 && goal2 === 0) {
-      const options = {
-        chartData: this.makeOptions(goal1, leads, 0),
-        leads: leads,
-        goal: goal1,
-        className: 'col-md-12',
-        desc: 'Doel'
-      };
-
-      return this.chart(options);
-    }
+    const leads = Math.round(_.sum(_.get(this.props, ['profile', 'leads', 'data'], []), (obj) => {
+      return obj.amount;
+    }));
+    const goal1 = _.get(this.props, ['profile', 'goal1'], 0);
+    const extern = _.get(this.props, ['profile', 'extern'], 0);
 
     const options1 = {
-      chartData: this.makeOptions(goal1, leads, goal2),
+      chartData: this.makeOptions(goal1, leads, extern),
       leads: (leads > goal1 ? goal1 : leads),
       goal: goal1,
-      className: 'col-md-6',
+      className: 'col-md-offset-2 col-md-8',
       desc: 'Doel'
     };
-    /* const leads2 = (leads - goal1 > 0 ? leads - goal1 : 0);
-    const options2 = {
-      chartData: this.makeOptions(goal2, leads2),
-      leads: leads2,
-      goal: goal2,
-      className: 'col-md-6',
-      desc: 'Doel 2'
-    }; */
 
     return (
       <div>
         {this.chart(options1)}
-
       </div>
     );
   }
@@ -117,7 +98,7 @@ class Charts extends React.Component {
       return (<div></div>);
     }
 
-    if (this.props.profile.goal1 === 0 && this.props.profile.goal2 === 0) {
+    if (this.props.profile.goal1 === 0) {
       return (<div></div>);
     }
 
