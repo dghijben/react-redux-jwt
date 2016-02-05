@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import {Link} from 'react-router';
 import {createMarkup} from 'utils/functions';
-import slug from 'slug';
 
 class Item extends React.Component {
   render() {
@@ -31,7 +30,7 @@ class Item extends React.Component {
             </div>
             <div className="mb20 visible-xs"></div>
             <div className="col-sm-6">
-              <h3 className="product-title"><Link to={`/p/${this.props.item.id}/${slug(this.props.item.name)}`} title={this.props.item.name}>{this.props.item.name}</Link></h3>
+              <h3 className="product-title"><Link to={`/p/${this.props.item.id}/${this.props.item.slug}`} title={this.props.item.name}>{this.props.item.name}</Link></h3>
               <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
             </div>
           </div>
@@ -43,7 +42,7 @@ class Item extends React.Component {
       <div className="col-sm-3 col-xs-6">
         <div className="product text-center">
           <div className="product-top">
-            <Link to={`/p/${this.props.item.id}/${slug(this.props.item.name)}`} title={this.props.item.name}>
+            <Link to={`/p/${this.props.item.id}/${this.props.item.slug}`} title={this.props.item.name}>
               {picture()}
             </Link>
           </div>

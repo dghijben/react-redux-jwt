@@ -20,7 +20,7 @@ module.exports = {
   context: path.resolve(__dirname, '..'),
   entry: {
     'main': './src/client.js',
-    'vendor': ['react', 'lodash','react-router', 'history'],
+    'vendor': ['react-helmet', 'react-bootstrap', 'react-bootstrap-datetimepicker', 'react-chartjs', 'react-copy-to-clipboard', 'react', 'react-dom', 'chart.js', 'classnames', 'history', 'scroll-behavior', 'moment', 'lodash','react-router', 'history'],
   },
   output: {
     path: assetsPath,

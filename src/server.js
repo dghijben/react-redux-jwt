@@ -18,7 +18,7 @@ import {ReduxRouter} from 'redux-router';
 import createHistory from './helpers/history';
 import {reduxReactRouter, match} from 'redux-router/server';
 import {Provider} from 'react-redux';
-import qs from 'query-string';
+import qs from 'qs';
 import getRoutes from './routes';
 import getStatusFromRoutes from './helpers/getStatusFromRoutes';
 // import { load as loadAuth } from './redux/modules/auth';
@@ -28,41 +28,40 @@ import {readFileSync} from 'fs';
 require('intl');
 import {IntlProvider} from 'react-intl';
 
-const targetUrl = 'http://' + config.apiHost + ':' + config.apiPort;
 const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 const proxy = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/api',
 });
-proxy.on('error', function(e) {
+proxy.on('error', function (e) {
   // console.error(e) // this is where the error is thrown
 });
 
 const proxyBin = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/bin',
 });
-proxyBin.on('error', function(e) {
+proxyBin.on('error', function (e) {
   // console.error(e) // this is where the error is thrown
 });
 
 const proxyImg = httpProxy.createProxyServer({
   target: 'http://' + config.apiHost + ':' + config.apiPort + '/image',
 });
-proxyImg.on('error', function(e) {
+proxyImg.on('error', function (e) {
   // console.error(e) // this is where the error is thrown
 });
 
-  const translations = globSync('./src/langs/*.json')
-  .map((filename) => [
-    path.basename(filename, '.json'),
-    readFileSync(filename, 'utf8'),
-  ])
-  .map(([locale, file]) => [locale, JSON.parse(file)])
-  .reduce((collection, [locale, messages]) => {
-    collection[locale] = messages;
-    return collection;
-  }, {});
+const translations = globSync('./src/langs/*.json')
+    .map((filename) => [
+      path.basename(filename, '.json'),
+      readFileSync(filename, 'utf8'),
+    ])
+    .map(([locale, file]) => [locale, JSON.parse(file)])
+    .reduce((collection, [locale, messages]) => {
+      collection[locale] = messages;
+      return collection;
+    }, {});
 
 app.use(compression());
 app.use(favicon(path.join(__dirname, '..', 'static', 'favicon.ico')));
@@ -106,7 +105,6 @@ app.use((req, res) => {
     webpackIsomorphicTools.refresh();
   }
 
-
   // There is some bug that keeps a cookie in memory while infact there was nog a cookie send.
   // So let see if request headers have a cookie,
   // If not reset cookie.
@@ -114,10 +112,9 @@ app.use((req, res) => {
   if (typeof(req.headers.cookie) !== 'undefined') {
     cookie.setRawCookie(req.headers.cookie);
   } else {
-    //Force empty cookie
+    // Force empty cookie
     cookie.setRawCookie('');
   }
-
 
   const token = cookie.load('locale');
   const locale = req.query.locale || token || 'nl';
@@ -127,20 +124,14 @@ app.use((req, res) => {
     return res.status(404).send('Locale is not supported.');
   }
   const i18n = {locale, messages};
-
   cookie.save('locale', locale);
 
-
-
-
-
   const client = new ApiClient(req);
-
   const store = createStore(reduxReactRouter, getRoutes, createHistory, client);
   listener(store);
   function hydrateOnClient() {
     res.send('<!doctype html>\n' +
-      ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} i18n={i18n}/>));
+        ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} store={store} i18n={i18n}/>));
   }
 
   if (__DISABLE_SSR__) {
@@ -167,11 +158,11 @@ app.use((req, res) => {
 
       store.getState().router.then(() => {
         const component = (
-          <IntlProvider locale={i18n.locale} messages={i18n.messages}>
-            <Provider store={store} key="provider">
-              <ReduxRouter/>
-            </Provider>
-          </IntlProvider>
+            <IntlProvider locale={i18n.locale} messages={i18n.messages}>
+              <Provider store={store} key="provider">
+                <ReduxRouter/>
+              </Provider>
+            </IntlProvider>
         );
 
         const status = getStatusFromRoutes(routerState.routes);
@@ -179,7 +170,8 @@ app.use((req, res) => {
           res.status(status);
         }
         res.send('<!doctype html>\n' +
-          ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store} i18n={i18n}/>));
+            ReactDOM.renderToString(<Html assets={webpackIsomorphicTools.assets()} component={component} store={store}
+                                          i18n={i18n}/>));
       }).catch((err) => {
         console.error('DATA FETCHING ERROR:', pretty.render(err));
         res.status(500);
