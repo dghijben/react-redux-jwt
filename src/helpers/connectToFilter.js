@@ -33,6 +33,7 @@ export default function connectToFilter() {
         this.inputOnStack = this.inputOnStack.bind(this);
         this.onStack = this.onStack.bind(this);
         this.sortOnStack = this.sortOnStack.bind(this);
+        this.removeFromState = this.removeFromState.bind(this);
         this.state = {
           form: {},
           skip: false
@@ -40,6 +41,7 @@ export default function connectToFilter() {
       }
 
       componentWillMount() {
+        console.log('cwm', createAllParamsForFetch(this.props));
         this.setState({form: createAllParamsForFetch(this.props)});
       }
 
@@ -48,10 +50,12 @@ export default function connectToFilter() {
         // const action = nextProps.router.location.action;
 
         // if (action === 'POP' && this.state.skip === false) {
+/*
         const params = _.assign({},
           Qs.parse(_.get(nextProps, ['router', 'location', 'search'], {}).substr(1))
         );
         state.form = params;
+*/
         // }
 
         if (this.state.skip === true) {
@@ -124,6 +128,12 @@ export default function connectToFilter() {
         this.setState({'form': state, skip: true}, this.pushStateAttempt);
       }
 
+      removeFromState(key: string) {
+        const state = Object.assign({}, this.state.form);
+        delete state[key];
+        this.setState({'form': state, skip: true}, this.pushStateAttempt);
+      }
+
       pushOnState(key: string, value) {
         const state = Object.assign({}, this.state.form);
         state[key] = value;
@@ -150,6 +160,7 @@ export default function connectToFilter() {
           {...this.props}
           switchPage={this.switchPage}
           pushOnState={this.pushOnState}
+          removeFromState={this.removeFromState}
           getParams={this.getParams}
           toggleOnStack={this.toggleOnStack}
           inputOnStack={this.inputOnStack}
