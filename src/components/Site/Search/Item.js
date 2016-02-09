@@ -22,9 +22,9 @@ class Item extends React.Component {
             <div className="col-sm-3">
               <div className="product-top">
                 <figure>
-                  <a href="product.html" title="Product Name">
+                  <Link to={`/p/${this.props.item.id}/${this.props.item.slug}`} title={this.props.item.name}>
                     {picture()}
-                  </a>
+                  </Link>
                 </figure>
               </div>
             </div>

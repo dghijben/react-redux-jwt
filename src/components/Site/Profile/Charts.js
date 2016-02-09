@@ -43,6 +43,21 @@ class Charts extends React.Component {
         highlight: '#eee',
         label: (100 - proc) + '% open'
       });
+    } else if (leads === 0 && leadsExtern > 0) {
+      const proc = Math.round(100 / goal * (leadsExtern > goal ? goal : leadsExtern));
+      chartData.push({
+        value: (leadsExtern > goal ? goal : leadsExtern),
+        color: 'rgba(151,187,205,0.75)',
+        highlight: '#eee',
+        label: proc + '% behaald',
+        leads: (leadsExtern > goal ? goal : leadsExtern)
+      });
+      chartData.push({
+        value: (goal - leadsExtern < 0 ? 0 : goal - leadsExtern),
+        color: '#eee',
+        highlight: '#eee',
+        label: (100 - proc) + '% open'
+      });
     } else if (leads > 0 && leadsExtern > 0) {
       const proc = Math.round(100 / goal * (leads > goal ? goal : leads));
       const procExtern = Math.round(100 / goal * (leadsExtern > goal ? goal : leadsExtern));
@@ -77,6 +92,9 @@ class Charts extends React.Component {
     }));
     const goal1 = _.get(this.props, ['profile', 'goal1'], 0);
     const extern = _.get(this.props, ['profile', 'extern'], 0);
+
+    console.log(leads, goal1, extern);
+
 
     const options1 = {
       chartData: this.makeOptions(goal1, leads, extern),

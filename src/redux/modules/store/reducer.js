@@ -8,51 +8,51 @@ export default function reducer(orgState = initialState, action = {}) {
   const state = Object.assign({}, orgState);
   const key = action.key;
   const keyState = Object.assign({}, _.get(state, key));
-
+  const status = _.get(action, 'error.status', false);
   switch (action.type) {
     case actions.STORE_LIST:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {pending: true, failed: false})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {pending: true, failed: false, status: false})));
     case actions.STORE_LIST_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {list: action.result, pending: false, success: true, failed: false})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {list: action.result, pending: false, success: true, failed: false, status: false})));
     case actions.STORE_LIST_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {pending: false, failed: true})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {pending: false, failed: true, status: status})));
 
     case actions.STORE_LIST_ALL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: keyState.all, allStatus: {pending: true}})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: keyState.all, allStatus: {pending: true, status: false}})));
     case actions.STORE_LIST_ALL_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: action.result, allStatus: {pending: false, success: true}})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: action.result, allStatus: {pending: false, success: true, status: false}})));
     case actions.STORE_LIST_ALL_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: keyState.all, allStatus: {pending: false, failed: true}})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: keyState.all, allStatus: {pending: false, failed: true, status: status}})));
     case actions.STORE_LIST_ALL_CLEAR:
       return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {all: {}})));
 
     case actions.STORE_ITEM_LOAD:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: true})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: true, status: false})})));
     case actions.STORE_ITEM_LOAD_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.result, {pending: false, success: true})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.result, {pending: false, success: true, status: false})})));
     case actions.STORE_ITEM_LOAD_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: {pending: false, failed: true}})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: {pending: false, failed: true, status: status}})));
 
     case actions.STORE_ITEM_DELETE:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: true})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: true, status: false})})));
     case actions.STORE_ITEM_DELETE_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: false, deleted: true})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: false, deleted: true, status: false})})));
     case actions.STORE_ITEM_DELETE_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: false, failed: true})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {pending: false, failed: true, error: status})})));
 
     case actions.STORE_ITEM_UPDATE:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, keyState.item, {actionStatus: {pending: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, keyState.item, {actionStatus: {pending: true, status: false}})})));
     case actions.STORE_ITEM_UPDATE_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.result, {actionStatus: {pending: false, success: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.result, {actionStatus: {pending: false, success: true, status: false}})})));
     case actions.STORE_ITEM_UPDATE_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, keyState.item, {actionStatus: {pending: false, failed: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, keyState.item, {actionStatus: {pending: false, failed: true, status: status}})})));
 
     case actions.STORE_ITEM_CREATE:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {actionStatus: {pending: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {actionStatus: {pending: true, status: false}})})));
     case actions.STORE_ITEM_CREATE_SUCCESS:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.payload, action.result, {actionStatus: {pending: false, success: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, action.payload, action.result, {actionStatus: {pending: false, success: true, status: false}})})));
     case actions.STORE_ITEM_CREATE_FAIL:
-      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {actionStatus: {pending: false, failed: true}})})));
+      return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {item: Object.assign({}, {actionStatus: {pending: false, failed: true, status: status}})})));
 
     case actions.STORE_LIST_CLEAR:
       return Object.assign({}, state, _.set(state, key, Object.assign({}, keyState, {list: {}})));
