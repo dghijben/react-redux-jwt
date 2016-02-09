@@ -10,6 +10,7 @@ import List from './List';
 import Pending from 'components/includes/Pending';
 import {fetchDataDeferred} from './fetchDataDeferred';
 import PageHeader from '../Includes/PageHeader';
+import classNames from 'classnames';
 let myTimeout = null;
 
 @connectData(null, fetchDataDeferred)
@@ -40,6 +41,7 @@ class Search extends React.Component {
     'onStack': PropTypes.func,
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
+    'removeFromState': PropTypes.func,
     'inputOnStack': PropTypes.func
   };
 
@@ -53,6 +55,8 @@ class Search extends React.Component {
     this.filter = this.filter.bind(this);
     this.categories = this.categories.bind(this);
     this.categoryList = this.categoryList.bind(this);
+    this.alphabet = this.alphabet.bind(this);
+    this.alphaFilter = this.alphaFilter.bind(this);
     this.state = {
       affiliateIds: [],
       q: '',
@@ -71,11 +75,11 @@ class Search extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-/*
-    const action = nextProps.router.location.action;
-    console.log('Action', action, this.state.skip, this.state.q, this.props.inputOnStack('q'), nextProps.inputOnStack('q'));
-    if (action === 'POP' && this.state.skip === 0) {
-*/
+    /*
+     const action = nextProps.router.location.action;
+     console.log('Action', action, this.state.skip, this.state.q, this.props.inputOnStack('q'), nextProps.inputOnStack('q'));
+     if (action === 'POP' && this.state.skip === 0) {
+     */
     if (this.state.skip === 0) {
       this.setState({q: nextProps.inputOnStack('q'), skip: 2});
     }
@@ -108,42 +112,63 @@ class Search extends React.Component {
 
   searchBar() {
     return (
-      <div className="panel panel-border-tb">
-        <div className="panel-heading">
-          <h4 className="pnael-title">Verfijn</h4>
-        </div>
-        <div className="panel-body">
-          <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
-                 value={this.state.q}/>
-        </div>
-      </div>);
+        <div className="panel panel-border-tb">
+          <div className="panel-heading">
+            <h4 className="pnael-title">Verfijn</h4>
+          </div>
+          <div className="panel-body">
+            <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
+                   value={this.state.q}/>
+          </div>
+        </div>);
   }
 
   categoryList() {
     const list = _.get(this.props, ['categoriesAccount', 'list'], []);
     if (list.length > 0) {
       return (
-        <ul>
-          {_.map(list, (category, key) => {
-            return this.filter('c', key, category);
-          })}
-        </ul>
+          <ul>
+            {_.map(list, (category, key) => {
+              return this.filter('c', key, category);
+            })}
+          </ul>
       );
     }
   }
 
   categories() {
     return (
-      <div className="panel panel-border-tb">
-        <div className="panel-heading">
-          <h4 className="pnael-title">Categorieën</h4>
-        </div>
-        <div className="panel-body">
-          <ul>
-            {this.categoryList()}
-          </ul>
-        </div>
-      </div>);
+        <div className="panel panel-border-tb">
+          <div className="panel-heading">
+            <h4 className="pnael-title">Categorieën</h4>
+          </div>
+          <div className="panel-body">
+            <ul>
+              {this.categoryList()}
+            </ul>
+          </div>
+        </div>);
+  }
+
+  alphabet() {
+    const stack = this.props.inputOnStack('alfa');
+    const name = 'alfa';
+    const range = ['~', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+    return (
+        <div className="panel panel-border-tb">
+          <div className="panel-heading">
+            <h4 className="pnael-title">Alfabet</h4>
+          </div>
+          <div className="panel-body">
+            <div className="filter-color-container">
+              <div className="row">
+                {_.map(range, (val, key) => {
+                  return this.alphaFilter(name, key, val, stack);
+                })}
+              </div>
+            </div>
+          </div>
+        </div>);
   }
 
   filter(name, key, item) {
@@ -155,12 +180,29 @@ class Search extends React.Component {
     };
 
     return (
-      <li key={key} onClick={() => { this.props.toggleOnStack(name, item.id); }}>
-        {checkBox()}
-        <i className="fa fa-angle-right"></i>
-        {' '}
-        {item.name}
-      </li>
+        <li key={key} onClick={() => { this.props.toggleOnStack(name, item.id); }}>
+          {checkBox()}
+          <i className="fa fa-angle-right"></i>
+          {' '}
+          {item.name}
+        </li>
+    );
+  }
+
+  alphaFilter(name, key, item, stack) {
+    if (stack === item) {
+      return (
+          <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
+             onClick={() => { this.props.removeFromState(name, item); }}>
+            {item}
+          </a>);
+    }
+
+    return (
+        <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
+           onClick={() => { this.props.pushOnState(name, item); }}>
+          {item}
+        </a>
     );
   }
 
@@ -170,7 +212,7 @@ class Search extends React.Component {
     return (
       <div id="content" role="main" ref="main">
         <Helmet
-          title={_.get(profile, 'name')}
+            title={_.get(profile, 'name')}
         />
         <PageHeader
           title="Doel vinden"
@@ -185,10 +227,10 @@ class Search extends React.Component {
             <div className="col-md-9 col-md-push-3 ">
               <Pending state={_.get(this.props, ['accounts', 'pending'], false)}>
                 <List
-                  list={_.get(this.props, ['accounts', 'list'])}
-                  switchPage={this.props.switchPage}
-                  pushOnState={this.props.pushOnState}
-                  inputOnStack={this.props.inputOnStack}
+                    list={_.get(this.props, ['accounts', 'list'])}
+                    switchPage={this.props.switchPage}
+                    pushOnState={this.props.pushOnState}
+                    inputOnStack={this.props.inputOnStack}
                 />
               </Pending>
             </div>
@@ -198,6 +240,7 @@ class Search extends React.Component {
                   <div className="panel-group">
                     {this.searchBar()}
                     {this.categories()}
+                    {this.alphabet()}
                   </div>
                 </div>
               </div>

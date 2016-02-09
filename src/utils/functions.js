@@ -106,7 +106,7 @@ export function createAllParamsForFetch(state) {
   const pathname = state.router.location.pathname;
   const action = state.router.location.action;
   let params;
-  if (action === 'POP') {
+  if (action === 'POP.x') {
     params = _.assign(
       Qs.parse(_.get(state, ['router', 'location', 'search'], {}).substr(1))
     );
