@@ -181,7 +181,7 @@
     "warning": "^2.1.0",
     "webpack": "^1.12.10",
     "webpack-dev-middleware": "^1.4.0",
-    "webpack-hot-middleware": "^2.6.0"
+    "webpack-hot-middleware": "^2.7.0"
   },
   "engines": {
     "node": "4.1.2"
