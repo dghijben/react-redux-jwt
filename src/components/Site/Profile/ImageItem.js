@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import {createMarkup, accountId} from 'utils/functions';
+import {createMarkup} from 'utils/functions';
 import ApiClient from 'helpers/ApiClient';
 const client = new ApiClient();
 
@@ -19,6 +19,8 @@ class ImageItem extends React.Component {
   }
 
   render() {
+    const accountId = _.get(this.props, ['profile', 'account_id'], '');
+
     const picture = () => {
       if (_.has(this.props.item, 'picture.data[0].file_name')) {
         const img = _.get(this.props.item, 'picture.data[0]');
@@ -36,13 +38,13 @@ class ImageItem extends React.Component {
         alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
       } else {
         client.get('/accounts/' + profileId + '/click/' + affiliateId);
-        const res = this.getLink().replace('#ACCOUNT_ID#', accountId(profileId));
+        const res = this.getLink().replace('#ACCOUNT_ID#', accountId);
         window.open(res);
       }
     };
 
     const href = () => {
-      return this.getLink().replace('#ACCOUNT_ID#', accountId(_.get(this.props, 'profile.id', '')));
+      return this.getLink().replace('#ACCOUNT_ID#', accountId);
     };
 
     if (this.props.display === 'list') {
