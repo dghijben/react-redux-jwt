@@ -9,7 +9,7 @@ export default class Confirm extends Component {
     confirmed: PropTypes.func.isRequired,
     item: PropTypes.object,
     status: PropTypes.object
-  }
+  };
 
   constructor() {
     super();

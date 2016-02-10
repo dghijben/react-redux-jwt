@@ -29,7 +29,7 @@ class Create extends Component {
     'users': PropTypes.object.isRequired,
     'aclRoles': PropTypes.object,
     'token': PropTypes.string.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

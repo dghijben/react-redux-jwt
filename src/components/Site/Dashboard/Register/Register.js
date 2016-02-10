@@ -35,7 +35,7 @@ class Register extends Component {
     'dashboardAccount': PropTypes.object,
     'token': PropTypes.string,
     'getValues': PropTypes.object,
-  }
+  };
 
   constructor() {
     super();

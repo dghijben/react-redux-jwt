@@ -15,7 +15,7 @@ export default function connectToState(reducerIndex, reducerKey, reducerItem) {
 
       static propTypes = {
         'dispatch': PropTypes.func
-      }
+      };
 
       constructor(props) {
         super(props);

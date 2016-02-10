@@ -8,7 +8,7 @@ export default class PageHeader extends Component {
     'title': PropTypes.string,
     'desc': PropTypes.string,
     'links': PropTypes.array
-  }
+  };
 
   constructor() {
     super();

@@ -20,7 +20,7 @@ class Show extends Component {
     'acl': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

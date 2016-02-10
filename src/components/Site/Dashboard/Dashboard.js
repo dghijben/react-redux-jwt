@@ -16,7 +16,7 @@ class Dashboard extends React.Component {
 
   static propTypes = {
     'authorization': PropTypes.object
-  }
+  };
 
   constructor() {
     super();

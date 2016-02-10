@@ -27,7 +27,7 @@ class Create extends Component {
     'dispatch': PropTypes.func,
     'history': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

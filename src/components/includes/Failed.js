@@ -4,7 +4,7 @@ import {Alert} from 'react-bootstrap';
 export default class Failed extends Component {
   static propTypes = {
     state: PropTypes.bool.isRequired
-  }
+  };
 
   render() {
     if (this.props.state === true) {

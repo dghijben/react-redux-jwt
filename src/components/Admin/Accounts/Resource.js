@@ -24,7 +24,7 @@ const reducerKey = 'users';
     values: PropTypes.array,
     list: PropTypes.array,
     'dispatch': PropTypes.func
-  }
+  };
 
   constructor() {
     super();

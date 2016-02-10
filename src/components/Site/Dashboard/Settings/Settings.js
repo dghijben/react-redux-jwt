@@ -44,7 +44,7 @@ class Settings extends Component {
     'form': PropTypes.object,
     'getValues': PropTypes.object,
     'token': PropTypes.string
-  }
+  };
 
   constructor() {
     super();

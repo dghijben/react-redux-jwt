@@ -27,7 +27,7 @@ class Show extends Component {
     'router': PropTypes.object.isRequired,
     'history': PropTypes.object,
     'dispatch': PropTypes.func.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

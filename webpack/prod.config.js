@@ -1,4 +1,4 @@
-require('babel/polyfill');
+require('babel-polyfill');
 
 // Webpack config for creating the production bundle.
 var path = require('path');
@@ -57,6 +57,9 @@ module.exports = {
     // css files from the extract-text-plugin loader
     new ExtractTextPlugin('[name]-[chunkhash].css', {allChunks: true}),
     new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      },
       __CLIENT__: true,
       __SERVER__: false,
       __DEVELOPMENT__: false,

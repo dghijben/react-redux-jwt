@@ -23,7 +23,7 @@ export default function connectToFilter() {
         'history': PropTypes.object,
         'dispatch': PropTypes.func,
         'pushState': PropTypes.func,
-      }
+      };
 
       constructor() {
         super();

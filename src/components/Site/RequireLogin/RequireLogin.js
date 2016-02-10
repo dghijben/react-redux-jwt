@@ -8,7 +8,7 @@ class RequireLogin extends Component {
     authorization: PropTypes.object,
     history: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired
-  }
+  };
 
   componentWillMount() {
     const {history, authorization} = this.props;

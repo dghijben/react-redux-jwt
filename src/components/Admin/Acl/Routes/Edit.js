@@ -27,7 +27,7 @@ class Edit extends Component {
     'dispatch': PropTypes.func,
     'aclroutes': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

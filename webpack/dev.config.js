@@ -1,4 +1,4 @@
-require('babel/polyfill');
+require('babel-polyfill');
 
 // Webpack config for development
 var fs = require('fs');
@@ -23,22 +23,28 @@ try {
 }
 
 var babelrcObjectDevelopment = babelrcObject.env && babelrcObject.env.development || {};
-var babelLoaderQuery = Object.assign({}, babelrcObject, babelrcObjectDevelopment);
+var combinedPlugins = babelrcObject.plugins || [];
+combinedPlugins = combinedPlugins.concat(babelrcObjectDevelopment.plugins);
+var babelLoaderQuery = Object.assign({}, babelrcObjectDevelopment, babelrcObject, {plugins: combinedPlugins});
 delete babelLoaderQuery.env;
 
 babelLoaderQuery.plugins = babelLoaderQuery.plugins || [];
-if (babelLoaderQuery.plugins.indexOf('react-transform') < 0) {
-  babelLoaderQuery.plugins.push('react-transform');
+var reactTransform = null;
+for (var i = 0; i < babelLoaderQuery.plugins.length; ++i) {
+  var plugin = babelLoaderQuery.plugins[i];
+  if (Array.isArray(plugin) && plugin[0] === 'react-transform') {
+    reactTransform = plugin;
+  }
+}
+if (!reactTransform) {
+  reactTransform = ['react-transform', {transforms: []}];
+  babelLoaderQuery.plugins.push(reactTransform);
+}
+if (!reactTransform[1] || !reactTransform[1].transforms) {
+  reactTransform[1] = Object.assign({}, reactTransform[1], {transforms: []});
 }
 
-babelLoaderQuery.extra = babelLoaderQuery.extra || {};
-if (!babelLoaderQuery.extra['react-transform']) {
-  babelLoaderQuery.extra['react-transform'] = {};
-}
-if (!babelLoaderQuery.extra['react-transform'].transforms) {
-  babelLoaderQuery.extra['react-transform'].transforms = [];
-}
-babelLoaderQuery.extra['react-transform'].transforms.push({
+reactTransform[1].transforms.push({
   transform: 'react-transform-hmr',
   imports: ['react'],
   locals: ['module']

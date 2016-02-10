@@ -29,7 +29,7 @@ class Edit extends Component {
     'dispatch': PropTypes.func,
     'data': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

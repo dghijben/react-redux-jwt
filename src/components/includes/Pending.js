@@ -8,7 +8,7 @@ export default class Pending extends Component {
       PropTypes.object.isRequired,
       PropTypes.array.isRequired
     ])
-  }
+  };
 
   constructor() {
     super();

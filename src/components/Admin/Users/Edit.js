@@ -29,7 +29,7 @@ class Edit extends Component {
     'data': PropTypes.object.isRequired,
     'aclRoles': PropTypes.object.isRequired,
     'token': PropTypes.string.isRequired
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

@@ -14,7 +14,7 @@ export default class DataTable extends Component {
     paginator: PropTypes.object,
     onChange: PropTypes.func,
     checked: PropTypes.array
-  }
+  };
 
   constructor() {
     super();

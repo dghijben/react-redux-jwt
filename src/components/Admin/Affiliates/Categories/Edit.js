@@ -32,7 +32,7 @@ class Edit extends Component {
     'token': PropTypes.string.isRequired,
     'affiliatesCategories': PropTypes.object.isRequired,
     'affiliatesSites': PropTypes.object.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
