@@ -137,7 +137,7 @@ class DiscountCodes extends React.Component {
     return (
       <div className="panel panel-border-tb">
         <div className="panel-heading">
-          <h4 className="pnael-title">Categorieen</h4>
+          <h4 className="pnael-title">Categorieën</h4>
         </div>
         <div className="panel-body">
           <ul>
