@@ -175,7 +175,7 @@ class DiscountCodes extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['kortingscodes', 'pending'], true)}>
+            <Pending state={_.get(this.props, ['kortingscodes', 'pending'], true)} failed={_.get(this.props, ['kortingscodes', 'failed'], true)}>
               <List
                 list={_.get(this.props, ['kortingscodes', 'list'])}
                 switchPage={this.props.switchPage}

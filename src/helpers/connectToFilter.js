@@ -45,7 +45,6 @@ export default function connectToFilter() {
       }
 
       componentWillMount() {
-        console.log('cwm', createAllParamsForFetch(this.props));
         this.setState({form: createAllParamsForFetch(this.props)});
       }
 

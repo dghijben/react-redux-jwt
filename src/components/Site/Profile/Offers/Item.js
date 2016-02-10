@@ -11,11 +11,22 @@ class Item extends React.Component {
     super();
     this.defaultView = this.defaultView.bind(this);
     this.discount = this.discount.bind(this);
+    this.getLink = this.getLink.bind(this);
     this.state = {view: 'x'};
   }
 
   componentWillMount() {
     this.defaultView();
+  }
+
+  getLink() {
+    if (_.has(this.props, ['item', 'url']) && _.get(this.props, ['item', 'url']) !== '') {
+      return _.get(this.props, ['item', 'url']);
+    } else if (_.has(this.props.item, ['affiliate', 'data', 'url_affiliate'])
+        && _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']) !== '') {
+      return _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']);
+    }
+    return '/no-url';
   }
 
   defaultView() {
@@ -50,19 +61,13 @@ class Item extends React.Component {
       const profileId = _.get(this.props, ['profile', 'id'], '');
       const affiliateId = _.get(this.props.item, ['id'], '');
 
-      if (_.get(this.props.item, 'url_affiliate') === '') {
-        alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-      } else {
-        client.get('/accounts/' + profileId + '/click/' + affiliateId);
-        const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId);
-        window.open(res);
-      }
+      client.get('/accounts/' + profileId + '/click/' + affiliateId);
+      const res = this.getLink().replace('#ACCOUNT_ID#', accountId);
+      window.open(res);
     };
 
     const href = () => {
-      const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
-      return affiliateUrl.replace('#ACCOUNT_ID#', accountId);
+      return this.getLink().replace('#ACCOUNT_ID#', accountId);
     };
 
     if (this.props.display === 'list') {
@@ -86,7 +91,7 @@ class Item extends React.Component {
           <div className="col-sm-3">
             <div className="product-top">
               <figure>
-                <a href={href()} rel="nofollow" title={this.props.item.affiliate.data.name}>
+                <a href={href()} rel="nofollow" title={this.props.item.affiliate.data.name} onClick={(e) => {e.preventDefault();}}>
                   {picture()}
                 </a>
               </figure>
@@ -95,9 +100,8 @@ class Item extends React.Component {
 
           <div className="mb20 visible-xs"></div>
           <div className="col-sm-6">
-
             <h3 className="product-title">
-              <a href={href()} rel="nofollow" title={this.props.item.affiliate.data.name}>
+              <a href={href()} rel="nofollow" title={this.props.item.affiliate.data.name} onClick={(e) => {e.preventDefault();}}>
                 {this.props.item.affiliate.data.name}
               </a>
             </h3>

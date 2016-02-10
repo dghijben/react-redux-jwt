@@ -36,18 +36,8 @@ export default class Pending extends Component {
         <div className="error-page text-center">
           <div className="container">
             <h2 className="error-title">404</h2>
-            <h3 className="error-subtitle">Page Not Found</h3>
-
-            <p className="error-text center-block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos animi, enim ullam consequatur ad ipsa quaerat voluptatem. Nulla similique assumenda alias perferendis voluptatibus voluptates neque voluptatem nesciunt, atque suscipit unde.</p>
-
-            <form action="#">
-              <div className="form-group">
-                <input className="form-control input-lg input-border-bottom text-center" type="text" placeholder="Search in here..." />
-              </div>
-              <div className="form-group">
-                <input type="submit" className="btn btn-dark no-radius min-width" value="Search Now" />
-              </div>
-            </form>
+            <h3 className="error-subtitle">Some bits denied your request.</h3>
+            <p className="error-text center-block">De pagina die u probeerde te bezoeken bestaat niet.</p>
           </div>
         </div>
         );

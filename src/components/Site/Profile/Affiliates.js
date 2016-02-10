@@ -175,7 +175,7 @@ class Affiliates extends React.Component {
         />
         <div className="row pos-relative">
           <div className="col-md-9 col-md-push-3 ">
-            <Pending state={_.get(this.props, ['affiliates', 'pending'], true)}>
+            <Pending state={_.get(this.props, ['affiliates', 'pending'], true)} failed={_.get(this.props, ['affiliates', 'failed'], true)}>
               <ImageList
                 list={_.get(this.props, ['affiliates', 'list'])}
                 switchPage={this.props.switchPage}

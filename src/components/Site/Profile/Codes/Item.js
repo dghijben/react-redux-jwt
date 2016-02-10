@@ -15,11 +15,22 @@ class Item extends React.Component {
     this.discount = this.discount.bind(this);
     this.discountCode = this.discountCode.bind(this);
     this.link = this.link.bind(this);
+    this.getLink = this.getLink.bind(this);
     this.state = {view: 'x'};
   }
 
   componentWillMount() {
     this.defaultView();
+  }
+
+  getLink() {
+    if (_.has(this.props, ['item', 'url']) && _.get(this.props, ['item', 'url']) !== '') {
+      return _.get(this.props, ['item', 'url']);
+    } else if (_.has(this.props.item, ['affiliate', 'data', 'url_affiliate'])
+        && _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']) !== '') {
+      return _.get(this.props.item, ['affiliate', 'data', 'url_affiliate']);
+    }
+    return '/no-url';
   }
 
   defaultView() {
@@ -45,22 +56,19 @@ class Item extends React.Component {
     };
 
     return (
-      <div>
-        <button className="btn btn-custom2 btn-block">{getDiscount()}</button>
-        <em className="center-block text-center">Toon de kortingscode</em>
-      </div>
+        <div>
+          <button className="btn btn-custom2 btn-block">{getDiscount()}</button>
+          <em className="center-block text-center">Toon de kortingscode</em>
+        </div>
     );
   }
 
   discountCode() {
     return (
-      <CopyToClipboard text={this.props.item.discountCode}
-                       onCopy={this.link}>
         <div>
           <button className="btn btn-primary btn-block">{this.props.item.discountCode}</button>
           <em className="center-block text-center">Klik om de code te kopiëren.</em>
         </div>
-      </CopyToClipboard>
     );
   }
 
@@ -69,14 +77,9 @@ class Item extends React.Component {
     const profileId = _.get(this.props, ['profile', 'id'], '');
     const affiliateId = _.get(this.props.item, ['id'], '');
 
-    if (_.get(this.props.item, 'url_affiliate') === '') {
-      alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-    } else {
-      client.get('/accounts/' + profileId + '/click/' + affiliateId);
-      const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
-      const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId);
-      window.open(res);
-    }
+    client.get('/accounts/' + profileId + '/click/' + affiliateId);
+    const res = this.getLink().replace('#ACCOUNT_ID#', accountId);
+    window.open(res);
   }
 
   render() {
@@ -91,34 +94,12 @@ class Item extends React.Component {
         return <img src={'/image/268x332/' + img.file_name} alt={this.props.item.name} className="img-responsive"/>;
       }
       return (<img src={'https://placehold.it/400x200&text=' + encodeURIComponent(this.props.item.name)}
-                  className="img-responsive"/>);
-    };
-
-    const link = () => {
-      if (_.get(this.props.item, 'url_affiliate') === '') {
-        alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
-      } else {
-
-        const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId);
-        window.open(res);
-      }
+                   className="img-responsive"/>);
     };
 
     const href = () => {
-      const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
-      return affiliateUrl.replace('#ACCOUNT_ID#', accountId);
+      return this.getLink().replace('#ACCOUNT_ID#', accountId);
     };
-
-    if (this.props.display === 'list') {
-      return (
-        <div className="col-sm-12 col-xs-12">
-          <div className="product text-center">
-            <h3><a href="#" onClick={link}>{this.props.item.name}</a></h3>
-          </div>
-        </div>
-      );
-    }
 
     const stop = () => {
       const date = moment(this.props.item.end, 'x');
@@ -126,35 +107,40 @@ class Item extends React.Component {
     };
 
     return (
-      <div className="product">
-        <div className="row">
-
-          <div className="col-sm-3">
-            <div className="product-top">
-              <figure>
-                <a href="product.html" title="Product Name">
-                  {picture()}
-                </a>
-              </figure>
+      <CopyToClipboard text={this.props.item.discountCode}
+                       onCopy={this.link}>
+        <div className="product" onMouseOver={this.hoverView} onMouseOut={this.defaultView}>
+          <div className="row">
+            <div className="col-sm-3">
+              <div className="product-top">
+                <figure>
+                  <a href={href()} title={this.props.item.affiliate.data.name} onClick={(e) => {e.preventDefault();}}>
+                    {picture()}
+                  </a>
+                </figure>
+              </div>
             </div>
-          </div>
-
-          <div className="mb20 visible-xs"></div>
-          <div className="col-sm-6">
-            <h3 className="product-title"><a href={href()} rel="nofollow" title="Product Title">{this.props.item.affiliate.data.name}</a></h3>
-            <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
-          </div>
-          <div className="col-sm-3">
-            <div onMouseOver={this.hoverView} onMouseOut={this.defaultView}>
-              {this.state.view}
+            <div className="mb20 visible-xs"></div>
+            <div className="col-sm-6">
+              <h3 className="product-title">
+                <a href={href()} rel="nofollow" title={this.props.item.affiliate.data.name} onClick={(e) => {e.preventDefault();}}>
+                  {this.props.item.affiliate.data.name}
+                </a>
+              </h3>
+              <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
+            </div>
+            <div className="col-sm-3">
               <div>
-                <strong>t/m: </strong>
-                {stop()}
+                {this.state.view}
+                <div>
+                  <strong>t/m: </strong>
+                  {stop()}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </CopyToClipboard>
     );
   }
 }
