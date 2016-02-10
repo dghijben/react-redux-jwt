@@ -93,9 +93,6 @@ class Charts extends React.Component {
     const goal1 = _.get(this.props, ['profile', 'goal1'], 0);
     const extern = _.get(this.props, ['profile', 'extern'], 0);
 
-    console.log(leads, goal1, extern);
-
-
     const options1 = {
       chartData: this.makeOptions(goal1, leads, extern),
       leads: (leads > goal1 ? goal1 : leads),

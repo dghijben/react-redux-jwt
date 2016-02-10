@@ -93,6 +93,14 @@ export default function fields(userId, token, affiliates) {
 
     },
     {
+      name: 'url',
+      label: 'Url',
+      type: 'text',
+      placeholder: 'Titel',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
       name: 'discount_code',
       label: 'Kortingscode',
       type: 'text',

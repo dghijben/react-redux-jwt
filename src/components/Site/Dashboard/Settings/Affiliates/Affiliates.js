@@ -36,7 +36,8 @@ let myTimeout = null;
     'onStack': PropTypes.func,
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
-    'inputOnStack': PropTypes.func
+    'inputOnStack': PropTypes.func,
+    'alphabet': PropTypes.func
   };
 
   constructor() {
@@ -58,10 +59,19 @@ let myTimeout = null;
 
   componentWillMount() {
     this.updateState(this.props);
+    this.setState({q: this.props.inputOnStack('q')});
   }
 
   componentWillReceiveProps(nextProps) {
     this.updateState(nextProps);
+
+    if (this.state.skip === 0) {
+      this.setState({q: nextProps.inputOnStack('q'), skip: 2});
+    }
+
+    if (this.state.skip > 0) {
+      this.setState({skip: this.state.skip - 1});
+    }
   }
 
   updateState(props) {
@@ -182,11 +192,18 @@ let myTimeout = null;
     const list = _.get(this.props, ['store', 'categories', 'list'], []);
     if (list.length > 0) {
       return (
-        <ul>
-          {_.map(list, (category, key) => {
-            return this.filter('c', key, category);
-          })}
-        </ul>
+      <div className="panel panel-border-tb">
+        <div className="panel-heading">
+          <h4 className="pnael-title">Categorieën</h4>
+        </div>
+        <div className="panel-body">
+          <ul>
+            {_.map(list, (category, key) => {
+              return this.filter('c', key, category);
+            })}
+          </ul>
+        </div>
+      </div>
       );
     }
   }
@@ -216,33 +233,53 @@ let myTimeout = null;
     ];
 
     return (
-      <ul>
-        {_.map(state, (item, key) => {
-          return this.filter('status', key, item);
-        })}
-      </ul>
+      <div className="panel panel-border-tb">
+        <div className="panel-heading">
+          <h4 className="pnael-title">Status</h4>
+        </div>
+        <div className="panel-body">
+          <ul>
+            {_.map(state, (item, key) => {
+              return this.filter('status', key, item);
+            })}
+          </ul>
+        </div>
+      </div>
     );
   }
 
   pushSearch(e) {
     const value = e.target.value;
     this.setState({
-      q: value
+      q: value,
+      skip: 2
+    }, () => {
+      if (myTimeout) {
+        clearTimeout(myTimeout);
+      }
+      myTimeout = setTimeout(() => {
+        this.props.pushOnState('q', value);
+      }, 500);
     });
-
-    myTimeout = setTimeout(() => {
-      this.props.pushOnState('q', value);
-    }, 150);
   }
 
   clearTimer() {
     if (myTimeout) {
-      clearTimeout(myTimeout);
+      // clearTimeout(myTimeout);
     }
   }
 
   searchBar() {
-    return ( <Input type="text" placeholder="zoeken" onKeyUp={this.pushSearch} onKeyDown={this.clearTimer} defaultValue={this.props.inputOnStack('q')}/> );
+    return (
+      <div className="panel panel-border-tb">
+        <div className="panel-heading">
+          <h4 className="pnael-title">Verfijn</h4>
+        </div>
+        <div className="panel-body">
+          <Input type="text" placeholder="zoeken" onChange={this.pushSearch} onKeyDown={this.clearTimer}
+                 value={this.state.q}/>
+        </div>
+      </div>);
   }
 
   render() {
@@ -251,7 +288,9 @@ let myTimeout = null;
       if (list) {
         const currentPage = list.current_page;
         const lastPage = list.last_page;
-        return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.props.switchPage}/>;
+        if (lastPage > 1) {
+          return <Paginator currPage={currentPage} lastPage={lastPage} onChange={this.props.switchPage}/>;
+        }
       }
     };
 
@@ -271,25 +310,20 @@ let myTimeout = null;
         <div className="container">
           <div className="row">
             <div className="col-md-9 col-md-push-3">
-              {pagedCalled}
               {this.sites()}
               {pagedCalled}
             </div>
 
             <aside className="col-md-3 col-md-pull-9 sidebar">
               <div className="widget">
-                <h3>Categories</h3>
-                <ul id="category-widget">
-                  <li className="open"><a href="#">Zoeken <span className="category-widget-btn"></span></a>
+                <div className="filter-group-widget">
+                  <div className="panel-group">
                     {this.searchBar()}
-                  </li>
-                  <li className="open"><a href="#">Categorieen <span className="category-widget-btn"></span></a>
                     {this.categories()}
-                  </li>
-                  <li className="open"><a href="#">Abonnee <span className="category-widget-btn"></span></a>
                     {this.affiliateState()}
-                  </li>
-                </ul>
+                    {this.props.alphabet()}
+                  </div>
+                </div>
               </div>
             </aside>
           </div>

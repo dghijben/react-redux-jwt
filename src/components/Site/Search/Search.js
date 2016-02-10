@@ -10,7 +10,6 @@ import List from './List';
 import Pending from 'components/includes/Pending';
 import {fetchDataDeferred} from './fetchDataDeferred';
 import PageHeader from '../Includes/PageHeader';
-import classNames from 'classnames';
 let myTimeout = null;
 
 @connectData(null, fetchDataDeferred)
@@ -42,6 +41,7 @@ class Search extends React.Component {
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
     'removeFromState': PropTypes.func,
+    'alphabet': PropTypes.func,
     'inputOnStack': PropTypes.func
   };
 
@@ -55,8 +55,6 @@ class Search extends React.Component {
     this.filter = this.filter.bind(this);
     this.categories = this.categories.bind(this);
     this.categoryList = this.categoryList.bind(this);
-    this.alphabet = this.alphabet.bind(this);
-    this.alphaFilter = this.alphaFilter.bind(this);
     this.state = {
       affiliateIds: [],
       q: '',
@@ -150,27 +148,6 @@ class Search extends React.Component {
         </div>);
   }
 
-  alphabet() {
-    const stack = this.props.inputOnStack('alfa');
-    const name = 'alfa';
-    const range = ['~', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-    return (
-        <div className="panel panel-border-tb">
-          <div className="panel-heading">
-            <h4 className="pnael-title">Alfabet</h4>
-          </div>
-          <div className="panel-body">
-            <div className="filter-color-container">
-              <div className="row">
-                {_.map(range, (val, key) => {
-                  return this.alphaFilter(name, key, val, stack);
-                })}
-              </div>
-            </div>
-          </div>
-        </div>);
-  }
-
   filter(name, key, item) {
     const checkBox = () => {
       if (this.props.onStack(name, item.id)) {
@@ -186,23 +163,6 @@ class Search extends React.Component {
           {' '}
           {item.name}
         </li>
-    );
-  }
-
-  alphaFilter(name, key, item, stack) {
-    if (stack === item) {
-      return (
-          <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
-             onClick={() => { this.props.removeFromState(name, item); }}>
-            {item}
-          </a>);
-    }
-
-    return (
-        <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
-           onClick={() => { this.props.pushOnState(name, item); }}>
-          {item}
-        </a>
     );
   }
 
@@ -240,7 +200,7 @@ class Search extends React.Component {
                   <div className="panel-group">
                     {this.searchBar()}
                     {this.categories()}
-                    {this.alphabet()}
+                    {this.props.alphabet()}
                   </div>
                 </div>
               </div>

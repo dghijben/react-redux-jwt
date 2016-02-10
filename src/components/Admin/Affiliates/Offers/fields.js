@@ -83,6 +83,14 @@ export default function fields(userId, token, affiliates) {
 
     },
     {
+      name: 'url',
+      label: 'Url',
+      type: 'text',
+      placeholder: 'Titel',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
       name: 'start',
       label: 'Start datum',
       type: 'dateTime',

@@ -3,6 +3,9 @@ import { bindActionCreators } from 'redux';
 import { pushState } from 'redux-router';
 import Qs from 'qs';
 
+export function accountId(id) {
+  return 'gdl-' + id;
+}
 
 export function stateMapper(state, pathname, name, obj, deep = 0) {
   const params = {};

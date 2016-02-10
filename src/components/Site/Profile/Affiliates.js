@@ -37,6 +37,7 @@ class Affiliates extends React.Component {
     'getParams': PropTypes.func,
     'toggleOnStack': PropTypes.func,
     'onStack': PropTypes.func,
+    'alphabet': PropTypes.func,
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
     'inputOnStack': PropTypes.func
@@ -190,6 +191,7 @@ class Affiliates extends React.Component {
                 <div className="panel-group">
                   {this.searchBar()}
                   {this.categories()}
+                  {this.props.alphabet()}
                 </div>
               </div>
             </div>

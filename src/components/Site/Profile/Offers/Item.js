@@ -31,6 +31,8 @@ class Item extends React.Component {
   }
 
   render() {
+    const accountId = _.get(this.props, ['profile', 'account_id'], '');
+
     const picture = () => {
       if (_.has(this.props.item, 'picture.data[0].file_name')) {
         const img = _.get(this.props.item, 'picture.data[0]');
@@ -52,15 +54,15 @@ class Item extends React.Component {
         alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
       } else {
         client.get('/accounts/' + profileId + '/click/' + affiliateId);
-        const affiliateUrl = _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], '');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', profileId);
+        const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
+        const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId);
         window.open(res);
       }
     };
 
     const href = () => {
-      const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
-      return affiliateUrl.replace('#ACCOUNT_ID#', _.get(this.props, ['profile', 'id'], ''));
+      const affiliateUrl = _.get(this.props, ['item', 'url'], _.get(this.props.item, ['affiliate', 'data', 'url_affiliate'], ''));
+      return affiliateUrl.replace('#ACCOUNT_ID#', accountId);
     };
 
     if (this.props.display === 'list') {
@@ -72,11 +74,6 @@ class Item extends React.Component {
         </div>
       );
     }
-
-    const start = () => {
-      const date = moment(this.props.item.start, 'x');
-      return date.format('dddd D MMMM YYYY');
-    };
 
     const stop = () => {
       const date = moment(this.props.item.end, 'x');
@@ -105,16 +102,14 @@ class Item extends React.Component {
               </a>
             </h3>
             <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
-            <div>
-              <strong>vanaf </strong>
-              {start()}
-              </div><div>
-              <strong>tot </strong>
-              {stop()}
-            </div>
+
           </div>
           <div className="col-sm-3">
             {this.state.view}
+            <div>
+              <strong>t/m: </strong>
+              {stop()}
+            </div>
           </div>
         </div>
       </div>

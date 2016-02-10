@@ -39,6 +39,7 @@ class DiscountCodes extends React.Component {
     'onStack': PropTypes.func,
     'sortOnStack': PropTypes.func,
     'pushOnState': PropTypes.func,
+    'alphabet': PropTypes.func,
     'inputOnStack': PropTypes.func
   };
 
@@ -190,6 +191,7 @@ class DiscountCodes extends React.Component {
                 <div className="panel-group">
                   {this.searchBar()}
                   {this.categories()}
+                  {this.props.alphabet()}
                 </div>
               </div>
             </div>

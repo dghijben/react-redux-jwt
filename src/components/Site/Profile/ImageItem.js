@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import {createMarkup} from 'utils/functions';
+import {createMarkup, accountId} from 'utils/functions';
 import ApiClient from 'helpers/ApiClient';
 const client = new ApiClient();
 
@@ -24,14 +24,14 @@ class ImageItem extends React.Component {
       } else {
         client.get('/accounts/' + profileId + '/click/' + affiliateId);
         const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', profileId);
+        const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId(profileId));
         window.open(res);
       }
     };
 
     const href = () => {
       const affiliateUrl = _.get(this.props.item, 'url_affiliate');
-      return affiliateUrl.replace('#ACCOUNT_ID#', this.props.profile.id);
+      return affiliateUrl.replace('#ACCOUNT_ID#', accountId(_.get(this.props, 'profile.id', '')));
     };
 
     if (this.props.display === 'list') {
@@ -41,7 +41,7 @@ class ImageItem extends React.Component {
             <div className="col-sm-3">
               <div className="product-top">
                 <figure>
-                  <a href="product.html" title="Product Name">
+                  <a href={href()} title={this.props.item.name}>
                     {picture()}
                   </a>
                 </figure>
@@ -51,6 +51,9 @@ class ImageItem extends React.Component {
               <div className="col-sm-6">
                 <h3 className="product-title"><a href={href()} title={this.props.item.name} rel="nofollow">{this.props.item.name}</a></h3>
                 <div dangerouslySetInnerHTML={createMarkup(this.props.item.description)}></div>
+              </div>
+              <div className="col-sm-3">
+                <button className="btn btn-custom2 btn-block">Winkelen</button>
               </div>
             </div>
           </div>

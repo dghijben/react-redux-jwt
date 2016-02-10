@@ -3,7 +3,9 @@ import React, {Component, PropTypes} from 'react';
 import { connect } from 'react-redux';
 import { storeState } from 'redux/modules/reduxRouter/actions';
 import {stringifyFullState, createAllParamsForFetch} from 'utils/functions';
-import Qs from 'qs';
+import classNames from 'classnames';
+let myTimeout = null;
+// import Qs from 'qs';
 
 let scrollTop = null;
 
@@ -34,6 +36,8 @@ export default function connectToFilter() {
         this.onStack = this.onStack.bind(this);
         this.sortOnStack = this.sortOnStack.bind(this);
         this.removeFromState = this.removeFromState.bind(this);
+        this.alphabet = this.alphabet.bind(this);
+        this.alphaFilter = this.alphaFilter.bind(this);
         this.state = {
           form: {},
           skip: false
@@ -45,17 +49,17 @@ export default function connectToFilter() {
         this.setState({form: createAllParamsForFetch(this.props)});
       }
 
-      componentWillReceiveProps(nextProps) {
+/*      componentWillReceiveProps(nextProps) {
         const state = {};
         // const action = nextProps.router.location.action;
 
         // if (action === 'POP' && this.state.skip === false) {
-/*
+/!*
         const params = _.assign({},
           Qs.parse(_.get(nextProps, ['router', 'location', 'search'], {}).substr(1))
         );
         state.form = params;
-*/
+*!/
         // }
 
         if (this.state.skip === true) {
@@ -63,7 +67,7 @@ export default function connectToFilter() {
         }
 
         this.setState(state);
-      }
+      }*/
 
       componentWillUpdate() {
         scrollTop = window.pageYOffset || document.documentElement.scrollTop || scrollTop;
@@ -155,6 +159,59 @@ export default function connectToFilter() {
         this.setState({form: state}, this.pushStateAttempt);
       }
 
+      pushSearch(e) {
+        const value = e.target.value;
+        this.setState({
+          q: value,
+          skip: 2
+        }, () => {
+          if (myTimeout) {
+            clearTimeout(myTimeout);
+          }
+          myTimeout = setTimeout(() => {
+            this.pushOnState('q', value);
+          }, 500);
+        });
+      }
+
+      alphabet() {
+        const stack = this.inputOnStack('alfa');
+        const name = 'alfa';
+        const range = ['~', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        return (
+          <div className="panel panel-border-tb">
+            <div className="panel-heading">
+              <h4 className="pnael-title">Alfabet</h4>
+            </div>
+            <div className="panel-body">
+              <div className="filter-color-container">
+                <div className="row">
+                  {_.map(range, (val, key) => {
+                    return this.alphaFilter(name, key, val, stack);
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>);
+      }
+
+      alphaFilter(name, key, item, stack) {
+        if (stack === item) {
+          return (
+            <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
+               onClick={() => { this.removeFromState(name, item); }}>
+              {item}
+            </a>);
+        }
+
+        return (
+          <a key={key} className={classNames({'filter-size-box': true, 'active': stack === item})}
+             onClick={() => { this.pushOnState(name, item); }}>
+            {item}
+          </a>
+        );
+      }
+
       render() {
         return (<WrappedComponent
           {...this.props}
@@ -166,6 +223,7 @@ export default function connectToFilter() {
           inputOnStack={this.inputOnStack}
           onStack={this.onStack}
           sortOnStack={this.sortOnStack}
+          alphabet={this.alphabet}
           />);
       }
     }

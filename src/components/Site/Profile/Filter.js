@@ -76,8 +76,8 @@ class Filter extends React.Component {
           </div>
         </div>
         <div className="filter-row-right">
-          <a onClick={setDisplayGrid} href="?display=grid" className={clGrid} data-placement="top" title="Category Grid"><i className="fa fa-th"></i></a>
-          <a onClick={setDisplayList} href="?display=list" className={clList} data-placement="top" title="Category List"><i className="fa fa-th-list"></i></a>
+          <a onClick={setDisplayGrid} href="?display=grid" className={clGrid} data-placement="top" title="Toon grid"><i className="fa fa-th"></i></a>
+          <a onClick={setDisplayList} href="?display=list" className={clList} data-placement="top" title="Toon lijst"><i className="fa fa-th-list"></i></a>
         </div>
       </div>
     );
