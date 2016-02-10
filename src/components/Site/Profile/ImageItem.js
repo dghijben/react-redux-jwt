@@ -5,6 +5,19 @@ import ApiClient from 'helpers/ApiClient';
 const client = new ApiClient();
 
 class ImageItem extends React.Component {
+
+  constructor() {
+    super();
+    this.getLink = this.getLink.bind(this);
+  }
+
+  getLink() {
+    if (_.has(this.props, ['item', 'url_affiliate']) && _.get(this.props, ['item', 'url_affiliate']) !== '') {
+      return _.get(this.props, ['item', 'url_affiliate']);
+    }
+    return '/no-url';
+  }
+
   render() {
     const picture = () => {
       if (_.has(this.props.item, 'picture.data[0].file_name')) {
@@ -23,20 +36,18 @@ class ImageItem extends React.Component {
         alert('Helaas kunt u tijdelijk niet bij deze site bestellen. ');
       } else {
         client.get('/accounts/' + profileId + '/click/' + affiliateId);
-        const affiliateUrl = _.get(this.props.item, 'url_affiliate', '');
-        const res = affiliateUrl.replace('#ACCOUNT_ID#', accountId(profileId));
+        const res = this.getLink().replace('#ACCOUNT_ID#', accountId(profileId));
         window.open(res);
       }
     };
 
     const href = () => {
-      const affiliateUrl = _.get(this.props.item, 'url_affiliate');
-      return affiliateUrl.replace('#ACCOUNT_ID#', accountId(_.get(this.props, 'profile.id', '')));
+      return this.getLink().replace('#ACCOUNT_ID#', accountId(_.get(this.props, 'profile.id', '')));
     };
 
     if (this.props.display === 'list') {
       return (
-        <div className="product">
+        <div className="product" onClick={link}>
           <div className="row" onClick={link} role="link">
             <div className="col-sm-3">
               <div className="product-top">
