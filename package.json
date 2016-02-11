@@ -77,7 +77,7 @@
   "dependencies": {
     "babel": "5.8.29",
     "babel-plugin-typecheck": "2.0.0",
-    "body-parser": "1.14.2",
+    "body-parser": "1.15.0",
     "chart.js": "^1.0.2",
     "classnames": "^2.2.3",
     "cluster": "^0.7.7",
