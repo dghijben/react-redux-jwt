@@ -45,7 +45,7 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {roles: _.pluck(_.get(values, 'roles'), 'id')}
+    {roles: _.map(_.get(values, 'roles'), 'id')}
   );
 }
 

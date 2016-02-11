@@ -18,7 +18,7 @@ import connectToState from 'helpers/connectToState';
   obj[reducerIndex] = state[reducerIndex];
   return obj;
 }, mapDispatchToProps)
-class Register extends Component {
+class Registration extends Component {
 
   static propTypes = {
     'clearItem': PropTypes.func,
@@ -99,4 +99,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default Registration;

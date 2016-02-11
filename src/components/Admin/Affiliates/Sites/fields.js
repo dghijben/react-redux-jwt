@@ -68,7 +68,7 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {categories: _.pluck(_.get(values, 'categories'), 'id')}
+    {categories: _.map(_.get(values, 'categories'), 'id')}
   );
 }
 

@@ -77,7 +77,7 @@ let myTimeout = null;
   updateState(props) {
     const accountId = props.router.params.id;
     const accountIndex = _.findIndex(_.get(props, 'accounts', []), 'id', parseInt(accountId, 10));
-    const affiliateIds = _.pluck(_.get(this.props.accounts, [accountIndex, 'affiliate_ids']), 'affiliate_id');
+    const affiliateIds = _.map(_.get(this.props.accounts, [accountIndex, 'affiliate_ids']), 'affiliate_id');
 
     if (this.state.affiliateIds !== affiliateIds) {
       this.setState({affiliateIds: affiliateIds});

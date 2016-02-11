@@ -14,7 +14,7 @@ export default () => {
         <Route path="/logout" component={cmpnnt.Logout} />
         <Route path="/about" component={cmpnnt.About}/>
         <Route path="/zoeken" component={cmpnnt.Search}/>
-        <Route path="/register" component={cmpnnt.Register} />
+        <Route path="/register" component={cmpnnt.Registration} />
         <Route path="/register/verify/:code" component={cmpnnt.RegisterVerify} />
 
         <Route component={cmpnnt.RequireLogin}>

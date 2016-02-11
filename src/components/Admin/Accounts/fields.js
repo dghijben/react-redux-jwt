@@ -38,9 +38,9 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
-    {users: _.pluck(_.get(values, 'users'), 'id')},
-    {categories: _.pluck(_.get(values, 'categories'), 'id')},
+    {affiliate: _.map(_.get(values, 'affiliate'), 'id')},
+    {users: _.map(_.get(values, 'users'), 'id')},
+    {categories: _.map(_.get(values, 'categories'), 'id')},
     {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
   );
 }

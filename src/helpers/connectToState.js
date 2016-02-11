@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {mapDispatchToProps, getActionStatus} from 'utils/functions';
 import {create, clearNetworkState, clearItem} from 'redux/modules/data/actions';
 
-export default connectToState = (reducerIndex, reducerKey, reducerItem) => {
+export default function connectToState(reducerIndex, reducerKey, reducerItem) {
   return (DecoratedComponent) => {
     @connect(state=> {
       const obj = {};

@@ -44,7 +44,7 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {affiliate: _.pluck(_.get(values, 'affiliate'), 'id')},
+    {affiliate: _.map(_.get(values, 'affiliate'), 'id')},
     {'discount_concat': _.get(values, 'discount') + _.get(values, 'type')}
   );
 }

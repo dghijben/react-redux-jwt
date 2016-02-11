@@ -32,7 +32,7 @@ export const searchFields = [
 export function initialValues(values) {
   return Object.assign({},
     values,
-    {accounts: _.pluck(_.get(values, 'accounts'), 'id')}
+    {accounts: _.map(_.get(values, 'accounts'), 'id')}
   );
 }
 
