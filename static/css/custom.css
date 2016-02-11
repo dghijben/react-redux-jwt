@@ -187,6 +187,10 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     height: 50px;
 }
 
+.search-pad {
+    padding: 30px 0 5px;
+}
+
 @media (min-width: 768px) {
     .navbar-brand {
         height: 90px;
@@ -217,7 +221,20 @@ input[type="checkbox"].green.ios-switch:checked + div > div {
     .search-pad {
         padding: 30px 0 5px;
     }
+    .search-pad .form-control {
+        margin-bottom: 0px;
+    }
 }
+
+@media (min-width: 1200px) {
+    .search-pad {
+        padding: 30px 0 5px;
+    }
+    .search-pad.input-group {
+        margin-bottom: 25px;
+    }
+}
+
 
 .sticky-menu.fixed .navbar-brand {
     padding: 0px;

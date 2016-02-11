@@ -19,7 +19,8 @@ const apiPaths = {
   'register': '/auth/register',
   'registerVerify': '/auth/register/verify',
   'dashboardAccount': '/dashboard/accounts',
-  'dashboardAffiliates': '/dashboard/settings/:id/affiliates'
+  'dashboardAffiliates': '/dashboard/settings/:id/affiliates',
+  'pages': '/admin/pages'
 };
 
 

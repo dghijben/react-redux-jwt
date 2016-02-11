@@ -36,6 +36,8 @@ import AdminAccountCategories from './Admin/Accounts/Categories';
 modules.AdminAccountCategories = AdminAccountCategories;
 import AdminUsers from './Admin/Users';
 modules.AdminUsers = AdminUsers;
+import AdminPages from './Admin/Pages';
+modules.AdminPages = AdminPages;
 import AdminAcl from './Admin/Acl/Acl';
 modules.AdminAcl = AdminAcl;
 import AdminAclRoles from './Admin/Acl/Roles';
