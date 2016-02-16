@@ -62,7 +62,7 @@ export default () => {
             <Route path=":id" component={cmpnnt.AdminPages.Show} />
             <Route path=":id/edit" component={cmpnnt.AdminPages.Edit} />
           </Route>
-
+          <Route path="settings" component={cmpnnt.AdminSettings} />
           <Redirect from="acl" to="acl/roles" />
           <Route path="acl" component={cmpnnt.AdminAcl}>
             <Route path="roles" component={cmpnnt.AdminAclRoles.Wrap}>

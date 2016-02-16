@@ -54,6 +54,8 @@ import AdminAffiliatesDiscountCodes from './Admin/Affiliates/DiscountCodes';
 modules.AdminAffiliatesDiscountCodes = AdminAffiliatesDiscountCodes;
 import AdminAffiliatesOffers from './Admin/Affiliates/Offers';
 modules.AdminAffiliatesOffers = AdminAffiliatesOffers;
+import AdminSettings from './Admin/Settings/Settings';
+modules.AdminSettings = AdminSettings;
 
 /**
  * Import Dashboard

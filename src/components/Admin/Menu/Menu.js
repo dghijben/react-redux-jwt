@@ -30,6 +30,7 @@ const tree = [
   {'desc': 'Pagina\'s', 'to': '/admin/pages', icon: 'fa-file-text-o', children: [
     {desc: 'Nieuwe pagina', to: '/admin/pages/new'}
   ]},
+  {'desc': 'Settings', 'to': '/admin/settings', icon: 'fa-wrench'}
 ];
 
 class Menu extends Component {

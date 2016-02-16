@@ -20,7 +20,8 @@ const apiPaths = {
   'registerVerify': '/auth/register/verify',
   'dashboardAccount': '/dashboard/accounts',
   'dashboardAffiliates': '/dashboard/settings/:id/affiliates',
-  'pages': '/admin/pages'
+  'pages': '/admin/pages',
+  'settings': '/admin/settings'
 };
 
 

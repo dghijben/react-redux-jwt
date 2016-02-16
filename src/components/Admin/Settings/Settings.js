@@ -7,7 +7,6 @@ import {Well, Row, Col} from 'react-bootstrap';
 import Ribbon from 'components/Admin/includes/Ribbon';
 import {Confirm} from 'components/includes';
 import DynamicForm from 'redux-form-generator';
-import UserPic from 'components/Admin/includes/UserPic';
 import validator from './ValidateEdit';
 import * as actions from 'redux/modules/data/actions';
 import fields, {reducerIndex, reducerKey, reducerItem, initialValues, fetchDataDeferred} from './fields';
@@ -70,14 +69,14 @@ class Edit extends Component {
 
   handleSubmit(values, dispatch) {
     return new Promise((resolve, reject) => {
-      dispatch(actions.update(reducerKey, this.props.router.params.id, values))
-        .then((ret)=> {
-          if (_.has(ret, 'error')) {
-            reject(ret.error);
-          } else {
-            resolve();
-          }
-        });
+      dispatch(actions.update(reducerKey, 1, values))
+          .then((ret)=> {
+            if (_.has(ret, 'error')) {
+              reject(ret.error);
+            } else {
+              resolve();
+            }
+          });
     });
   }
 
@@ -88,43 +87,38 @@ class Edit extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Accounts', to: '/admin/accounts'},
-      {name: 'Categorieen', to: '/admin/accounts/categories'},
-      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown'), to: '/admin/accounts/categories/' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])},
-      {name: 'wijzigen'}
+      {name: 'Settings', to: '/admin/settings'},
     ];
     return (
-      <div>
-        <Ribbon breadCrumbs={breadCrumbs}/>
-        <div id="content">
-          <Well>
-            <h1>Site
+        <div>
+          <Ribbon breadCrumbs={breadCrumbs}/>
+          <div id="content">
+            <Well>
+              <h1>Settings
               <span>
                 {' '} {_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], '')}
               </span>
-            </h1>
-            <Row>
-              <Col md={2}>
-                <UserPic responsive thumbnail pictures={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'picture'], [])} />
-              </Col>
-              <Col md={10}>
-                <DynamicForm
-                  checkKey={'edit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
-                  formName="edit"
-                  formClass="form-horizontal"
-                  fieldsNeeded={fields()}
-                  initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
-                  validate={validator}
-                  onSubmit={this.handleSubmit}
-                  getActionState={this.getActionState}
-                  clearActionState={this.clearActionState}
+              </h1>
+              <Row>
+                <Col md={2} />
+                <Col md={10}>
+                  <DynamicForm
+                      checkKey={'edit-' + _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'id'])}
+                      formName="edit"
+                      formClass="form-horizontal"
+                      fieldsNeeded={fields()}
+                      initialValues={initialValues(_.get(this.props, [reducerIndex, reducerKey, reducerItem]))}
+                      validate={validator}
+                      onSubmit={this.handleSubmit}
+                      getActionState={this.getActionState}
+                      clearActionState={this.clearActionState}
                   />
-              </Col>
-            </Row>
-          </Well>
+                </Col>
+              </Row>
+            </Well>
+          </div>
+          {this.renderModal()}
         </div>
-        {this.renderModal()}
-      </div>
     );
   }
 } export default Edit;

@@ -123,7 +123,7 @@
     "react-cookie": "0.4.3",
     "react-copy-to-clipboard": "^4.0.1",
     "react-dom": "0.14.7",
-    "react-helmet": "^2.3.1",
+    "react-helmet": "file:../github/react-helmet",
     "react-intl": "^2.0.0-pr-3",
     "react-laravel-paginator": "git://github.com/lemonCMS/react-paginator.git#master",
     "react-plupload": "0.1.0",
