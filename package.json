@@ -110,7 +110,7 @@
     "react-bootstrap": "0.28.2",
     "react-bootstrap-datetimepicker": "0.0.22",
     "react-chartjs": "lemoncms/react-chartjs",
-    "react-cookie": "0.4.3",
+    "react-cookie": "0.4.4",
     "react-copy-to-clipboard": "^4.0.1",
     "react-dom": "0.14.6",
     "react-helmet": "^2.3.1",
