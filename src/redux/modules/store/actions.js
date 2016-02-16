@@ -57,6 +57,17 @@ export function create(key, path, params) {
   };
 }
 
+export function post(key, path, params) {
+  return {
+    types: [actions.STORE_ITEM_CREATE, actions.STORE_ITEM_CREATE_SUCCESS, actions.STORE_ITEM_CREATE_FAIL],
+    key,
+    promise: (client) => client.post(path, {
+      data: params
+    }),
+    payload: params
+  };
+}
+
 export function loadItem(key, path, id) {
   return {
     types: [actions.STORE_ITEM_LOAD, actions.STORE_ITEM_LOAD_SUCCESS, actions.STORE_ITEM_LOAD_FAIL],

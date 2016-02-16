@@ -6,16 +6,20 @@ import {mapDispatchToProps} from 'utils/functions';
 import { Tabs, Tab, Row, Col } from 'react-bootstrap';
 import validator, {validateBank, validateExtra, validatePI} from './validate';
 import DynamicForm from 'redux-form-generator';
-import {fields1, fieldsBank, fieldsExtra, fieldsPI, reducerIndex, reducerKey, reducerItem} from './fields';
+import {fields1, fieldsBank, fieldsExtra, fieldsPI, reducerIndex, reducerKey, reducerItem, reducerKeyCats} from './fields';
+import connectData from 'helpers/connectData';
 import connectToState from 'helpers/connectToState';
+import fetchDataDeferred from './fetchDataDeferred';
 import * as actions from 'redux/modules/data/actions';
 import {getUser} from 'redux/modules/auth/authActions';
 import {getValues} from 'redux-form';
 
+@connectData(null, fetchDataDeferred)
 @connectToState(reducerIndex, reducerKey, reducerItem)
 @connect(state=> {
   const obj = {
     'token': state.authorization.token,
+    'categories': _.get(state.store, reducerKeyCats, {}),
     'getValues': _.merge(
       getValues(_.get(state.form, [reducerKey, 'tab1'])),
       getValues(_.get(state.form, [reducerKey, 'tab2'])),
@@ -164,7 +168,6 @@ class Register extends Component {
             checkKey={reducerKey + checkKey() + 'tab1'}
             formName={reducerKey}
             formKey="tab1"
-            formClass="dummy"
             fieldsNeeded={fieldsPI()}
             initialValues={{}}
             validate={validatePI}
@@ -177,8 +180,7 @@ class Register extends Component {
             checkKey={reducerKey + checkKey() + 'tab1'}
             formName={reducerKey}
             formKey="tab2"
-            formClass="dummy"
-            fieldsNeeded={fields1(this.props.token)}
+            fieldsNeeded={fields1(this.props.token, _.get(this.props, 'categories.all', []))}
             initialValues={{}}
             validate={validator}
             onSubmit={this.handleSubmitTab2}

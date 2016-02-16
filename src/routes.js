@@ -7,6 +7,7 @@ export default () => {
     <Route component={cmpnnt.App}>
       <Route path="" component={cmpnnt.Site}>
         <Route path="/" component={cmpnnt.Home}/>
+        <Route path="/contact" component={require('components/Site/Contact/Contact')}/>
         <Route path="/login" component={cmpnnt.Login}>
           <Route path="/password-forgotten" component={cmpnnt.PasswordForgotten} />
           <Route path="/password-reset/:token" component={cmpnnt.PasswordReset} />

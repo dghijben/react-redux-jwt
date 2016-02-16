@@ -103,7 +103,7 @@ class Item extends React.Component {
 
     const stop = () => {
       const date = moment(this.props.item.end, 'x');
-      return date.format('dddd D MMMM YYYY');
+      return date.format('DD-MM-YYYY');
     };
 
     return (
@@ -132,8 +132,8 @@ class Item extends React.Component {
             <div className="col-sm-3">
               <div>
                 {this.state.view}
-                <div>
-                  <strong>t/m: </strong>
+                <div className="center-block text-center">
+                  <strong>Geldig t/m </strong>
                   {stop()}
                 </div>
               </div>

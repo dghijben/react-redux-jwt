@@ -1,8 +1,8 @@
-
+import _ from 'lodash';
 export const reducerIndex = 'data';
 export const reducerKey = 'dashboardAccount';
 export const reducerItem = 'item';
-
+export const reducerKeyCats = 'dashboardAccountCategories';
 
 export function fieldsPI() {
   return ([
@@ -146,8 +146,8 @@ export function fieldsExtra(voorwaarden) {
       wrapperClassName: 'col-md-10'
     },
     {
-      name: 'goal2',
-      label: 'Doel 2',
+      name: 'extern',
+      label: 'Extern',
       type: 'text',
       labelClassName: 'col-md-2',
       wrapperClassName: 'col-md-10'
@@ -179,99 +179,102 @@ export function fieldsExtra(voorwaarden) {
   ]);
 }
 
-export function fields1(token) {
+export function fields1(token, categories) {
+
+  const catOptions = () => {
+    const options = [];
+    if (typeof categories === 'object') {
+      _.sortBy(categories, 'name').map((item) => {
+        options.push({value: item.id, desc: item.name});
+      });
+    }
+    return options;
+  };
 
   return ([
-
-
     {
       name: 'name',
       label: 'Account / Club',
       type: 'text',
       placeholder: 'Account / Club',
-      labelClassName: 'input-desc',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
     },
     {
       name: 'description',
       label: 'Omschrijving',
       type: 'rte',
+      config: {
+        plugins: 'autolink link image lists print preview',
+        toolbar: 'undo redo | bold italic | alignleft aligncenter alignright',
+        entity_encoding: 'raw',
+        menubar: false
+      },
       placeholder: 'Omschrijving van de club',
-      labelClassName: 'input-desc'
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
     },
     {
       name: 'address',
       label: 'Adres + huisnummer',
       type: 'text',
       placeholder: 'Adres + huisnummer',
-      labelClassName: 'input-desc'
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
     },
     {
-      row: {
-        col: [
-          {
-            md: 6,
-            children: [{
-              name: 'postcode',
-              label: 'Postcode',
-              type: 'text',
-              placeholder: 'Postcode',
-              labelClassName: 'input-desc'
-            }]
-          },
-          {
-            md: 6,
-            children: [{
-              name: 'city',
-              label: 'Plaats',
-              type: 'text',
-              placeholder: 'Plaats',
-              labelClassName: 'input-desc'
-            }]
-          }
-        ]
-      }
+      name: 'postcode',
+      label: 'Postcode',
+      type: 'text',
+      placeholder: 'Postcode',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
     },
     {
-      row: {
-        col: [
-          {
-            md: 6,
-            children: [{
-              name: 'telephone',
-              label: 'Telefoon',
-              type: 'text',
-              placeholder: 'Telefoon',
-              labelClassName: 'input-desc'
 
-            }]
-          },
-          {
-            md: 6,
-            children: [{
-              name: 'email',
-              label: 'Email club',
-              type: 'text',
-              placeholder: 'Email',
-              labelClassName: 'input-desc'
-            }]
-          }
-        ]
-      }
-    }, {
-      row: {
-        col: [
-          {
-            md: 6,
-            children: [{
-              name: 'website',
-              label: 'Website',
-              type: 'text',
-              placeholder: 'Website',
-              labelClassName: 'input-desc'
-            }]
-          }
-        ]
-      }
+      name: 'city',
+      label: 'Plaats',
+      type: 'text',
+      placeholder: 'Plaats',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+      name: 'telephone',
+      label: 'Telefoon',
+      type: 'text',
+      placeholder: 'Telefoon',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
+
+      name: 'email',
+      label: 'Email club',
+      type: 'text',
+      placeholder: 'Email',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+
+    },
+    {
+      name: 'website',
+      label: 'Website',
+      type: 'text',
+      placeholder: 'Website',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+
+    },
+    {
+      name: 'categories',
+      label: 'Categorieën',
+      type: 'checkboxList',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10',
+      chunks: 3,
+      options: catOptions()
+
     },
     {
       name: 'picture',

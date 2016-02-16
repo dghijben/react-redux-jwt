@@ -6,6 +6,7 @@ export const reducerIndex = 'data';
 export const reducerKey = 'accounts';
 export const reducerKeyUsers = 'users';
 export const reducerKeyCats = 'accountCategories';
+export const reducerKeySettings = 'settings';
 export const reducerItem = 'item';
 export const path = 'accounts';
 export const title = 'Accounts';
@@ -226,6 +227,13 @@ export default function fields(id, token, resource, resourceList, categories) {
       wrapperClassName: 'col-md-10'
     },
     {
+      name: 'payout',
+      label: 'Payout %',
+      type: 'text',
+      labelClassName: 'col-md-2',
+      wrapperClassName: 'col-md-10'
+    },
+    {
       name: 'active',
       label: 'Actief',
       type: 'checkbox',
@@ -282,6 +290,10 @@ export function fetchDataDeferred(getState, dispatch) {
     if (!actions.isLoadedItem(reducerKey, state, state.router.params.id)) {
       promises.push(dispatch(actions.loadItem(reducerKey, state.router.params.id)));
     }
+  }
+
+  if (!actions.isLoadedItem(reducerKeySettings, state, 1)) {
+    promises.push(dispatch(actions.loadItem(reducerKeySettings, 1)));
   }
   return Promise.all(promises);
 }
