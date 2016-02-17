@@ -95,7 +95,7 @@
     "jsx-loader": "^0.13.2",
     "less": "2.5.3",
     "less-loader": "2.2.2",
-    "lodash": "^4.3.0",
+    "lodash": "^4.5.0",
     "lru-memoize": "1.0.0",
     "map-props": "1.0.0",
     "moment": "^2.11.2",
