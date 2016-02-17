@@ -22,7 +22,7 @@ function formatUrl(path) {
  *
  * Remove it at your own risk.
  */
-class _ApiClient {
+export default class _ApiClient {
   constructor() {
     methods.forEach((method) =>
       this[method] = (path, { params, formData, data, headers } = {}) => new Promise((resolve, reject) => {
