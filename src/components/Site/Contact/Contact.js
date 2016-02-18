@@ -88,7 +88,6 @@ class Contact extends React.Component {
         return (<Alert bsStyle="success">Uw bericht is verzonden, we nemen zo spoedig mogelijk contact met u op.</Alert>);
       }
 
-
       return (<DynamicForm
         checkKey={'contact' + _.get(this.props, ['contact', 'item', 'success'], false)}
         formName="contact"

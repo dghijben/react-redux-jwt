@@ -25,7 +25,7 @@ const tree = [
     ]},
     {desc: 'Aanbiedingen', to: '/admin/affiliates/offers', children: [
       {desc: 'Nieuwe aanbieding', to: '/admin/affiliates/offers/new'}
-    ]},
+    ]}
   ]},
   {'desc': 'Pagina\'s', 'to': '/admin/pages', icon: 'fa-file-text-o', children: [
     {desc: 'Nieuwe pagina', to: '/admin/pages/new'}

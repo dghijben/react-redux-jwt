@@ -1,23 +1,13 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { PropTypes as historyPropTypes } from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
 import { Link } from 'react-router';
 
 class MenuItem extends Component {
 
-  static propTypes = {
-    children: PropTypes.object.isRequired,
-    history: historyPropTypes.history,
-  };
-
-  static contextTypes = {
-    children: React.PropTypes.func
-  };
-
-  constructor(context, props) {
-    super(context, props);
+  constructor(props, context) {
+    super(props, context);
     this.content = this.content.bind(this);
     this.children = this.children.bind(this);
     this.icon = this.icon.bind(this);
@@ -27,7 +17,7 @@ class MenuItem extends Component {
   }
 
   componentWillMount() {
-    if (this.context.history.isActive(this.props.item.to)) {
+    if (this.props.history.isActive(this.props.item.to)) {
       this.setState({active: true});
     } else {
       this.setState({active: false});
@@ -35,7 +25,7 @@ class MenuItem extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.context.history.isActive(nextProps.item.to)) {
+    if (this.props.history.isActive(nextProps.item.to)) {
       this.setState({active: true});
     } else {
       this.setState({active: false});
@@ -83,7 +73,7 @@ class MenuItem extends Component {
   children() {
     if (_.has(this.props.item, 'children') && ( this.state.active === true)) {
       return _.map(_.get(this.props.item, 'children'), (item, key) => {
-        return (<MenuItem key={key} item={item} />);
+        return (<MenuItem key={key} item={item} history={this.props.history} location={this.props.location} />);
       });
     }
   }
@@ -91,7 +81,7 @@ class MenuItem extends Component {
   render() {
     const {item} = this.props;
     return (
-      <li className={classNames({'active': this.context.location.pathname === item.to, 'open': this.state.active})}>
+      <li className={classNames({'active': this.props.location.pathname === item.to, 'open': this.state.active})}>
         {this.content()}
         <ReactCSSTransitionGroup component="ul" transitionName={{enter: 'animated', enterActive: 'slideInLeft', leave: 'animatedOut', leaveActive: 'slideOutLeft'}} transitionEnterTimeout={500} transitionLeaveTimeout={500}>
           {this.children()}
@@ -103,10 +93,8 @@ class MenuItem extends Component {
 
 MenuItem.propTypes = {
   item: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
-MenuItem.contextTypes = {
-  history: React.PropTypes.object,
-  location: React.PropTypes.object
-};
 export default MenuItem;

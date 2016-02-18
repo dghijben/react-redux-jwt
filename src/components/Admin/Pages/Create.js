@@ -59,8 +59,7 @@ class Create extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Accounts', to: '/admin/accounts'},
-      {name: 'Categorieën', to: '/admin/accounts/categories'},
+      {name: 'Pagina\'s', to: '/admin/pages'},
       {name: 'Nieuw'}
     ];
 

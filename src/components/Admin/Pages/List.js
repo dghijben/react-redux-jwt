@@ -96,8 +96,7 @@ class List extends Component {
 
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Affiliates', to: '/admin/affiliates'},
-      {name: 'Categorieen'}
+      {name: 'Pagina\'s'}
     ];
 
     return (

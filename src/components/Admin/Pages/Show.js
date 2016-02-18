@@ -67,9 +67,8 @@ class Show extends Component {
   render() {
     const breadCrumbs = [
       {name: 'Admin', to: '/admin'},
-      {name: 'Accounts', to: '/admin/accounts'},
-      {name: 'Categorieen', to: '/admin/accounts/categories'},
-      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'name'], 'unknown')},
+      {name: 'Pagina\'s', to: '/admin/pages'},
+      {name: _.get(this.props, [reducerIndex, reducerKey, reducerItem, 'page_title'], 'unknown')},
     ];
 
     const editLink = () => {
@@ -88,9 +87,7 @@ class Show extends Component {
             </h1>
 
             <Row>
-              <Col md={2}>
-                Extra info?
-              </Col>
+              <Col md={2} />
               <Col md={10}>
                 <Pending state={_.get(this.props, [reducerIndex, reducerKey, reducerItem, 'pending'], false)}>
                   <DynamicForm
